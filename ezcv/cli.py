@@ -30,5 +30,40 @@ Any useful examples of basic usage of this module, make sure to enclose code in 
     ```
 """
 
-if __name__ == "__main__": # Code inside this statement will only run if the file is explicitly called and not just imported.
-    pass
+# Standard Lib Dependencies
+import webbrowser
+from sys import argv, exit
+
+# Third party dependencies
+from docopt import docopt
+
+usage = """Usage:
+    ezcv [-h] [-v] [-p]
+    ezcv init [<template>]
+
+
+Options:
+-h, --help            show this help message and exit
+-v, --version         show program's version number and exit
+-p, --preview         preview the current state of the site
+"""
+
+def init(template="default"):
+    ...
+
+if __name__ == "__main__":
+    args = docopt(usage, version="0.1.0")
+
+    if len(argv) == 1: # Print usage if no arguments are given
+        print("\n", usage)
+        exit()
+
+    if args["--preview"]:
+        # TODO: Generate HTML/open HTML
+        webbrowser.open() 
+    
+    elif args["init"]:
+        if args["<template>"]:
+            init(args["<template>"])
+        else:
+            init()

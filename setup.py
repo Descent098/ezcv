@@ -4,6 +4,7 @@ import setuptools
 def get_content(*filename:str) -> str:
     """ Gets the content of a file or files and returns
     it/them as a string
+
     Parameters
     ----------
     filename : (str)
@@ -22,41 +23,37 @@ def get_content(*filename:str) -> str:
     return content
 
 setuptools.setup(
-    name = "", # TODO: Give the package a name
-    version = "0.0.1", # I recommend every 2nd decimal release (i.e. 0.x.0) for big releases and 3rd (i.e. 0.0.x) for bug fixes.
-    author = "", # TODO: Add your name
-    author_email = "", # TODO: Add your email
-    description = "", # TODO: Give the package a description
+    name = "ezcv",
+    version = "0.0.1",
+    author = "Kieran Wood",
+    author_email = "kieran@canadiancoding.ca",
+    description = "An easy to use personal site generator",
     long_description = get_content("README.md", "CHANGELOG.md"),
     long_description_content_type = "text/markdown",
-    # Replace https://github.com/canadian-coding/python-package-template with your repo github URL 
     project_urls = {
-        "User Docs" :      "", # TODO: Fill out or remove
-        "API Docs"  :      "", # TODO: Fill out or remove
-        "Source" :         "https://github.com/canadian-coding/python-package-template",
-        "Bug Report":      "https://github.com/canadian-coding/python-package-template/issues/new?assignees=Descent098&labels=bug&template=bug_report.md&title=%5BBUG%5D",
-        "Feature Request": "https://github.com/canadian-coding/python-package-template/issues/new?labels=enhancement&template=feature_request.md&title=%5BFeature%5D",
-        "Roadmap":         "https://github.com/canadian-coding/python-package-template/projects"
+        "User Docs" :      "https://ezcv.readthedocs.io",
+        "API Docs"  :      "https://kieranwood.ca/ezcv",
+        "Source" :         "https://github.com/Descent098/ezcv",
+        "Bug Report":      "https://github.com/Descent098/ezcv/issues/new?assignees=Descent098&labels=bug&template=bug_report.md&title=%5BBUG%5D",
+        "Feature Request": "https://github.com/Descent098/ezcv/issues/new?labels=enhancement&template=feature_request.md&title=%5BFeature%5D",
+        "Roadmap":         "https://github.com/Descent098/ezcv/projects"
     },
     include_package_data = True,
     packages = setuptools.find_packages(),
 
-    # The code below is used to define entrypoints, if you don't know what this is then:
-    # SEE: https://canadiancoding.ca/posts/post/python/script-entrypoints/
-
-    
     # entry_points = { 
-    #        'console_scripts': ['... = ...']
+    #        'console_scripts': ['ezcv = ezcv.cli.main']
     #    },
-    
 
     install_requires = [
     "docopt", # Used for argument parsing if you are writing a CLI
+    "jinja2", # used as middlewear for generating templates
+    "markdown" # Used to parse markdown
         ],
     extras_require = {
-        "dev" : ["nox",    # Used to run automated processes
-                "pytest",  # Used to run the test code in the tests directory
-                "mkdocs"], # Used to create HTML versions of the markdown docs in the docs directory
+        "dev" : ["pytest",  # Used to run the test code in the tests directory
+                "mkdocs", # Used to create HTML versions of the markdown docs in the docs directory
+                "pdoc3"], # Used to create development docs
 
     },
     classifiers = [
