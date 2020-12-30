@@ -1,0 +1,12 @@
+<!-- Start volunteering_experience -->
+<h2>Volunteering Experience</h2>
+<div>
+    {% for experience in volunteering_experience %}
+        <!-- Metadata -->
+        <h4>{{ experience[0]["company"] }} | {{ experience[0]["role"] }}</h4>
+        <h4>{% if experience[0]["month_started"] %} {{ experience[0]["month_started"] }} {%endif%} {% if experience[0]["year_started"] %} {{ experience[0]["year_started"] }} {%endif%} {% if experience[0]["current"] %}- Present {%else%} - {% endif %} {% if experience[0]["month_ended"] %} {{ experience[0]["month_ended"] }} {%endif%} {% if experience[0]["year_ended"] %} {{ experience[0]["year_ended"] }} {%endif%}</h4>
+        <!-- Content -->
+        <p>{{ experience[1] | safe}}</p>
+    {% endfor %}
+</div>
+<!-- End volunteering_experience -->

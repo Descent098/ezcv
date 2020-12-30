@@ -1,0 +1,11 @@
+<!-- Start Education -->
+<h2>Education</h2>
+<div>
+    {% for experience in education %}
+        <!-- Metadata -->
+        <h4>{{ experience[0]["institution"] }} | {{ experience[0]["year_started"] }} {% if experience[0]["current"] %}- Present{% endif %}{% if experience[0]["year_ended"] %}- {{ experience[0]["year_ended"] }}{%endif%}</h4>
+        <!-- Content -->
+        <p>{{ experience[1] | safe}}</p>
+    {% endfor %}
+</div>
+<!-- End Education -->

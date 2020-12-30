@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="{{ config['name'] }}'s resume site" />
+        <meta name="author" content="{{ config['name'] }}" /> 
+        <title>{{ config["name"] }} </title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <h1> Configuration Values </h1>
+        <ul>
+            <li>{{ config }}</li>
+            <ul>
+                <li>{{ config["name"] }}</li>
+                <li>{{ config["email"] }}</li>
+                <li>{{ config["phone"] }}</li>
+                <li>{{ config["biography"] }}</li>
+                <li>{{ config["role"] }}</li>
+                <li>{{ config["company"] }}</li>
+                <li>{{ config["address"] }}</li>
+                <li>{{ config["social"] }}
+                    <ul>
+                        <li>{{ config["social"]["github"] }}</li>
+                        <li>{{ config["social"]["twitch"] }}</li>
+                        <li>{{ config["social"]["youtube"] }}</li>
+                        <li>{{ config["social"]["instagram"] }}</li>
+                        <li>{{ config["social"]["twitter"] }}</li>
+                        <li>{{ config["social"]["snapchat"] }}</li>
+                        <li>{{ config["social"]["linkedin"] }}</li>
+                        <li>{{ config["social"]["facebook"] }}</li>
+                    </ul>
+                </li>
+                <li>{{ config["examples"] }}</li>
+                <li>{{ config["resume"] }}</li>
+            </ul>
+        </ul>
+        <h1> Generated section HTML </h1>
+        {{ projects_html | safe }}
+        {{ education_html | safe }}
+        {{ work_experience_html | safe }}
+        {{ volunteering_experience_html | safe }}
+        <!-- Publications --> <!-- volunteering_experience_html | safe -->
+    </body>
+</html>
