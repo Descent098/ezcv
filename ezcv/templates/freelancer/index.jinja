@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="{{ config['name'] }}'s resume site" />
+        <meta name="author" content="{{ config['name'] }}" /> 
+        <title>{{ config["name"] }} </title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+    </head>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand js-scroll-trigger" href="#page-top">{{ config["name"] }}</a>
+                <button class="navbar-toggler navbar-toggler-right text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                        {% if projects_html %}
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Projects</a></li>
+                        {% endif %}
+
+                        {% if config["biography"] %}
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">About</a></li>
+                        {% endif %}
+
+                        {% if config["phone"] or config["email"] %}
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Contact</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Masthead-->
+        <header class="masthead bg-primary text-white text-center">
+            <div class="container d-flex align-items-center flex-column">
+                <!-- Masthead Avatar Image-->
+                <img class="masthead-avatar mb-5" src="images/avataaars.svg" alt="{{ config['name'] }}" />
+                <!-- Masthead Heading-->
+                <h1 class="masthead-heading text-uppercase mb-0">{{ config["name"] }}</h1>
+                <!-- Icon Divider-->
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <!-- Masthead Subheading-->
+                {% if config["company"] and config["title"] %}
+                <p class="masthead-subheading font-weight-light mb-0">{{ config["company"] }} - {{ config["role"] }}</p>
+                {% elif config["company"] %}
+                <p class="masthead-subheading font-weight-light mb-0">{{ config["company"] }}</p>
+                {% elif config["title"] %}
+                <p class="masthead-subheading font-weight-light mb-0">{{ config["role"] }}</p>
+                {% else %}
+
+                {% endif %}
+            </div>
+        </header>
+
+        {{ projects_html | safe }}
+
+        {% if config["biography"] %} 
+        <!-- About Section-->
+        <section class="page-section bg-primary text-white mb-0" id="about">
+            <div class="container">
+                <!-- About Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase text-white">About</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <!-- About Section Content-->
+                <div class="row justify-content-center text-center">
+                    <div class="col-md-9">
+                        <p class="lead">{{ config["biography"] }}</p>
+                    </div>
+                </div>
+            </div>
+            </br>
+            </br>
+            <div class="container">
+                <div class="row justify-content-center text-center">
+            {{ education_html | safe }}
+            {{ work_experience_html | safe }}
+            {{ volunteering_experience_html | safe }}
+                </div>
+            </div>
+        </section>
+        {% endif %}
+
+        {% if config["phone"] or config["email"] %}
+        <!-- Contact Section-->
+        <section class="page-section" id="contact">
+            <div class="container">
+                <!-- Contact Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Contact Me</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <h4 class="text-uppercase text-secondary text-center mb-0"> Ready to get in contact?</h4>
+            </div>
+            </br>
+            </br>
+            <div class="container">
+                <div class="row justify-content-center">
+                {% if config["phone"] %} 
+                    <div class="col-lg-6 text-center">
+                        <h4 class="text-uppercase text-secondary mb-0" style="font-size: 2rem;line-height: 1.5rem;"><i class="fas fa-phone mr-2"></i>Give me a call</h4>
+                        </br>
+                        <a class="btn btn-xl" href="tel:{{ config['phone'] }}" style="background-color:#1abc9c;color:white;">
+                        <!-- <i class="fas fa-download mr-2"></i> Font Awesome fontawesome.com -->
+                            {{ config['phone'] }}
+                        </a>
+                    </div>
+                {% endif %}
+                {% if config["email"] %} 
+                    <div class="col-lg-6 text-center">
+                        <h4 class="text-uppercase text-secondary mb-0" style="font-size: 2rem;line-height: 1.5rem;"><i class="fas fa-envelope mr-2"></i>Send me an email</h4>
+                        </br>
+                        <a class="btn btn-xl" href="mailto:{{ config['email'] }}" style="background-color:#1abc9c;color:white;">
+                        <!-- <i class="fas fa-download mr-2"></i> Font Awesome fontawesome.com -->
+                            {{ config['email'] }}
+                        </a>
+                    </div>
+                {% endif %}
+                </div>
+            </div>
+
+        </section>
+        {% endif %}
+        <!-- Footer-->
+        <footer class="footer text-center">
+            <div class="container">
+                {% if config["address"] or config["phone"] or config["email"] %}
+                <div class="row">
+                    <!-- Footer Location-->
+                    <div class="col-lg-4 mb-5 mb-lg-0">
+                        <h4 class="text-uppercase mb-4">Contact details</h4>
+                        {% if config["address"] %}
+                        <p class="lead mb-0">
+                            <i class="fas fa-map-pin mr-2"></i> {{ config["address"] }}
+                        </p>
+                        {% endif %}
+                        {% if config["email"] %}
+                        <p class="lead mb-0">
+                            <a href="mailto:{{ config['email'] }}"> <i class="fas fa-envelope mr-2"></i> {{ config["email"] }} </a>
+                        </p>
+                        {% endif %}
+                        {% if config["phone"] %}
+                        <p class="lead mb-0">
+                            <a href="tel:{{ config['phone'] }}"> <i class="fas fa-phone mr-2"></i> {{ config["phone"] }} </a>
+                        </p>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    {% if config["social"] %}
+                    <!-- Footer Social Icons-->
+                    <div class="col-lg-4 mb-5 mb-lg-0">
+                        <h4 class="text-uppercase mb-4">Around the Web</h4>
+                        {% if config['social']["github"] %}
+                        <a class="btn btn-outline-light btn-social mx-1" href="https://github.com/{{config['social']['github']}}" target="_blank"><i class="fab fa-fw fa-github"></i></a>
+                        {% endif %}
+                        {% if config['social']["youtube"] %}
+                        <a class="btn btn-outline-light btn-social mx-1" href="https://youtube.com/{{config['social']['youtube']}}" target="_blank"><i class="fab fa-fw fa-youtube"></i></a>
+                        {% endif %}
+                        {% if config['social']["twitch"] %}
+                        <a class="btn btn-outline-light btn-social mx-1" href="https://twitch.tv/{{config['social']['twitch']}}" target="_blank"><i class="fab fa-fw fa-twitch"></i></a>
+                        {% endif %}
+                        {% if config['social']["twitter"] %}
+                        <a class="btn btn-outline-light btn-social mx-1" href="https://twitter.com/{{config['social']['twitter']}}" target="_blank"><i class="fab fa-fw fa-twitter"></i></a>
+                        {% endif %}
+                        {% if config['social']["instagram"] %}
+                        <a class="btn btn-outline-light btn-social mx-1" href="https://www.instagram.com/{{config['social']['instagram']}}" target="_blank"><i class="fab fa-lg fa-instagram"></i></a>
+                        {% endif %}
+                        {% if config['social']["facebook"] %}
+                        <a class="btn btn-outline-light btn-social mx-1" href="https://www.facebook.com/{{config['social']['facebook']}}" target="_blank"><i class="fab fa-fw fa-facebook-f"></i></a>
+                        {% endif %}
+                        {% if config['social']["linkedin"] %}
+                        <a class="btn btn-outline-light btn-social mx-1" href="https://www.linkedin.com/in/{{config['social']['linkedin']}}" target="_blank"><i class="fab fa-fw fa-linkedin-in"></i></a>
+                        {% endif %}
+                        {% if config['social']["snapchat"] %} 
+                        <a class="btn btn-outline-light btn-social mx-1" href="https://snapchat.com/add/{{ config['social']['snapchat'] }}" target="_blank"><i class="fab fa-fw fa-snapchat"></i></a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    <!-- Footer About Text-->
+                    <div class="col-lg-4">
+                        <h4 class="text-uppercase mb-4">About The Site</h4>
+                        <p class="lead mb-0">
+                            This site was generated using <a href="https://github.com/descent098/ezcv" target="_blank">ezcv</a> and <a href="https://startbootstrap.com/theme/freelancer" target="_blank">Freelancer</a>, a theme by <a href="http://startbootstrap.com">Start Bootstrap</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Copyright Section-->
+        <div class="copyright py-4 text-center text-white">
+            <div class="container"><small>Copyright © {{ config["name"] }} 2020</small></div>
+        </div>
+        <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes)-->
+        <div class="scroll-to-top d-lg-none position-fixed">
+            <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top"><i class="fa fa-chevron-up"></i></a>
+        </div>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Third party plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        <!-- Contact form JS-->
+        <script src="js/jqBootstrapValidation.js"></script>
+        <script src="js/contact_me.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+    </body>
+</html>

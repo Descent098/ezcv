@@ -1,0 +1,24 @@
+                    <!-- Start work_experience -->
+                    <div class="col-md-6">
+                        <h4 class="page-section-heading text-center text-uppercase text-white">Work Experience</h4>
+                        <div class="divider-custom divider-light">
+                            <div class="divider-custom-line"></div>
+                            <div class="divider-custom-icon"><i class="fas fa-tools"></i></div>
+                            <div class="divider-custom-line"></div>
+                        </div>
+                        <div class="row">
+                            {% for experience in work_experience %}
+                            <div class="col-md-12">
+                                <h6 class="text-center text-uppercase text-white">
+                                {{ experience[0]["company"] }} | {{ experience[0]["role"] }}
+                                </h6>
+                                <h6 class="text-center text-uppercase text-white">
+                                {% if experience[0]["month_started"] %} {{ experience[0]["month_started"] }} {%endif%} {% if experience[0]["year_started"] %} {{ experience[0]["year_started"] }} {%endif%} {% if experience[0]["current"] %}- Present {%else%} - {% endif %} {% if experience[0]["month_ended"] %} {{ experience[0]["month_ended"] }} {%endif%} {% if experience[0]["year_ended"] %} {{ experience[0]["year_ended"] }} {%endif%}
+                                </h6>
+                                <p class="lead">{{ experience[1] | safe}}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <!-- End work_experience -->

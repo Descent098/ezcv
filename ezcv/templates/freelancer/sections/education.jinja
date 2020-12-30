@@ -1,0 +1,21 @@
+                    <!-- Start Education -->
+                    <div class="col-md-6">
+                        <h4 class="page-section-heading text-center text-uppercase text-white">Education</h4>
+                        <div class="divider-custom divider-light">
+                            <div class="divider-custom-line"></div>
+                            <div class="divider-custom-icon"><i class="fas fa-graduation-cap"></i></div>
+                            <div class="divider-custom-line"></div>
+                        </div>
+                        <div class="row">
+                            {% for experience in education %}
+                            <div class="col-md-12">
+                                <h6 class="text-center text-uppercase text-white">
+                                {{ experience[0]["institution"] }} | {{ experience[0]["year_started"] }} {% if experience[0]["current"] %}- Present{% endif %}{% if experience[0]["year_ended"] %}- {{ experience[0]["year_ended"] }}{%endif%}
+                                </h6>
+                                <p class="lead">{{ experience[1] |safe}}</p>
+                            </div>
+                                {% endfor %}
+                            
+                        </div>
+                    </div>
+                    <!-- End Education -->
