@@ -13,8 +13,8 @@ from docopt import docopt
 
 usage = """Usage:
     ezcv [-h] [-v] [-p]
-    ezcv init [<theme>] [<name>]
-    ezcv build [-d OUTPUT_DIR]
+    ezcv init [<name>] [<theme>]
+    ezcv build [-d OUTPUT_DIR] [-p]
 
 
 Options:
@@ -42,8 +42,6 @@ def init(theme="freelancer", name="John Doe"):
     
     # Generate github actions deploy script
     os.mkdir(os.path.join(name, ".github"))
-    print(os.listdir(os.path.abspath(os.path.dirname(__file__))))
-    print(os.path.isfile(os.path.join(os.path.dirname(__file__), "ezcv-publish.yml")))
     shutil.copyfile(os.path.join(os.path.dirname(__file__), "ezcv-publish.yml"), os.path.join(name, ".github", "ezcv-publish.yml") )
 
     print(f"Site generated and is available at {os.path.abspath(name)}")
@@ -56,15 +54,14 @@ def preview(temporary_foler_name = "asdfhlasdjkfhlasdjkfhasldkjfhalskfghd"):
     input("Press enter when done previewing")
     shutil.rmtree(temporary_foler_name) # Clean up preview files
 
-if __name__ == "__main__":
+def main():
     args = docopt(usage, version="0.1.0")
 
     if len(argv) == 1: # Print usage if no arguments are given
-        print(args) # TODO: remove
         print("\n", usage)
         exit()
 
-    if args["--preview"]:
+    if args["--preview"] and not args["build"]:
         preview()
 
     elif args["init"]:
@@ -78,7 +75,13 @@ if __name__ == "__main__":
             init()
 
     elif args["build"]:
-        if args["--dir"]:
-            generate_site(args["--dir"])
-        else:
+        if not args["--dir"]:
             generate_site()
+        else:
+            generate_site(args["--dir"])
+
+        if args["--preview"]:
+            preview()
+
+if __name__ == "__main__": # For testing
+    main()

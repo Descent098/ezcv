@@ -42,18 +42,19 @@ setuptools.setup(
     package_data = {"":["mkdocs.yml", "docs/*", "./themes/*"]},
     packages = setuptools.find_packages(),
 
-    # entry_points = { 
-    #        'console_scripts': ['ezcv = ezcv.cli.main']
-    #    },
+    entry_points = { 
+            'console_scripts': ['ezcv = ezcv.cli:main']
+        },
 
     install_requires = [
-    "docopt", # Used for argument parsing if you are writing a CLI
-    "jinja2", # used as middlewear for generating templates
-    "markdown" # Used to parse markdown
+    "docopt",   # Used for argument parsing if you are writing a CLI
+    "jinja2",   # used as middlewear for generating templates
+    "markdown", # Used to parse markdown
+    "tqdm",     # Used to generate progress bars
+    "colored"   # Used to color terminal output
         ],
     extras_require = {
-        "dev" : ["pytest",  # Used to run the test code in the tests directory
-                "mkdocs", # Used to create HTML versions of the markdown docs in the docs directory
+        "dev" : ["mkdocs", # Used to create HTML versions of the markdown docs in the docs directory
                 "pdoc3"], # Used to create development docs
 
     },

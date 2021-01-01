@@ -251,6 +251,7 @@ def generate_site(output_folder:str="site", theme:str = "freelancer", sections: 
     generate_site(output_folder="resume", sections=["projects"])
     ```
     """
+    print(f"Exporting site to {output_folder}")
     pages = [] # Filled with a list of all the pages to render
 
     # The data passed to render all pages
