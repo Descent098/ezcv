@@ -29,20 +29,11 @@ Options:
 def init(theme="freelancer", name="John Doe"):
     print(f"Generating site at {os.path.abspath(name)}")
 
-    # Generate site folder
-    os.mkdir(name)
+    shutil.copytree(os.path.join(os.path.dirname(__file__), "example_site"), os.path.abspath(name))
 
     # Generate initial config.yml file
     with open(os.path.join(name, "config.yml"), "w+") as config_file:
-        config_file.write(f"name: {name}\ntheme: {theme}")
-    
-    # Generate sections folders
-    for section in SECTIONS_LIST:
-        os.mkdir(os.path.join(name, section))
-    
-    # Generate github actions deploy script
-    os.mkdir(os.path.join(name, ".github"))
-    shutil.copyfile(os.path.join(os.path.dirname(__file__), "ezcv-publish.yml"), os.path.join(name, ".github", "ezcv-publish.yml") )
+        config_file.write(f"# See https://ezprez.readthedocs.io for documentation\nname: {name}\ntheme: {theme}")
 
     print(f"Site generated and is available at {os.path.abspath(name)}")
 
