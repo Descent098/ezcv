@@ -129,7 +129,7 @@ def render_section(template_folder:str, section_content_dir:str, examples:bool =
         try:
             template = environment.get_template(section_template_path)
         except jinja2.TemplateNotFound: # If current section is not supported
-            print(f"Template {section_template_path} is not available")
+            print(f"Section {section_content_dir.split(os.sep)[-1]} is not available")
             return ""
         return template.render({section_content_dir:contents})
     else:

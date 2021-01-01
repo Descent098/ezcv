@@ -28,7 +28,7 @@
 				<!-- Header -->
 					<header id="header">
 						<h1>{{ config["name"] }}</h1>
-						<p>Security Chief &nbsp;&bull;&nbsp; Cyborg &nbsp;&bull;&nbsp; Never asked for this</p>
+						<p>{% if config['role'] %}  {{ config['role'] }}&nbsp;&bull;&nbsp;{% endif %} {% if config['company'] %}  {{ config['company'] }}&nbsp;&bull;&nbsp;{% endif %}</p>
 						<nav>
 							<ul>
 
