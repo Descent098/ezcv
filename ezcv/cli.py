@@ -33,7 +33,7 @@ def init(theme="freelancer", name="John Doe"):
 
     # Generate initial config.yml file
     with open(os.path.join(name, "config.yml"), "w+") as config_file:
-        config_file.write(f"# See https://ezprez.readthedocs.io for documentation\nname: {name}\ntheme: {theme}")
+        config_file.write(f"# See https://ezcv.readthedocs.io for documentation\nname: {name}\ntheme: {theme}")
 
     print(f"Site generated and is available at {os.path.abspath(name)}")
 
