@@ -39,6 +39,7 @@ setuptools.setup(
         "Roadmap":         "https://github.com/Descent098/ezcv/projects"
     },
     include_package_data = True,
+    package_data = {"":["mkdocs.yml", "docs/*", "./templates/*"]},
     packages = setuptools.find_packages(),
 
     # entry_points = { 

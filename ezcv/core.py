@@ -1,6 +1,7 @@
 # Standard Lib Dependencies
 import os
 import shutil
+from glob import glob
 import webbrowser
 from collections import defaultdict
 
@@ -10,7 +11,8 @@ import jinja2
 import markdown
 from tqdm import tqdm
 
-sections_list = ["projects", "education", "work_experience", "volunteering_experience"]
+# The global list of currently supported first party sections
+SECTIONS_LIST = ["projects", "education", "work_experience", "volunteering_experience"]
 
 
 def get_site_config(config_file_path: str = "config.yml") -> defaultdict:
@@ -168,6 +170,7 @@ def export(site_context:dict, template_folder:str, output_folder:str = "my_site"
     # Copy source files
     try:
         shutil.copytree(template_folder, output_folder, ignore=shutil.ignore_patterns("*.jinja"))
+
     except FileExistsError:
         shutil.rmtree(output_folder)
         shutil.copytree(template_folder, output_folder, ignore=shutil.ignore_patterns("*.jinja"))
@@ -197,7 +200,7 @@ def export(site_context:dict, template_folder:str, output_folder:str = "my_site"
             outfile.write(html)
 
 
-def generate_site(output_folder:str="my_site", template:str = "freelancer", sections: list = sections_list, config_file_path="config.yml", preview:bool = False):
+def generate_site(output_folder:str="my_site", template:str = "freelancer", sections: list = SECTIONS_LIST, config_file_path="config.yml", preview:bool = False):
     """The primary entrypoint to generating a site
 
     Parameters
@@ -209,7 +212,7 @@ def generate_site(output_folder:str="my_site", template:str = "freelancer", sect
         The name of the template to use, by default "freelancer"
 
     sections : (list[str], optional)
-        [description], by default sections_list
+        A list of the sections to include in export, by default ezprez.core.SECTIONS_LIST
 
     config_file_path : (str, optional)
         The path to the site's config yaml file, by default "config.yml"
@@ -253,6 +256,10 @@ def generate_site(output_folder:str="my_site", template:str = "freelancer", sect
     # The data passed to render all pages
     site_context = {"config": get_site_config(config_file_path)} 
 
+    # If no template argument, and a theme is defined in the site config file
+    if site_context["config"]["theme"] and template == "freelancer": 
+        template = site_context["config"]["theme"]
+
     # Preprocess template folder, and find correct path
     if os.path.exists(os.path.abspath(template)):
         template_folder = os.path.abspath(template)
@@ -288,7 +295,3 @@ def generate_site(output_folder:str="my_site", template:str = "freelancer", sect
             except webbrowser.Error:
                 continue
         webbrowser.open(f"file:///{os.path.abspath(output_folder)}/index.html")
-
-
-if __name__ == "__main__":
-    generate_site(sections=["projects", "education", "work_experience", "volunteering_experience"], preview=True)
