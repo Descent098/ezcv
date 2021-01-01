@@ -39,7 +39,7 @@ from docopt import docopt
 
 usage = """Usage:
     ezcv [-h] [-v] [-p]
-    ezcv init [<template>]
+    ezcv init [<theme>]
 
 
 Options:
@@ -48,7 +48,7 @@ Options:
 -p, --preview         preview the current state of the site
 """
 
-def init(template="default"):
+def init(theme="default"):
     ...
 
 if __name__ == "__main__":
@@ -63,7 +63,7 @@ if __name__ == "__main__":
         webbrowser.open() 
     
     elif args["init"]:
-        if args["<template>"]:
-            init(args["<template>"])
+        if args["<theme>"]:
+            init(args["<theme>"])
         else:
             init()

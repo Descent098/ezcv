@@ -1,7 +1,6 @@
 # Standard Lib Dependencies
 import os
 import shutil
-from glob import glob
 import webbrowser
 from collections import defaultdict
 
@@ -40,13 +39,13 @@ def get_site_config(config_file_path: str = "config.yml") -> defaultdict:
     return default_dict_config
 
 
-def render_section(template_folder:str, section_content_dir:str, examples:bool = False) -> str:
+def render_section(theme_folder:str, section_content_dir:str, examples:bool = False) -> str:
     """Renders the particular section provided using the environment provided
 
     Parameters
     ----------
-    template_folder : (str)
-        The absolute path to the template
+    theme_folder : (str)
+        The absolute path to the theme
 
     section_content_dir : (str)
         The name of the section to render i.e. projects, education, work_experience etc.
@@ -57,37 +56,37 @@ def render_section(template_folder:str, section_content_dir:str, examples:bool =
     Returns
     -------
     str
-        The rendered template of the section, or an empty string if no content was found
+        The rendered theme of the section, or an empty string if no content was found
 
     Examples
     --------
     ### Render projects section
     ```
-    # NOTE: This example assumes you have a folder with projects at ./projects and a section template at <ezcv install directory>/templates/freelancer/projects.jinja
+    # NOTE: This example assumes you have a folder with projects at ./projects and a section theme at <ezcv install directory>/themes/freelancer/projects.jinja
 
     from ezcv import render_section
 
-    template = "freelancer"
+    theme = "freelancer"
     section = "projects" # The relative path to the content folder for this 
 
-    template_folder = os.path.abspath(os.path.join(os.path.dirname(ezcv.__file__), "templates", template))
+    theme_folder = os.path.abspath(os.path.join(os.path.dirname(ezcv.__file__), "themes", theme))
 
     # render projects html
-    render_section(template_folder, section)
+    render_section(theme_folder, section)
     ```
     """
     contents = [] # Will be filled with each file in the sections' metadata and markdown content
     content_folder = False # Set to True if current section is in /content/<section>
 
     # Initialize jinja loaders
-    template_loader = jinja2.FileSystemLoader(template_folder)
-    environment = jinja2.Environment(loader=template_loader, autoescape=True, trim_blocks=True) # Grab all files in template_folder
+    theme_loader = jinja2.FileSystemLoader(theme_folder)
+    environment = jinja2.Environment(loader=theme_loader, autoescape=True, trim_blocks=True) # Grab all files in theme_folder
 
     # If content for current section is stored within a folder called /content/<section>
     if os.path.exists(os.path.join("content", section_content_dir)): 
         content_folder = True
 
-    section_template_path = f"sections/{section_content_dir}.jinja" # Where in the template folder to find the section template
+    section_theme_path = f"sections/{section_content_dir}.jinja" # Where in the theme folder to find the section theme
 
     # The folder to iterate through and find sections markdown files
     content_iteration_directory = os.path.join("content", section_content_dir) if content_folder else section_content_dir
@@ -127,21 +126,21 @@ def render_section(template_folder:str, section_content_dir:str, examples:bool =
 
     if len(contents) > 0:
         try:
-            template = environment.get_template(section_template_path)
+            theme = environment.get_template(section_theme_path)
         except jinja2.TemplateNotFound: # If current section is not supported
             print(f"Section {section_content_dir.split(os.sep)[-1]} is not available")
             return ""
-        return template.render({section_content_dir:contents})
+        return theme.render({section_content_dir:contents})
     else:
         return ""
 
 
-def render_page(template_folder:str, page:str, site_context:dict) -> str:
-    """Renders the page provided from the specified template
+def render_page(theme_folder:str, page:str, site_context:dict) -> str:
+    """Renders the page provided from the specified theme
 
     Parameters
     ----------
-    template_folder : (str)
+    theme_folder : (str)
         [description]
 
     page : (str)
@@ -156,24 +155,24 @@ def render_page(template_folder:str, page:str, site_context:dict) -> str:
         The rendered html of the page
     """
     # Initialize jinja loaders
-    template_loader = jinja2.FileSystemLoader(template_folder)
-    environment = jinja2.Environment(loader=template_loader, autoescape=True, trim_blocks=True) # Grab all files in template_folder
+    theme_loader = jinja2.FileSystemLoader(theme_folder)
+    environment = jinja2.Environment(loader=theme_loader, autoescape=True, trim_blocks=True) # Grab all files in theme_folder
 
     # generate new index
-    template = environment.get_template(page)
-    return template.render(site_context)
+    theme = environment.get_template(page)
+    return theme.render(site_context)
 
-def export(site_context:dict, template_folder:str, output_folder:str = "my_site", pages:list=["index.jinja"]):
-    if not os.path.exists(template_folder): # Error out if provided template folder does not exist
-        raise FileNotFoundError(f"The provided template folder does not exist: {template_folder}")
+def export(site_context:dict, theme_folder:str, output_folder:str = "my_site", pages:list=["index.jinja"]):
+    if not os.path.exists(theme_folder): # Error out if provided theme folder does not exist
+        raise FileNotFoundError(f"The provided theme folder does not exist: {theme_folder}")
 
     # Copy source files
     try:
-        shutil.copytree(template_folder, output_folder, ignore=shutil.ignore_patterns("*.jinja"))
+        shutil.copytree(theme_folder, output_folder, ignore=shutil.ignore_patterns("*.jinja"))
 
     except FileExistsError:
         shutil.rmtree(output_folder)
-        shutil.copytree(template_folder, output_folder, ignore=shutil.ignore_patterns("*.jinja"))
+        shutil.copytree(theme_folder, output_folder, ignore=shutil.ignore_patterns("*.jinja"))
     
     # Copy images
     output_image_dir = os.path.join(output_folder, "images")
@@ -187,11 +186,11 @@ def export(site_context:dict, template_folder:str, output_folder:str = "my_site"
     ### TODO
 
     # Iterate through top level pages and write to the output folder
-    print("\nGenerating output html from template")
+    print("\nGenerating output html from theme")
     pages_iterator = tqdm(pages)
     pages_iterator.set_description_str("Generating top level pages")
     for page in pages_iterator:  # Write new pages
-        html = render_page(template_folder, page, site_context)
+        html = render_page(theme_folder, page, site_context)
         if page.endswith(".jinja"):
             page = f"{page[:-6:]}.html"
         pages_iterator.set_description_str(f"Writing {page}")
@@ -200,7 +199,7 @@ def export(site_context:dict, template_folder:str, output_folder:str = "my_site"
             outfile.write(html)
 
 
-def generate_site(output_folder:str="my_site", template:str = "freelancer", sections: list = SECTIONS_LIST, config_file_path="config.yml", preview:bool = False):
+def generate_site(output_folder:str="my_site", theme:str = "freelancer", sections: list = SECTIONS_LIST, config_file_path="config.yml", preview:bool = False):
     """The primary entrypoint to generating a site
 
     Parameters
@@ -208,8 +207,8 @@ def generate_site(output_folder:str="my_site", template:str = "freelancer", sect
     output_folder : (str, optional)
         The folder to output the site files to, by default "my_site"
 
-    template : (str, optional)
-        The name of the template to use, by default "freelancer"
+    theme : (str, optional)
+        The name of the theme to use, by default "freelancer"
 
     sections : (list[str], optional)
         A list of the sections to include in export, by default ezprez.core.SECTIONS_LIST
@@ -222,7 +221,7 @@ def generate_site(output_folder:str="my_site", template:str = "freelancer", sect
 
     Notes
     -----
-    - Template options are: 
+    - theme options are: 
         - freelancer; https://startbootstrap.com/theme/freelancer
         - aerial; https://html5up.net/aerial
         - creative; https://startbootstrap.com/theme/creative
@@ -256,22 +255,22 @@ def generate_site(output_folder:str="my_site", template:str = "freelancer", sect
     # The data passed to render all pages
     site_context = {"config": get_site_config(config_file_path)} 
 
-    # If no template argument, and a theme is defined in the site config file
-    if site_context["config"]["theme"] and template == "freelancer": 
-        template = site_context["config"]["theme"]
+    # If no theme argument, and a theme is defined in the site config file
+    if site_context["config"]["theme"] and theme == "freelancer": 
+        theme = site_context["config"]["theme"]
 
-    # Preprocess template folder, and find correct path
-    if os.path.exists(os.path.abspath(template)):
-        template_folder = os.path.abspath(template)
-    elif os.path.exists(os.path.abspath(os.path.join("templates", template))):
-        template_folder = os.path.abspath(os.path.join("templates", template))
-    elif os.path.exists(os.path.abspath(os.path.join(os.path.dirname(__file__), "templates", template))):
-        template_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "templates", template))
+    # Preprocess theme folder, and find correct path
+    if os.path.exists(os.path.abspath(theme)):
+        theme_folder = os.path.abspath(theme)
+    elif os.path.exists(os.path.abspath(os.path.join("themes", theme))):
+        theme_folder = os.path.abspath(os.path.join("themes", theme))
+    elif os.path.exists(os.path.abspath(os.path.join(os.path.dirname(__file__), "themes", theme))):
+        theme_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "themes", theme))
     else:
-        raise ValueError(f"Template {template} does not exist")
+        raise ValueError(f"theme {theme} does not exist")
 
-    # Get a list of all the top level pages in the template folder and add them to the pages list
-    for top_level_file in os.listdir(template_folder):
+    # Get a list of all the top level pages in the theme folder and add them to the pages list
+    for top_level_file in os.listdir(theme_folder):
         if top_level_file.endswith(".jinja") or top_level_file.endswith(".html"):
             pages.append(top_level_file)
     
@@ -280,11 +279,11 @@ def generate_site(output_folder:str="my_site", template:str = "freelancer", sect
     sections_iterator = tqdm(sections)
     sections_iterator.set_description_str("Writing section content")
     for section in sections_iterator: 
-        html = render_section(template_folder, section, site_context["config"]["examples"])
+        html = render_section(theme_folder, section, site_context["config"]["examples"])
         site_context[f"{section}_html"] = html
 
     # Generate and export all the pages of a site
-    export(site_context, template_folder, output_folder, pages)
+    export(site_context, theme_folder, output_folder, pages)
 
     if preview:
         browser_types = ["chromium-browser", "chromium", "chrome", "google-chrome", "firefox", "mozilla", "opera", "safari"] # A list of all the types of browsers to try
