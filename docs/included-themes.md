@@ -113,7 +113,7 @@ The following settings are supported and not supported in the ```config.yml``` f
 ```
 name: ✅
 background: ☑️
-avatar: ☑️
+avatar: ❌
 email: ☑️
 phone: ☑️
 biography: ❌
@@ -129,9 +129,6 @@ social: ☑️
   snapchat: ☑️
   linkedin: ☑️
   facebook: ☑️
-examples: ❌
-resume: ❌
-theme: ❌
 ```
 #### Supported Sections
 
@@ -143,6 +140,75 @@ Below are a list of the supported, and unsupported sections.
 
 ```yml
 Projects: ❌
+Education: ❌
+Publications: ❌
+Work Experience: ❌
+Volunteering Experience: ❌
+```
+
+## Creative
+
+Author:  [Start Bootstrap](https://startbootstrap.com)
+
+Theme page: [https://startbootstrap.com/theme/creative](https://startbootstrap.com/theme/creative)
+
+Preview: [https://startbootstrap.com/previews/creative](https://startbootstrap.com/previews/creative)
+
+
+### Usage
+
+To use this theme in your code either initialize the project with "creative" as the theme, or set it in your ```config.yml``` file:
+
+```yaml
+... # Other configuration settings
+theme: creative
+... # Other configuration settings
+```
+
+**Notes**
+
+For images in projects the dimensions are (530px x 450px)
+
+#### Supported config settings
+
+The following settings are supported and not supported in the ```config.yml``` file:
+
+✅: Required
+
+☑️: Optional
+
+❌: Not Supported
+
+```
+name: ✅
+background: ☑️ (recommended)
+avatar: ❌
+email: ☑️
+phone: ☑️
+biography: ☑️ (recommended)
+role: ☑️ (recommended)
+company: ☑️ (recommended)
+address: ☑️
+social: ❌
+  github: ❌
+  twitch: ❌
+  youtube: ❌
+  instagram: ❌
+  twitter: ❌
+  snapchat: ❌
+  linkedin: ❌
+  facebook: ❌
+```
+#### Supported Sections
+
+Below are a list of the supported, and unsupported sections.
+
+✔️: Supported
+
+❌: Not Supported
+
+```yml
+Projects: ✔️
 Education: ❌
 Publications: ❌
 Work Experience: ❌
@@ -197,9 +263,6 @@ social: ☑️
   snapchat: ☑️
   linkedin: ☑️
   facebook: ☑️
-examples: ☑️
-resume: ☑️
-theme: ☑️
 ```
 #### Supported Sections
 

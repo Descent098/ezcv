@@ -3,30 +3,43 @@
 # Standard Lib Dependencies
 import os
 import shutil
+import tempfile
 from sys import argv, exit
 
 ## internal dependencies
-from ezcv.core import generate_site, SECTIONS_LIST
+from ezcv.core import generate_site, SECTIONS_LIST, get_site_config
 
 # Third party dependencies
+from colored import fg
 from docopt import docopt
 
 usage = """Usage:
     ezcv [-h] [-v] [-p]
     ezcv init [<name>] [<theme>]
-    ezcv build [-d OUTPUT_DIR] [-p]
+    ezcv build [-d OUTPUT_DIR]
+    ezcv theme [-l] [-c] [<theme>]
 
 
 Options:
 -h, --help            show this help message and exit
 -v, --version         show program's version number and exit
+-l, --list            list the possible themes
+-c, --copy            copy the provided theme, or defined site theme
 -p, --preview         preview the current state of the site
 -d OUTPUT_DIR, --dir OUTPUT_DIR The folder name to export the site to
 """
 
-
-
 def init(theme="freelancer", name="John Doe"):
+    """Initializes an ezcv site
+
+    Parameters
+    ----------
+    theme : (str, optional)
+        The theme to use in the config, by default "freelancer"
+
+    name : (str, optional)
+        The name to use in the config, by default "John Doe"
+    """
     print(f"Generating site at {os.path.abspath(name)}")
 
     shutil.copytree(os.path.join(os.path.dirname(__file__), "example_site"), os.path.abspath(name))
@@ -37,15 +50,54 @@ def init(theme="freelancer", name="John Doe"):
 
     print(f"Site generated and is available at {os.path.abspath(name)}")
 
-def preview(temporary_foler_name = "asdfhlasdjkfhlasdjkfhasldkjfhalskfghd"):
-    if not os.path.exists(temporary_foler_name):
-        os.mkdir(temporary_foler_name)
 
-    generate_site(temporary_foler_name, preview=True)
-    input("Press enter when done previewing")
-    shutil.rmtree(temporary_foler_name) # Clean up preview files
+def preview():
+    """Creates a temporary folder of the site's files and then previews it in browser"""
+    with tempfile.TemporaryDirectory() as temp_dir:
+        print(temp_dir)
+        generate_site(temp_dir, preview=True)
+        input("Press enter when done previewing")
+
+
+def theme(list_themes: bool = False, copy_theme:bool = False, theme:str = ""):
+    """Used to get information about the available themes and/or copy a theme folder
+
+    Parameters
+    ----------
+    list_themes : bool, optional
+        Whether or not to list the available themes, by default False
+
+    copy_theme : bool, optional
+        Whether or not to copy provided theme, by default False
+
+    theme : str, optional
+        The theme to copy, by default "" (which will copy the freelancer)
+    """
+    if not theme:
+        theme = "freelancer"
+
+    themes_folder =  os.path.join(os.path.dirname(__file__), "themes")
+
+    if copy_theme:
+        if os.path.exists(os.path.join(themes_folder, theme)): # If the theme exists in the themes folder
+            try: # Try to copy the theme to ./<theme>
+                shutil.copytree(os.path.join(themes_folder, theme), theme)
+            except FileExistsError: # If a folder exists at ./<theme> remove and then re-copy
+                shutil.rmtree(theme)
+                shutil.copytree(os.path.join(themes_folder, theme), theme)
+            print(f"Copied {os.path.join(themes_folder, theme)} to .{os.sep}{theme}")
+        else: # Theme could not be found
+            print(f"{fg(1)}Theme {theme} not found and was unable to be copied{fg(15)}")
+
+    if list_themes:
+        print(f"\nAvailable themes\n{'='*16}")
+        for theme in os.listdir(themes_folder):
+            print(f"  - {theme}")
+        print() # empty newline after list
+
 
 def main():
+    """The primary entrypoint for the ezcv cli"""
     args = docopt(usage, version="0.1.0")
 
     if len(argv) == 1: # Print usage if no arguments are given
@@ -71,8 +123,30 @@ def main():
         else:
             generate_site(args["--dir"])
 
-        if args["--preview"]:
-            preview()
+        if not args["--dir"] and not args["--preview"]: # No flags provided
+            print("\n", usage)
+            exit()
+
+    elif args["theme"]:
+        if args["<theme>"]:
+            theme(args["--list"], args["--copy"], args["<theme>"])
+        elif args["--copy"]: # If copy is flagged, but no theme is provided
+            if os.path.exists("config.yml"):
+                theme(args["--list"], args["--copy"], get_site_config()["theme"])
+            else: # If no theme, or config.yml file is present
+                theme(args["--list"], args["--copy"], "freelancer")
+        elif args["--list"]:
+            theme(args["--list"])
+        else: # If theme argument is called with no other flags
+            print("\n", usage)
+            exit()
+
+    elif args["--preview"]: # If preview flag is specified with no other flags
+        preview()
+
+    else: # No top level argument is provided
+        print("\n", usage)
+        exit()
 
 if __name__ == "__main__": # For testing
     main()

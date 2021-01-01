@@ -1,0 +1,33 @@
+<!-- Projects -->
+        <div id="portfolio">
+            <div class="container-fluid p-0">
+                <div class="row no-gutters">
+                {% for project in projects %}
+                    <!-- {{ project[0]['title'] }} start -->
+                    <div class="col-lg-4 col-sm-6">
+                        {% if project[0]['image'] %}
+                            {% if not project[0]['image'].startswith("http") %}
+                        <a class="portfolio-box" href="{{ project[0]['image'] }}">
+                            <img class="img-fluid" src="images/{{ project[0]['image'] }}" alt="{{project[0]['title']}}" style="width:530px;height:450px;"/>
+                            {% else %}
+                        <a class="portfolio-box" href="{{ project[0]['image'] }}">
+                            <img class="img-fluid" src="{{ project[0]['image'] }}" alt="{{project[0]['title']}}" style="width:530px;height:450px;"/>
+                            {% endif %}
+                        {% else %}  
+                        <a class="portfolio-box" href="images/fullsize/1.jpg">
+                            <img class="img-fluid" src="images/thumbnail/1.jpg" alt="{{project[0]['title']}}" style="width:530px;height:450px;"/>
+                        {% endif %}
+                            <div class="portfolio-box-caption">
+                                
+                                <div class="project-name">{{ project[0]['title'] }}</div>
+                                {% if project[1] %}
+                                    {{ project[1] | safe }}
+                                {% endif %}
+                            </div>
+                        </a>
+                    </div>
+                    <!-- {{ project[0]['title'] }} end -->
+                {% endfor %}
+                </div>
+            </div>
+        </div>

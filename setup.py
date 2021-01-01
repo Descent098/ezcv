@@ -48,7 +48,7 @@ setuptools.setup(
 
     install_requires = [
     "docopt",   # Used for argument parsing if you are writing a CLI
-    "pyyaml",     # Used for config file parsing
+    "pyyaml",   # Used for config file parsing
     "jinja2",   # used as middlewear for generating templates
     "markdown", # Used to parse markdown
     "tqdm",     # Used to generate progress bars

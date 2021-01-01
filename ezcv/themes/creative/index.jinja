@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>{{ config['name'] }}</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+        <!-- Third party plugin CSS-->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+    
+    {% if config["background"] %}
+    <style>
+        header.masthead {
+            padding-top: 10rem;
+            padding-bottom: calc(10rem - 4.5rem);
+            background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url("{{config['background']}}");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+            background-size: cover;
+            }
+    </style>
+    {% endif %}
+    </head>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand js-scroll-trigger" href="#page-top">{{ config['name'] }}</a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto my-2 my-lg-0">                    
+                    {% if config["biography"] %}
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
+                    {% endif %}
+
+
+                    {% if projects_html %}
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio">Projects</a></li>
+                    {% endif %}
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Masthead-->
+        <header class="masthead">
+            <div class="container h-100">
+                <div class="row h-100 align-items-center justify-content-center text-center">
+                    <div class="col-lg-10">
+                        <h1 class="text-uppercase text-white font-weight-bold">{{ config['name'] }} {% if config["role"] %}</br>&nbsp;&bull;&nbsp; {{config["role"]}} &nbsp;&bull;&nbsp;{%endif%} {% if config["company"] %}</br>&nbsp;&bull;&nbsp; {{config["company"]}} &nbsp;&bull;&nbsp;{%endif%}</h1>
+                    </div>
+                    <p class="text-white-75 font-weight-light mb-5"></p>
+                </div>
+            </div>
+        </header>
+
+        {% if config["biography"] %}
+        <section class="page-section bg-primary" id="about">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 text-center">
+                        <h2 class="text-white mt-0">About me!</h2>
+                        <hr class="divider light my-4">
+                        <p class="text-white-75 mb-4">{{ config["biography"] | safe}}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endif %}
+
+
+        <!-- Services-->
+        <section class="page-section" id="services">
+            <div class="container">
+                <h2 class="text-center mt-0">Projects</h2>
+                <hr class="divider my-4" />
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <div class="mt-5">
+                            <i class="fas fa-4x fa-gem text-primary mb-4"></i>
+                            <h3 class="h4 mb-2">Check out my projects below</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {{ projects_html | safe }}
+
+{% if config['phone'] or config['email'] %}
+        <!-- Contact-->
+        <section class="page-section bg-dark text-white" id="contact">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 text-center">
+                        <h2 class="mt-0">Let's Get In Touch!</h2>
+                        <hr class="divider my-4" />
+                        <p class="text-muted mb-5">Reach out via one of the methods below to get in touch with me!</p>
+                    </div>
+                </div>
+                <div class="row">
+                    {% if config['phone'] %}
+                    <div class="col-lg-4 ml-auto text-center mb-5 mb-lg-0">
+                        <a href="tel:{{config['phone']}}">
+                            <i class="fas fa-phone fa-3x mb-3 text-muted"></i>
+                            <div>{{config['phone']}}</div>
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% if config['email'] %}
+                    <div class="col-lg-4 mr-auto text-center">
+                        <a class="d-block" href="mailto:{{config['email']}}">
+                            <i class="fas fa-envelope fa-3x mb-3 text-muted"></i>
+                            <div>{{config['email']}}</div>
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% if config['address'] %}
+                    <div class="col-lg-4 mr-auto text-center">
+                        <i class="fas fa-map-pin fa-3x mb-3 text-muted"></i>
+                        <div>{{config['address']}}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+{% endif %}
+
+        <!-- Footer-->
+        <footer class="bg-light py-5">
+            <div class="container"><div class="small text-center text-muted">Copyright © 2020 - {{ config["name"] }}</div></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Third party plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+    </body>
+</html>
