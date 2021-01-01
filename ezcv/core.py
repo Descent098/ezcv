@@ -1,3 +1,4 @@
+"""TODO"""
 # Standard Lib Dependencies
 import os
 import shutil
@@ -162,7 +163,7 @@ def render_page(theme_folder:str, page:str, site_context:dict) -> str:
     theme = environment.get_template(page)
     return theme.render(site_context)
 
-def export(site_context:dict, theme_folder:str, output_folder:str = "my_site", pages:list=["index.jinja"]):
+def export(site_context:dict, theme_folder:str, output_folder:str = "site", pages:list=["index.jinja"]):
     if not os.path.exists(theme_folder): # Error out if provided theme folder does not exist
         raise FileNotFoundError(f"The provided theme folder does not exist: {theme_folder}")
 
@@ -199,13 +200,13 @@ def export(site_context:dict, theme_folder:str, output_folder:str = "my_site", p
             outfile.write(html)
 
 
-def generate_site(output_folder:str="my_site", theme:str = "freelancer", sections: list = SECTIONS_LIST, config_file_path="config.yml", preview:bool = False):
+def generate_site(output_folder:str="site", theme:str = "freelancer", sections: list = SECTIONS_LIST, config_file_path="config.yml", preview:bool = False):
     """The primary entrypoint to generating a site
 
     Parameters
     ----------
     output_folder : (str, optional)
-        The folder to output the site files to, by default "my_site"
+        The folder to output the site files to, by default "site"
 
     theme : (str, optional)
         The name of the theme to use, by default "freelancer"

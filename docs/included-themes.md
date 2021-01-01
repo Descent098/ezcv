@@ -53,7 +53,7 @@ social:
   facebook: your id # go to facebook and go to your profile, your ID will be at the end of the url i.e. www.facebook.com/<your id>
 examples: true # If you want to include the example.md files in your final build (good for developing new themes)
 resume: false # If you want to generate the resume section
-theme: freelancer # Which of the included templates to use
+theme: freelancer # Which of the included themes to use
 ```
 ## Sections
 
@@ -61,7 +61,7 @@ Sections is the name given to the content you use to fill your site. For example
 
 ### First Party sections
 
-Here is the list of first party sections supported (check each template to see which of these is supported):
+Here is the list of first party sections supported (check each theme to see which of these is supported):
 
 ```
 Projects: Various projects you have worked on in the past
@@ -80,7 +80,7 @@ Preview: [https://html5up.net/aerial](https://html5up.net/aerial)
 
 ### Usage
 
-To use this template in your code either initialize the project with "aerial" as the template, or set it in your ```config.yml``` file:
+To use this theme in your code either initialize the project with "aerial" as the theme, or set it in your ```config.yml``` file:
 
 ```yaml
 ... # Other configuration settings
@@ -160,7 +160,7 @@ Preview: [https://startbootstrap.com/previews/freelancer](https://startbootstrap
 
 ### Usage
 
-To use this template in your code either initialize the project with "freelancer" as the template, or set it in your ```config.yml``` file:
+To use this theme in your code either initialize the project with "freelancer" as the theme, or set it in your ```config.yml``` file:
 
 ```yaml
 ... # Other configuration settings
