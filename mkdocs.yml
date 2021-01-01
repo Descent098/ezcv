@@ -1,12 +1,16 @@
-site_name: project_name
+site_name: ezcv
 
 nav:
     - Home: index.md
+    - Included Themes: included-themes.md
 
 theme: readthedocs
 
-repo_url: Fill in your repo url here
+repo_url: https://github.com/Descent098/ezcv
 
-site_description: This is the documentation site for project_name.
+site_description: A python-based static site generator for setting up a CV/Resume site
 
-site_author: Your name here
+site_author: Kieran Wood
+
+markdown_extensions:
+    - codehilite
