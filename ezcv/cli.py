@@ -1,22 +1,72 @@
-"""TODO"""
+"""The module containing all cli functionality of ezcv including:
+    - Initializing sites
+    - Generating temporary preview
+    - Getting lists of themes and/or copying themes
+
+Functions
+---------
+init:
+    Initializes an ezcv site
+
+preview:
+    Creates a temporary folder of the site's files and then previews it in browser
+
+theme:
+    Used to get information about the available themes and/or copy a theme folder
+
+main:
+    The primary entrypoint for the ezcv cli
+
+Examples
+--------
+Create a new site
+```
+from ezcv.cli import init
+
+theme = "freelancer"
+name = "John Doe"
+
+init(theme, name)
+```
+
+Preview a site that is in the cwd
+```
+from ezcv.cli import preview
+
+preview()
+```
+
+Copy the aerial theme
+```
+from ezcv.cli import theme
+
+theme(copy_theme = True, theme = "aerial")
+```
+
+Print a list of available themes
+```
+from ezcv.cli import theme
+
+theme(list_themes = True)
+```
+"""
 
 # Standard Lib Dependencies
-import os
-import shutil
-import tempfile
-from sys import argv, exit
+import os                   # Used for path validation
+import shutil               # Used for file/folder copying and removal
+import tempfile             # Used to generate temporary folders for previews
+from sys import argv, exit  # Used to get length of CLI args and exit cleanly
 
 ## internal dependencies
-from ezcv.core import generate_site, SECTIONS_LIST, get_site_config
+from ezcv.core import generate_site, _get_site_config
 
 # Third party dependencies
-from colored import fg
-from docopt import docopt
+from docopt import docopt  # Used to complete argument parsing
 
 usage = """Usage:
     ezcv [-h] [-v] [-p]
     ezcv init [<name>] [<theme>]
-    ezcv build [-d OUTPUT_DIR]
+    ezcv build [-d OUTPUT_DIR] [-p]
     ezcv theme [-l] [-c] [<theme>]
 
 
@@ -87,7 +137,7 @@ def theme(list_themes: bool = False, copy_theme:bool = False, theme:str = ""):
                 shutil.copytree(os.path.join(themes_folder, theme), theme)
             print(f"Copied {os.path.join(themes_folder, theme)} to .{os.sep}{theme}")
         else: # Theme could not be found
-            print(f"{fg(1)}Theme {theme} not found and was unable to be copied{fg(15)}")
+            print(f"Theme {theme} not found and was unable to be copied")
 
     if list_themes:
         print(f"\nAvailable themes\n{'='*16}")
@@ -123,6 +173,9 @@ def main():
         else:
             generate_site(args["--dir"])
 
+        if args["--preview"]: # If preview flag is specified
+            preview()
+
         if not args["--dir"] and not args["--preview"]: # No flags provided
             print("\n", usage)
             exit()
@@ -132,7 +185,7 @@ def main():
             theme(args["--list"], args["--copy"], args["<theme>"])
         elif args["--copy"]: # If copy is flagged, but no theme is provided
             if os.path.exists("config.yml"):
-                theme(args["--list"], args["--copy"], get_site_config()["theme"])
+                theme(args["--list"], args["--copy"], _get_site_config()["theme"])
             else: # If no theme, or config.yml file is present
                 theme(args["--list"], args["--copy"], "freelancer")
         elif args["--list"]:
