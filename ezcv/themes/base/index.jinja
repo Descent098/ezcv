@@ -7,7 +7,6 @@
         <meta name="author" content="{{ config['name'] }}" /> 
         <title>{{ config["name"] }} </title>
         <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
@@ -17,7 +16,7 @@
     <body>
         <h1> Configuration Values </h1>
         <ul>
-            <li>{{ config }}</li>
+            <li>{{ config | pprint }}</li>
             <ul>
                 <li>{{ config["name"] }}</li>
                 <li>{{ config["email"] }}</li>
@@ -42,6 +41,8 @@
                 <li>{{ config["resume"] }}</li>
             </ul>
         </ul>
+        <h1> Sections dictionary </h1>
+        {{ sections | pprint }}
         <h1> Generated section HTML </h1>
         {{ projects_html | safe }}
         {{ education_html | safe }}

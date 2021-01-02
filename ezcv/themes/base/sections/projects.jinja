@@ -5,11 +5,15 @@
         <!-- Metadata -->
         <h4>{{ project[0]['title'] }}</h4>
         {% if project[0]["image"] %}
-        <img src="images/{{ project[0]['image'] }}" alt="{{ project[0]['title'] }}"/>
+            {% if project[0]["image"].startswith("http") %}  {# If image is from the internet #}
+            <img src="{{ project[0]['image'] }}" alt="{{ project[0]['title'] }}"/>
+            {% else %} {# If image is a local file #}
+            <img src="images/{{ project[0]['image'] }}" alt="{{ project[0]['title'] }}"/>
+            {%endif%}
         {% endif %}
 
         <!-- Content -->
-        <p>{{ project[1]|striptags }}</p>
+        <p>{{ project[1] | safe }}</p>
     {% endfor %}
 </div>
 <!--End of Projects section-->
