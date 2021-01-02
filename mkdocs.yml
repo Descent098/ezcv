@@ -2,7 +2,10 @@ site_name: ezcv
 
 nav:
     - Home: index.md
+    - Quick Start: quick-start.md
+    - CLI: cli.md
     - Included Themes: included-themes.md
+    - Theme Development: theme-development.md
 
 theme: readthedocs
 
