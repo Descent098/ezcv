@@ -1,19 +1,25 @@
 # Changelog
 
-Include information about your changes as you release 
+## V0.1.0; January 9th 2020
 
-## Version number; Date
-
-Description of release goals.
+Initial release of ezcv
 
 ### Features
 
-...
-
-### Bug fixes
-
-...
+- Themes Added:
+  - [aerial](https://html5up.net/aerial)
+- base
+  - [creative](https://startbootstrap.com/theme/creative)
+  - [dimension](https://html5up.net/dimension)
+  - [ethereal](https://html5up.net/ethereal)
+  - [freelancer](https://startbootstrap.com/theme/freelancer)
+  - [strata](https://html5up.net/strata)
+- Added initial [example site](https://github.com/Descent098/ezcv/tree/master/ezcv/example_site)
+- Added initial [CLI](https://ezcv.readthedocs.io/en/latest/cli/)
+- Added initial [core files](https://github.com/Descent098/ezcv/blob/master/ezcv/core.py#L289-L402)
+- Added to [pypi](https://pypi.org/project/ezcv/)
 
 ### Documentation improvements
 
-...
+- Added initial [api docs](https://kieranwood.ca/ezcv)
+- Added initial [user docs](https://ezcv.readthedocs.io)

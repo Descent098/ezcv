@@ -24,7 +24,7 @@ def get_content(*filename:str) -> str:
 
 setuptools.setup(
     name = "ezcv",
-    version = "0.0.1",
+    version = "0.1.0",
     author = "Kieran Wood",
     author_email = "kieran@canadiancoding.ca",
     description = "An easy to use personal site generator",
@@ -52,7 +52,6 @@ setuptools.setup(
     "jinja2",   # used as middlewear for generating templates
     "markdown", # Used to parse markdown
     "tqdm",     # Used to generate progress bars
-    "colored"   # Used to color terminal output
         ],
     extras_require = {
         "dev" : ["mkdocs", # Used to create HTML versions of the markdown docs in the docs directory
@@ -62,6 +61,6 @@ setuptools.setup(
     classifiers = [
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
-        "Development Status :: 1 - Planning" # TODO: Change this when you have created package, SEE: https://pypi.org/classifiers/
+        "Development Status :: 4 - Beta"
     ],
 )
