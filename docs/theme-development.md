@@ -7,27 +7,102 @@ There are 3 key peices of data you should be aware about when developing your th
 3. Sections HTML; If you are doing a component based model this is where the resulting html is stored
 
 
+## Folder Layout
+
+When creating a theme this is the only officially supported file structure layout (others work but are not guarenteed to):
+
+**Note: I highly recommend snake casing on folder and file names to avoid path escaping bugs**
+
+```
+📁<theme_name>/
+├── 📁css/
+|   └──📄 <file_name>.css
+├── 📁js/
+|   └──📄 <file_name>.js
+├── 📁images/
+|   └──📄 <file_name>.<extension>
+├── 📁sections/
+|   └──📄 <section_name>.jinja
+└── 📄index.jinja
+```
+
+
 ## Base Theme
 
-...
+To make things easier to understand there is a base theme that has every feature supported in plain unstyled html. To use this base theme I would recommend copying it to your working directory and then changing your ```config.yml``` to use it. so you would do:
+
+```shell
+ezcv theme -c base
+```
+
+and then in your ```config.yml``` set:
+
+```yml
+theme: base
+```
+
+This will let you see in plain html **just** what ezcv is doing.
+
 
 ## Modifying Existing themes
 
-...
+If you want to modify an existing theme, set it in your ```config.yml``` file and then just run:
+
+```shell
+ezcv -c
+```
+
+You will now have a folder in your working directory with a copy of the theme you are using that you can begin modifying.
 
 ## Config Variable
 
-...
+Any settings defined in the ```config.yml``` file will be available in the templates under the ```config``` variable. For example if you wanted to access the defined name in the ```config.yml``` file you would do:
+
+```jinja2
+{{ config["name"] }}
+```
+
+### Adding new config values
+
+Since the ```config``` variable is a [defaultdict](https://docs.python.org/3/library/collections.html#collections.defaultdict), this means you can include any key-value pairs you want without needing to update the ezcv code base. Any unspecified values will simply return `False` instead of just crashing. 
+
+So for example if you wanted to include a new variable in your theme called ```sign``` you could do it without needing to update ezcv in any way.
+
+### Optional values
+
+ Just keep in mind that if you want a variable to be optional you should do an explicit check within the **theme** for the variable, for example:
+
+```jinja2
+{% if config["sign"] %}
+  <p> your sign is {{ config["sign"] }} </p>
+
+{{% else %}}
+<p> You have no sign </p>
+
+{{% endif %}}
+```
+
+Because if you just do:
+
+```jinja2
+<p> your sign is {{ config["sign"] }} </p>
+```
+
+Then if no sign value is specified you will get:
+
+```html
+<p> your sign is False </p>
+```
 
 ## Sections
 
 ### Sections Dictionary
 
-For each section you can access a defaultdictionary inside any templates and use the section name as a key to get a list of that sections content.
+For each section you can access a [defaultdict](https://docs.python.org/3/library/collections.html#collections.defaultdict) inside any templates and use the section name as a key to get a list of that sections content.
 
 For example here is what an example section dictionary would look like with only the work_experience section:
 
-**Note that because this is a defaultdictionary any keys that are not filled in will be False**
+**Note that because this is a [defaultdict](https://docs.python.org/3/library/collections.html#collections.defaultdict) any keys that are not filled in will be False**
 
 ```python
 {'work_experience': 
@@ -78,12 +153,61 @@ So to iterate through each of the peices of content you could do:
 
 ### Developing sections templates
 
-...
+In any theme using the typical [file folder layout](#folder-layout) you just simply add your files in the ```/sections``` folder. I recommend using the ```.jinja``` extension, but ```.html``` will also work. 
+
+For example to create a section template for ```projects``` you would have:
+
+```
+📁<theme_name>/
+├── 📁sections/
+└──  └──📄 projects.jinja
+```
+
+Then put your section template inside ```projects.jinja```.
 
 ### Sections HTML
 
 On top of the actual sections being included in the sections dictionary if you have sections templates for doing component-based rendering you can access them using ```<section>_html```. So for example if you have a theme called ```base``` with a ```projects``` section in ```/base/sections/projects.jinja``` then to access the rendered html in your top-level pages you can use:
 
-```jinja
+```jinja2
+{{ projects_html | safe }}
+```
 
+### Creating custom sections
+
+ezcv supports adding in custom sections without need to change the codebase. To do so, simply add in the section template to ```/sections``` in your theme, then add a folder with the same name inside ```/content``` in the site's directory. Inside the section template the content will be available under the section name. 
+
+For example if you created a custom section called ```foo``` then in your theme folder you would put:
+
+```
+📁<theme_name>/
+├── 📁sections/
+└──  └──📄 foo.jinja
+```
+
+and in your site you would put
+
+```
+📁<site_name>/
+├── 📁content/
+|    └── 📁foo/
+|         └──📄 example.md
+```
+
+and you can access the content of all the files in ```/content/foo``` in ```foo.jinja``` via:
+
+```jinja2
+<p> This is all the section foo content </p>
+{{ foo }}
+
+<p> This is how to iterate over each peice of content indvidually </p>
+
+{% for bar in foo %}
+<p> This is the metadata </p>
+{{ bar[0] }}
+
+<p> This is the content </p>
+{{ bar[1] | safe }}
+
+{% endfor %}
 ```

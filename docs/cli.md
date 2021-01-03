@@ -57,8 +57,8 @@ ezcv build --dir="site" -p
 
 There are two optional flags:
 
-    - The ```--dir``` flag for giving a custom name to the output directory (default is "site")
-    - If you want to preview after the build (```-p```)
+- The ```--dir``` flag for giving a custom name to the output directory (default is "site")
+- If you want to preview after the build (```-p```)
 
 **Example**
 
@@ -77,6 +77,7 @@ ezcv theme -l -c <theme>
 ```
 
 There are two optional flags and one positional argument:
+
 - ```-l``` indicates you want to see a list of the available themes
 - ```-c``` indicates you want to copy a theme
   - First it will check if a ```<theme>``` argument has been passed, and if it has it will copy that theme

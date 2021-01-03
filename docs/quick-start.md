@@ -1,14 +1,86 @@
 # Quick start
 
+Everything you need to get you up and running with ezcv. 
+
+There are two different ways to get started:
+
+- Local installation
+- Remote editing
+
+If you are familiar with git, github and markdown then I would recommend starting from [Local Installation](#local-installation).
+
+If you are unfamiliar with any of the above then see directly below for getting started with remote editing.
+
+## Remote editing
+
 ...
 
-## Installation
+## Local Installation
 
-...
+To use ezcv you will need python 3.6+ (earlier versions wont work) and pip for python 3.
 
-## No-code usage
+### From PyPi
 
-...
+1. Run ```pip install ezcv```
+
+### From source
+
+1. Clone this repo: [https://github.com/Descent098/ezcv](https://github.com/Descent098/ezcv)
+2. Run ```pip install .``` or ```sudo pip3 install .```in the root directory
+
+## Getting started
+
+The easiest way to get started is by running:
+
+```ezcv init <name>```
+
+Replacing the ```<name>``` argument with your name (use "" if you want to use your full name i.e. ```ezcv init "Kieran Wood"```). 
+
+### File structure
+
+When you run the command a new folder will be created with your name, and some starter files like this:
+
+**Legend**
+
+| Icon | Meaning |
+|------|---------|
+|📁| File Folder |
+|📷| Image file |
+|📝| File you should edit/delete |
+|📄| File you don't need to edit/shouldn't delete |
+
+```
+📁<name>/
+├── 📁.github/
+│   └── 📁workflows/
+│       └── 📄ezcv-publish.yml
+├── 📁content/
+│   ├── 📁education/
+│   |   ├── 📝example-current.md
+│   |   └── 📝example-old.md
+│   ├── 📁projects/
+│   |   └── 📝example.md
+│   ├── 📁volunteering_experience/
+│   |   ├── 📝example-current.md
+│   |   └── 📝example-old.md
+│   └── 📁volunteering_experience/
+│       ├── 📝example-current.md
+│       └── 📝example-old.md
+├── 📁images/
+│   ├── 📷 abstract-landscape.jpg
+│   └── 📷 ice-caps.jpg
+├── 📄.gitignore
+└── 📝config.yml
+```
+
+From here you can go into your ```config.yml``` file and [pick a theme](https://ezcv.readthedocs.io/en/latest/included-themes/), then start filling out your content according to what's available for the theme.
+
+To preview your content use:
+
+```ezcv -p```
+
+If you're on github then pushing the contents to master/main will activate the publish workflow and automatically publish the site to ```<username>.github.io```.
+
 
 ## Configuration Settings
 
@@ -79,4 +151,30 @@ Volunteering Experience: Your current/old volunteer experience that you want to 
 
 ## Image management
 
-...
+To include images in your site add them to the images folder (in the same spot as your ```config.yml``` file).
+
+From there, there's two possible ways to include images:
+
+1. In the metadata of a file, for example in ```/content/projects/example.md``` you will see an image field.
+2. Inline in a file, like if you wanted to include an image of a diagram in a file.
+
+To include an image in the metadata of a file, you just simply put the filename. For example if you have ```abstract-landscape.jpg``` inside the ```images``` folder then you would just do something like
+
+```md
+---
+image: abstract-landscape.jpg
+---
+<!--- This is where your other content would go -->
+```
+
+To include an image inline you use standard markdown syntax and reference the file using the full path i.e. ```images/abstract-landscape.jpg``` would be:
+
+```md
+---
+<!-- This is where your metadata is -->
+---
+This is a cool image:
+
+![abstract landscape](images/abstract-landscape.jpg)
+```
+
