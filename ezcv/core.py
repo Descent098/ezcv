@@ -15,14 +15,14 @@ SECTIONS_LIST (list[str]):
 
 Examples
 --------
-Generating a site using all settings defined in "config.yml"
+#### Generating a site using all settings defined in "config.yml"
 ```
 from ezcv.core import generate_site
 
 generate_site()
 ```
 
-Generating a site overriding the theme in "config.yml", output directory and specifying to show a preview of the site
+#### Generating a site overriding the theme in "config.yml", output directory and specifying to show a preview of the site
 ```
 from ezcv.core import generate_site
 

@@ -19,7 +19,7 @@ main:
 
 Examples
 --------
-Create a new site
+#### Create a new site
 ```
 from ezcv.cli import init
 
@@ -29,21 +29,21 @@ name = "John Doe"
 init(theme, name)
 ```
 
-Preview a site that is in the cwd
+#### Preview a site that is in the cwd
 ```
 from ezcv.cli import preview
 
 preview()
 ```
 
-Copy the aerial theme
+#### Copy the aerial theme
 ```
 from ezcv.cli import theme
 
 theme(copy_theme = True, theme = "aerial")
 ```
 
-Print a list of available themes
+#### Print a list of available themes
 ```
 from ezcv.cli import theme
 
