@@ -101,7 +101,7 @@ Each site will have a ```config.yml``` file, this file is in the [YAML format](h
 | **address** | Your physical address | The full text of your address |
 | **social** | Social media links | github, twitch, youtube, instagram, twitter, snapchat, linkedin, facebook |
 | **examples** | Whether to include content files that have example in the name | true or false |
-| **theme** | The name of the theme to use | the name of any included theme i.e. freelancer |
+| **theme** | The name of the theme to use | the name of any included theme i.e. dimension |
 
 </br>
 
@@ -131,7 +131,7 @@ social:
   linkedin: name # go to linkedin and go to your profile, your name will be at the end of the url i.e. www.linkedin.com/in/<name>
   facebook: your id # go to facebook and go to your profile, your ID will be at the end of the url i.e. www.facebook.com/<your id>
 examples: true # If you want to include the example.md files in your final build (good for developing new themes)
-theme: freelancer # Which of the included themes to use
+theme: dimension # Which of the included themes to use
 ```
 ## Sections
 

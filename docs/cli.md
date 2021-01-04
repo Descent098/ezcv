@@ -82,7 +82,7 @@ There are two optional flags and one positional argument:
 - ```-c``` indicates you want to copy a theme
   - First it will check if a ```<theme>``` argument has been passed, and if it has it will copy that theme
   - Then it will check if there's a ```config.yml``` file in the current directory and copy that one
-  - Then it will just default to exporting the freelancer theme
+  - Then it will just default to exporting the dimension theme
 
 
 **Examples**
