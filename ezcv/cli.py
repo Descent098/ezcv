@@ -79,13 +79,13 @@ Options:
 -d OUTPUT_DIR, --dir OUTPUT_DIR The folder name to export the site to
 """
 
-def init(theme="freelancer", name="John Doe"):
+def init(theme="dimension", name="John Doe"):
     """Initializes an ezcv site
 
     Parameters
     ----------
     theme : (str, optional)
-        The theme to use in the config, by default "freelancer"
+        The theme to use in the config, by default "dimension"
 
     name : (str, optional)
         The name to use in the config, by default "John Doe"
@@ -121,10 +121,10 @@ def theme(list_themes: bool = False, copy_theme:bool = False, theme:str = ""):
         Whether or not to copy provided theme, by default False
 
     theme : str, optional
-        The theme to copy, by default "" (which will copy the freelancer)
+        The theme to copy, by default "" (which will copy the dimension theme)
     """
     if not theme:
-        theme = "freelancer"
+        theme = "dimension"
 
     themes_folder =  os.path.join(os.path.dirname(__file__), "themes")
 

@@ -159,11 +159,11 @@ def _render_section(theme_folder:str, section_content_dir:str, examples:bool = F
     --------
     ### Render projects section
     ```
-    # NOTE: This example assumes you have a folder with projects at ./projects and a section theme at <ezcv install directory>/themes/freelancer/projects.jinja
+    # NOTE: This example assumes you have a folder with projects at ./projects and a section theme at <ezcv install directory>/themes/dimension/projects.jinja
 
     from ezcv import _render_section
 
-    theme = "freelancer"
+    theme = "dimension"
     section = "projects" # The relative path to the content folder for this 
 
     theme_folder = os.path.abspath(os.path.join(os.path.dirname(ezcv.__file__), "themes", theme))
@@ -283,7 +283,7 @@ def _export(site_context:dict, theme_folder:str, output_folder:str = "site", pag
             outfile.write(html)
 
 
-def generate_site(output_folder:str="site", theme:str = "freelancer", sections: list = [], config_file_path="config.yml", preview:bool = False):
+def generate_site(output_folder:str="site", theme:str = "dimension", sections: list = [], config_file_path="config.yml", preview:bool = False):
     """The primary entrypoint to generating a site
 
     Parameters
@@ -292,7 +292,7 @@ def generate_site(output_folder:str="site", theme:str = "freelancer", sections: 
         The folder to output the site files to, by default "site"
 
     theme : (str, optional)
-        The name of the theme to use, by default "freelancer"
+        The name of the theme to use, by default "dimension"
 
     sections : (list[str], optional)
         A list of the sections to include in export, by default []
@@ -347,7 +347,7 @@ def generate_site(output_folder:str="site", theme:str = "freelancer", sections: 
     site_context = {"config": _get_site_config(config_file_path)} 
 
     # If no theme argument, and a theme is defined in the site config file
-    if site_context["config"]["theme"] and theme == "freelancer": 
+    if site_context["config"]["theme"] and theme == "dimension": 
         theme = site_context["config"]["theme"]
 
     site_context["sections"] = {}
