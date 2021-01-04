@@ -269,9 +269,6 @@ def _export(site_context:dict, theme_folder:str, output_folder:str = "site", pag
         for file in os.listdir("images"): # Copy file from source images folder to output image directory
             shutil.copyfile(os.path.join("images", file), os.path.join(output_image_dir, file))
 
-    ## Copy images in content directories
-    ### TODO
-
     # Iterate through top level pages and write to the output folder
     print("\nGenerating output html from theme")
     pages_iterator = tqdm(pages)
@@ -365,7 +362,7 @@ def generate_site(output_folder:str="site", theme:str = "freelancer", sections: 
     else:
         raise FileNotFoundError(f"Theme {theme} does not exist")
     
-    if not sections:
+    if not sections and os.path.exists(os.path.join(theme_folder, "sections")):
         for section in os.listdir(os.path.join(theme_folder, "sections")):
             if section.endswith(".jinja"):
                 section = section.replace(".jinja", "")

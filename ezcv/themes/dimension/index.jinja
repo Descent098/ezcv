@@ -1,0 +1,162 @@
+<!DOCTYPE HTML>
+<!--
+	Dimension by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>{{ config["name"] }}</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="css/main.css" />
+		<noscript><link rel="stylesheet" href="css/noscript.css" /></noscript>
+{% if config["background"] %}			
+	<style>
+		#bg:after {
+			-moz-transform: scale(1.125);
+			-webkit-transform: scale(1.125);
+			-ms-transform: scale(1.125);
+			transform: scale(1.125);
+			-moz-transition: -moz-transform 0.325s ease-in-out, -moz-filter 0.325s ease-in-out;
+			-webkit-transition: -webkit-transform 0.325s ease-in-out, -webkit-filter 0.325s ease-in-out;
+			-ms-transition: -ms-transform 0.325s ease-in-out, -ms-filter 0.325s ease-in-out;
+			transition: transform 0.325s ease-in-out, filter 0.325s ease-in-out;
+		{% if config['background'].startswith('http') or config['background'].startswith('images') %}
+			background-image: url("{{ config['background'] }}");
+		{% else %}
+			background-image: url("images/{{ config['background'] }}");
+		{% endif %}
+			background-position: center;
+			background-size: cover;
+			background-repeat: no-repeat;
+			z-index: 1;
+		}
+	</style>
+{% endif %}
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="logo">
+							<span class="icon fa-gem"></span>
+						</div>
+						<div class="content">
+							<div class="inner">
+								<h1>{{ config["name"] }}</h1>
+								{% if config["role"] and config["company"] %}
+								<h3>{{ config["role"] }} &nbsp;&bull;&nbsp; {{ config["company"] }}</h3>
+								{% elif config["role"] %}
+								<h3>{{ config["role"] }}</h3>
+								{% elif config["company"] %}
+								<h3>{{ config["company"] }}</h3>
+								{% else %}
+								{% endif %}
+							</div>
+						</div>
+						<nav>
+							<ul>
+								{% if work_experience_html or volunteering_experience_html or education_html %}
+								<li><a href="#experience">Experience</a></li>
+								{% endif %}
+
+								{% if projects_html %}
+								<li><a href="#projects">Projects</a></li>
+								{% endif %}
+
+								<li><a href="#about">About</a></li>
+							</ul>
+						</nav>
+					</header>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Start of experience section -->
+							<article id="experience">
+								<h2 class="major">Experience</h2>
+								<p>Below are examples of my experience and qualifications</p>
+								{{ education_html | safe }}
+								{{ work_experience_html | safe }}
+								{{ volunteering_experience_html | safe }}
+							</article>
+						<!-- End of experience section -->
+
+						<!-- Start of projects section -->
+							<article id="projects">
+								<h2 class="major">Projects</h2>
+								<p>Below are some of my projects</p>
+								{{ projects_html | safe }}
+							</article>
+						<!-- End of Projects section -->
+
+						<!-- About -->
+							<article id="about">
+								<h2 class="major">About Me</h2>
+								{% if config["avatar"] %}
+									{% if config["avatar"].startswith("http") or config["avatar"].startswith("images") %}
+									<span><img src="{{ config['avatar'] }}" style="display: block;margin-left: auto;margin-right: auto;width: 50%;"></span>
+									{% else %}
+									<span><img src="images/{{ config['avatar'] }}" style="display: block;margin-left: auto;margin-right: auto;width: 50%;"></span>
+									{%endif%}
+								{% endif %}
+								{{ config["biography"] | safe }}
+								</br>
+								</br>
+								<ul class="icons">
+									{% if config['social']["github"] %}
+									<li><a href="https://github.com/{{config['social']['github']}}" class="icon brands fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+									{% endif %}
+									{% if config['social']["youtube"] %}
+									<li><a href="https://youtube.com/{{config['social']['youtube']}}" class="icon brands fa-youtube" target="_blank"><span class="label">YouTube</span></a></li>
+									{% endif %}
+									{% if config['social']["twitch"] %}
+									<li><a href="https://twitch.tv/{{config['social']['twitch']}}" class="icon brands fa-twitch" target="_blank"><span class="label">Twitch</span></a></li>
+									{% endif %}
+									{% if config['social']["twitter"] %}
+									<li><a href="https://www.twitter.com/{{config['social']['twitter']}}" class="icon brands fa-twitter" target="_blank"><span class="label">Twitter</span></a></li>
+									{% endif %}
+									{% if config['social']["instagram"] %}
+									<li><a href="https://www.instagram.com/{{config['social']['instagram']}}" class="icon brands fa-instagram" target="_blank"><span class="label">Instagram</span></a></li>
+									{% endif %}
+									{% if config['social']["facebook"] %}
+									<li><a href="https://www.facebook.com/{{config['social']['facebook']}}" class="icon brands fa-facebook" target="_blank"><span class="label">Facebook</span></a></li>
+									{% endif %}
+									{% if config['social']["linkedin"] %}
+									<li><a href="https://www.instagram.com/{{config['social']['instagram']}}" class="icon brands fa-linkedin-in" target="_blank"><span class="label">LinkedIn</span></a></li>
+									{% endif %}
+									{% if config['social']["snapchat"] %} 
+									<li><a href="https://snapchat.com/add/{{config['social']['snapchat']}}" class="icon brands fa-snapchat" target="_blank"><span class="label">snapchat</span></a></li>
+									{% endif %}
+									{% if config['email'] %} 
+									<li><a href="mailto:{{config['email']}}" class="icon solid fa-envelope" target="_blank"><span class="label">email</span></a></li>
+									{% endif %}
+									{% if config['phone'] %} 
+									<li><a href="tel:{{config['phone']}}" class="icon solid fa-phone" target="_blank"><span class="label">phone</span></a></li>
+									{% endif %}
+								</ul>
+							</article>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<p class="copyright">&copy; {{ config["name"] }} 2020. Design: <a href="https://html5up.net" target="_blank">HTML5 UP</a>. </br>Built using: <a href="https://ezcv.readthedocs.io" target="_blank">ezcv</a>.</p>
+					</footer>
+
+			</div>
+
+		<!-- BG -->
+			<div id="bg"></div>
+
+		<!-- Scripts -->
+			<script src="js/jquery.min.js"></script>
+			<script src="js/browser.min.js"></script>
+			<script src="js/breakpoints.min.js"></script>
+			<script src="js/util.js"></script>
+			<script src="js/main.js"></script>
+
+	</body>
+</html>

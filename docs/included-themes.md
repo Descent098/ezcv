@@ -155,6 +155,73 @@ Work Experience: ❌
 Volunteering Experience: ❌
 ```
 
+## Dimension
+
+Author:  [HTML5Up](https://html5up.net)
+
+### Preview
+
+Full page preview: [https://html5up.net/dimension](https://html5up.net/dimension)
+
+<iframe src="https://html5up.net/uploads/demos/dimension/" width="100%" height="500px">
+</iframe>
+
+### Usage
+
+To use this theme in your code either initialize the project with "dimension" as the theme, or set it in your ```config.yml``` file:
+
+```yaml
+... # Other configuration settings
+theme: dimension
+... # Other configuration settings
+```
+
+#### Supported config settings
+
+The following settings are supported and not supported in the ```config.yml``` file:
+
+✅: Required
+
+☑️: Optional
+
+❌: Not Supported
+
+```
+name: ✅
+background: ☑️ (recommended)
+avatar: ☑️
+email: ☑️
+phone: ☑️
+biography: ✅
+role: ☑️ (recommended)
+company: ☑️ (recommended)
+address: ☑️
+social: ☑️
+  github: ☑️
+  twitch: ☑️
+  youtube: ☑️
+  instagram: ☑️
+  twitter: ☑️
+  snapchat: ☑️
+  linkedin: ☑️
+  facebook: ☑️
+```
+#### Supported Sections
+
+Below are a list of the supported, and unsupported sections.
+
+✔️: Supported
+
+❌: Not Supported
+
+```yml
+Projects: ✔️
+Education: ✔️
+Publications: ✔️
+Work Experience: ✔️
+Volunteering Experience: ✔️
+```
+
 ## Freelancer
 
 Author:  [Start Bootstrap](https://startbootstrap.com)

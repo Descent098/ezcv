@@ -18,7 +18,7 @@ def get_content(*filename:str) -> str:
     """
     content = ""
     for file in filename:
-        with open(file, "r") as full_description:
+        with open(file, "r", encoding="utf-8") as full_description:
             content += full_description.read()
     return content
 

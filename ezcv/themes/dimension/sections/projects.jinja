@@ -1,0 +1,18 @@
+{% for project in projects %}
+<h4 class="major">{{ project[0]['title'] }}</h4>
+
+{% if project[0]["image"] %}
+    {% if project[0]["image"].startswith("http") or project[0]["image"].startswith("images") %}  {# If image is from the internet #}
+    <span class="image main"><img src="{{ project[0]['image'] }}" alt="{{ project[0]['title'] }}"/></span>
+    {% else %} {# If image is a local file #}
+    <span class="image main" ><img src="images/{{ project[0]['image'] }}" alt="{{ project[0]['title'] }}"/></span>
+    {%endif%}
+{% endif %}
+
+    {{ project[1] | safe }}
+    {% if project[0]["link"] %}
+    <ul class="icons">
+    <li><a href="{{ project[0]['link'] }}" class="icon solid fa-link" target="_blank"><span class="label">{{ project[0]['title'] }}</span></a></li>
+    </ul>
+    {% endif %}
+{% endfor %}
