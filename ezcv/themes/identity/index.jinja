@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<!--
+	Identity by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Identity by HTML5 UP</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="css/main.css" />
+		<noscript><link rel="stylesheet" href="css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+		{% if config["background"] %}
+		<style>
+		body {
+			height: 100%;
+			background-color: #ffffff;
+			{% if config['background'].startswith('http') or config['background'].startswith('images') %}
+			background-image: url("../images/overlay.png"), -moz-linear-gradient(60deg, rgba(255, 165, 150, 0.5) 5%, rgba(0, 228, 255, 0.35)), url("{{config['background']}}");
+			background-image: url("../images/overlay.png"), -webkit-linear-gradient(60deg, rgba(255, 165, 150, 0.5) 5%, rgba(0, 228, 255, 0.35)), url("{{config['background']}}");
+			background-image: url("../images/overlay.png"), -ms-linear-gradient(60deg, rgba(255, 165, 150, 0.5) 5%, rgba(0, 228, 255, 0.35)), url("{{config['background']}}");
+			background-image: url("../images/overlay.png"), linear-gradient(60deg, rgba(255, 165, 150, 0.5) 5%, rgba(0, 228, 255, 0.35)), url("{{config['background']}}");
+			{% else %}
+			background-image: url("../images/overlay.png"), -moz-linear-gradient(60deg, rgba(255, 165, 150, 0.5) 5%, rgba(0, 228, 255, 0.35)), url("images/{{config['background']}}");
+			background-image: url("../images/overlay.png"), -webkit-linear-gradient(60deg, rgba(255, 165, 150, 0.5) 5%, rgba(0, 228, 255, 0.35)), url("images/{{config['background']}}");
+			background-image: url("../images/overlay.png"), -ms-linear-gradient(60deg, rgba(255, 165, 150, 0.5) 5%, rgba(0, 228, 255, 0.35)), url("images/{{config['background']}}");
+			background-image: url("../images/overlay.png"), linear-gradient(60deg, rgba(255, 165, 150, 0.5) 5%, rgba(0, 228, 255, 0.35)), url("images/{{config['background']}}");
+			{% endif %}
+
+			background-repeat: repeat,			no-repeat,			no-repeat;
+			background-size: 100px 100px, cover,				cover;
+			background-position: top left,		center center,		bottom center;
+			background-attachment: fixed,			fixed,				fixed;
+		}
+	</style>
+		{% endif %}
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<section id="main">
+						<header>
+							{% if config['avatar'].startswith('http') or config['avatar'].startswith('images') %}
+							<span class="avatar"><img src="{{ config['avatar'] }}" alt="{{ config['name'] }}" /></span>
+							{% else %}
+							<span class="avatar"><img src="images/{{ config['avatar'] }}" alt="{{ config['name'] }}" /></span>
+							{% endif %}
+							<h1>{{ config["name"] }}</h1>
+							<em>{% if config['role'] %}  {{ config['role'] }}&nbsp;&bull;&nbsp;{% endif %} {% if config['company'] %}  {{ config['company'] }}{% endif %}</em>
+						</header>
+						
+						<footer>
+							<ul class="icons">
+								{% if config['social']["github"] %}
+								<li><a href="https://github.com/{{config['social']['github']}}" class="icon brands fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+								{% endif %}
+								{% if config['social']["youtube"] %}
+								<li><a href="https://youtube.com/{{config['social']['youtube']}}" class="icon brands fa-youtube" target="_blank"><span class="label">YouTube</span></a></li>
+								{% endif %}
+								{% if config['social']["twitch"] %}
+								<li><a href="https://twitch.tv/{{config['social']['twitch']}}" class="icon brands fa-twitch" target="_blank"><span class="label">Twitch</span></a></li>
+								{% endif %}
+								{% if config['social']["twitter"] %}
+								<li><a href="https://www.twitter.com/{{config['social']['twitter']}}" class="icon brands fa-twitter" target="_blank"><span class="label">Twitter</span></a></li>
+								{% endif %}
+								{% if config['social']["instagram"] %}
+								<li><a href="https://www.instagram.com/{{config['social']['instagram']}}" class="icon brands fa-instagram" target="_blank"><span class="label">Instagram</span></a></li>
+								{% endif %}
+								{% if config['social']["facebook"] %}
+								<li><a href="https://www.facebook.com/{{config['social']['facebook']}}" class="icon brands fa-facebook" target="_blank"><span class="label">Facebook</span></a></li>
+								{% endif %}
+								{% if config['social']["linkedin"] %}
+								<li><a href="https://www.instagram.com/{{config['social']['instagram']}}" class="icon brands fa-linkedin-in" target="_blank"><span class="label">LinkedIn</span></a></li>
+								{% endif %}
+								{% if config['social']["snapchat"] %} 
+								<li><a href="https://snapchat.com/add/{{config['social']['snapchat']}}" class="icon brands fa-snapchat" target="_blank"><span class="label">snapchat</span></a></li>
+								{% endif %}
+								{% if config['email'] %} 
+								<li><a href="mailto:{{config['email']}}" class="icon solid fa-envelope" target="_blank"><span class="label">email</span></a></li>
+								{% endif %}
+								{% if config['phone'] %} 
+								<li><a href="tel:{{config['phone']}}" class="icon solid fa-phone" target="_blank"><span class="label">phone</span></a></li>
+								{% endif %}
+							</ul>
+						</footer>
+					</section>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<ul class="copyright">
+							<p class="copyright">&copy; {{ config["name"] }} 2020. Design: <a href="https://html5up.net" target="_blank">HTML5 UP</a>. </br>Built using: <a href="https://ezcv.readthedocs.io" target="_blank">ezcv</a>.</p>
+						</ul>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script>
+				if ('addEventListener' in window) {
+					window.addEventListener('load', function() { document.body.className = document.body.className.replace(/\bis-preload\b/, ''); });
+					document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
+				}
+			</script>
+
+	</body>
+</html>

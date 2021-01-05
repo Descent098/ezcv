@@ -1,0 +1,10 @@
+<h2><a href="#" class="icon solid fa-wrench"><span class="label">Work Experience</span></a>Work Experience</h2>
+<div class="row">
+    {% for experience in work_experience %}
+    <article class="col-6 col-12-xsmall work-item">
+        <h3>{{ experience[0]["company"] }}</h3>
+        <em>{{ experience[0]["year_started"] }} {% if experience[0]["current"] %}- Present{% endif %}{% if experience[0]["year_ended"] %}- {{ experience[0]["year_ended"] }}{%endif%}</em>
+        {{ experience[1] | safe }}
+    </article>
+    {% endfor %}
+</div>

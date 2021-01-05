@@ -1,0 +1,25 @@
+				<!-- Two -->
+					<section id="two">
+						<h2>Projects</h2>
+						<div class="row">
+                            {% for project in projects %}
+							<article class="col-6 col-12-xsmall work-item">
+                                {% if project[0]["image"] %}
+                                    {% if project[0]["image"].startswith("http") or project[0]["image"].startswith("images") %}  {# If image is from the internet #}
+                                <img src="{{ project[0]['image'] }}" alt="{{ project[0]['title'] }}"/>
+                                    {% else %} {# If image is a local file #}
+                                <img src="images/{{ project[0]['image'] }}" alt="{{ project[0]['title'] }}"/>
+                                    {%endif%}
+                                {% endif %}
+								<h3>{{ project[0]["title"] }}</h3>
+								{{ project[1] | safe }}
+
+                                {% if project[0]["link"] %}
+                                <a href="{{ project[0]['link'] }}" class="button" target="_blank">Check out the project</a>
+                                {% else %}
+                                {% endif %}
+							</article>
+                            {% endfor %}
+
+						</div>
+					</section>

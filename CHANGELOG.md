@@ -13,6 +13,8 @@ Initial release of ezcv
   - [dimension](https://html5up.net/dimension)
   - [ethereal](https://html5up.net/ethereal)
   - [freelancer](https://startbootstrap.com/theme/freelancer)
+  - [Identity](https://html5up.net/identity)
+  - [Read only](https://html5up.net/read-only)
   - [strata](https://html5up.net/strata)
 - Added initial [example site](https://github.com/Descent098/ezcv/tree/master/ezcv/example_site)
 - Added initial [CLI](https://ezcv.readthedocs.io/en/latest/cli/)
