@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<!--
+	Read Only by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>{{ config["name"] }}</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Header -->
+			<section id="header">
+				<header>
+					{% if config['avatar'].startswith('http') or config['avatar'].startswith('images') %}
+					<span class="image avatar"><img src="{{ config['avatar'] }}" alt="{{ config['name'] }}" /></span>
+					{% else %}
+					<span class="image avatar"><img src="images/{{ config['avatar'] }}" alt="{{ config['name'] }}" /></span>
+					{% endif %}
+					<h1 id="logo">{{ config["name"] }}</h1>
+					<em>{% if config['role'] %}  {{ config['role'] }}&nbsp;&bull;&nbsp;{% endif %} {% if config['company'] %}  {{ config['company'] }}{% endif %}</em>
+				</header>
+				<nav id="nav">
+					<ul>
+						<li><a href="#one" class="active">About</a></li>
+						{% if education_html or work_experience_html or volunteering_experience_html %}
+						<li><a href="#two">Experience</a></li>
+						{% endif %}
+						{% if projects_html %}
+
+						<li><a href="#three">Projects</a></li>
+						{% endif %}
+					</ul>
+				</nav>
+				<footer>
+					<ul class="icons">
+						{% if config['social']["github"] %}
+						<li><a href="https://github.com/{{config['social']['github']}}" class="icon brands fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+						{% endif %}
+						{% if config['social']["youtube"] %}
+						<li><a href="https://youtube.com/{{config['social']['youtube']}}" class="icon brands fa-youtube" target="_blank"><span class="label">YouTube</span></a></li>
+						{% endif %}
+						{% if config['social']["twitch"] %}
+						<li><a href="https://twitch.tv/{{config['social']['twitch']}}" class="icon brands fa-twitch" target="_blank"><span class="label">Twitch</span></a></li>
+						{% endif %}
+						{% if config['social']["twitter"] %}
+						<li><a href="https://www.twitter.com/{{config['social']['twitter']}}" class="icon brands fa-twitter" target="_blank"><span class="label">Twitter</span></a></li>
+						{% endif %}
+						{% if config['social']["instagram"] %}
+						<li><a href="https://www.instagram.com/{{config['social']['instagram']}}" class="icon brands fa-instagram" target="_blank"><span class="label">Instagram</span></a></li>
+						{% endif %}
+						{% if config['social']["facebook"] %}
+						<li><a href="https://www.facebook.com/{{config['social']['facebook']}}" class="icon brands fa-facebook" target="_blank"><span class="label">Facebook</span></a></li>
+						{% endif %}
+						{% if config['social']["linkedin"] %}
+						<li><a href="https://www.instagram.com/{{config['social']['instagram']}}" class="icon brands fa-linkedin-in" target="_blank"><span class="label">LinkedIn</span></a></li>
+						{% endif %}
+						{% if config['social']["snapchat"] %} 
+						<li><a href="https://snapchat.com/add/{{config['social']['snapchat']}}" class="icon brands fa-snapchat" target="_blank"><span class="label">snapchat</span></a></li>
+						{% endif %}
+						{% if config['email'] %} 
+						<li><a href="mailto:{{config['email']}}" class="icon solid fa-envelope" target="_blank"><span class="label">email</span></a></li>
+						{% endif %}
+						{% if config['phone'] %} 
+						<li><a href="tel:{{config['phone']}}" class="icon solid fa-phone" target="_blank"><span class="label">phone</span></a></li>
+						{% endif %}
+					</ul>
+				</footer>
+			</section>
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- About -->
+							<section id="one">
+								<div class="image main" data-position="center">
+								{% if config['background'].startswith('http') or config['background'].startswith('images') %}
+									<img src="{{ config['background'] }}" alt="{{ config['name'] }}" />
+								{% else %}
+									<img src="images/{{ config['background'] }}" alt="{{ config['name'] }}" />
+								{% endif %}
+								</div>
+								<div class="container">
+									<header class="major">
+										<h2>{{ config["name"] }}</h2>
+										<p>About me</p>
+									</header>
+									<p>{{ config["biography"] }}</p>
+								</div>
+							</section>
+						
+						{% if education_html or work_experience_html or volunteering_experience_html %}
+						<!-- Experience -->
+							<section id="two">
+								<div class="container">
+									<h3>Things I've done</h3>
+									<p>Below is a list of my experience!</p>
+									{{ education_html | safe }}
+									{{ work_experience_html | safe }}
+									{{ volunteering_experience_html | safe }}
+								</div>
+							</section>
+						{% endif %}
+
+						{% if projects_html %}
+						<!-- Projects -->
+							<section id="three">
+								<div class="container">
+									<h3>A Few Accomplishments</h3>
+									<p>Check out some of the amazing projects I've worked on below!</p>
+									{{ projects_html | safe }}
+								</div>
+							</section>
+						{% endif %}
+
+					</div>
+
+				<!-- Footer -->
+					<section id="footer">
+						<div class="container">
+							<ul class="copyright">
+								<li>&copy; {{ config["name"] }} 2020. Design: <a href="https://html5up.net" target="_blank">HTML5 UP</a>. </br>Built using: <a href="https://ezcv.readthedocs.io" target="_blank">ezcv</a>.</li>
+							</ul>
+						</div>
+					</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="js/jquery.min.js"></script>
+			<script src="js/jquery.scrollex.min.js"></script>
+			<script src="js/jquery.scrolly.min.js"></script>
+			<script src="js/browser.min.js"></script>
+			<script src="js/breakpoints.min.js"></script>
+			<script src="js/util.js"></script>
+			<script src="js/main.js"></script>
+
+	</body>
+</html>

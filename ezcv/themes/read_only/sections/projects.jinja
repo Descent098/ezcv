@@ -1,0 +1,29 @@
+<div class="features">
+
+{% for project in projects %}
+    <article>
+        {% if project[0]["image"] and project[0]["link"] %}
+            {% if project[0]["image"].startswith("http") or project[0]["image"].startswith("images") %}
+        <a href="{{ project[0]['link'] }}" target="_blank" class="image"><img src="{{ project[0]['image'] }}" alt="{{ project[0]['title'] }}" width="400px"/></a>
+            {% else %} {# If image is a local file #}
+        <a href="{{ project[0]['link'] }}" target="_blank" class="image"><img src="images/{{ project[0]['image'] }}" alt="{{ project[0]['title'] }}" width="400px"/></a>
+            {%endif%}
+
+        {% else %}
+            {% if project[0]["image"].startswith("http") or project[0]["image"].startswith("images") %}
+        <img class="image" src="{{ project[0]['image'] }}" alt="{{ project[0]['title'] }}" width="300px"/>
+            {% else %} {# If image is a local file #}
+        <img class="image" src="images/{{ project[0]['image'] }}" alt="{{ project[0]['title'] }}" width="300px"/>
+            {%endif%}
+        {% endif %}
+
+
+        <div class="inner">
+
+        <h3>{{ project[0]["title"] }}</h3>
+        {{ project[1] | safe }}
+
+        </div>
+    </article>
+{% endfor %}
+</div>

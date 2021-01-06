@@ -10,9 +10,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="css/main.css" />
-	
-	
-		<!-- TODO add background links -->
+
 		{% if config['background'] %}
 		<style> 
 			{% if config['background'].startswith('http') or config['background'].startswith('images') %}
@@ -93,7 +91,11 @@
 		<!-- Header -->
 			<header id="header">
 				<div class="inner">
-					<a href="#" class="image avatar"><img src="images/avatar.jpg" alt="" /></a>
+					{% if config[0]["avatar"].startswith("http") or config[0]["avatar"].startswith("images") %}
+					<a href="#" class="image avatar"><img src="{{ config['avatar'] }}" alt="{{ config['name'] }}" /></a>
+            		{% else %}
+        			<a href="#" class="image avatar"><img src="images/{{ config['avatar'] }}" alt="{{ config['name'] }}" /></a>
+            		{% endif %}
 					<h1><strong>{{ config["name"] }}</strong><br />
 						{% if config["company"] and config["role"] %}
 						<em>{{ config["company"] }} | {{ config["role"] }}</em>

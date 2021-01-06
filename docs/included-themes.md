@@ -438,7 +438,6 @@ Full page preview: [https://html5up.net/read-only](https://html5up.net/read-only
 <iframe src="https://html5up.net/uploads/demos/read-only/" width="100%" height="500px">
 </iframe>
 
-
 ### Usage
 
 To use this theme in your code either initialize the project with "read_only" as the theme, or set it in your ```config.yml``` file:
@@ -448,6 +447,10 @@ To use this theme in your code either initialize the project with "read_only" as
 theme: read_only
 ... # Other configuration settings
 ```
+
+**Notes**
+
+For images in projects the dimensions are (400px x 235px)
 
 #### Supported config settings
 
@@ -461,7 +464,7 @@ The following settings are supported and not supported in the ```config.yml``` f
 
 ```
 name: ✅
-background: ☑️
+background: ✅
 avatar: ✅
 email: ☑️
 phone: ☑️
