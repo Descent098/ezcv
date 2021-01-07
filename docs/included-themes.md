@@ -243,6 +243,10 @@ theme: ethereal
 ... # Other configuration settings
 ```
 
+**Notes**
+
+For best usage the avatar should be (525px x 900px)
+
 #### Supported config settings
 
 The following settings are supported and not supported in the ```config.yml``` file:
@@ -255,8 +259,8 @@ The following settings are supported and not supported in the ```config.yml``` f
 
 ```
 name: ✅
-background: ☑️ (recommended)
-avatar: ☑️
+background: ❌
+avatar: ✅
 email: ☑️
 phone: ☑️
 biography: ✅
@@ -282,7 +286,7 @@ Below are a list of the supported, and unsupported sections.
 ❌: Not Supported
 
 ```yml
-Projects: ✔️
+Projects: ❌
 Education: ✔️
 Publications: ❌
 Work Experience: ✔️

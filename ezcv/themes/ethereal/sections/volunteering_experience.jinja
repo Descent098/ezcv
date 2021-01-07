@@ -1,0 +1,25 @@
+<!-- Panel (Spotlight) -->
+<section class="panel spotlight medium right">
+    <div class="content span-7">
+        <h2 class="major">Volunteering</h2>
+    </div>
+    <div class="image filtered tinted" data-position="top right">
+        <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1353&q=80" alt="" />
+    </div>
+</section>
+
+
+<section class="panel color3">
+    <div class="intro joined">
+    {% for experience in volunteering_experience %}
+        <h4 class="major">{{ experience[0]["company"] }}</h4>
+        <em>{{ experience[0]["year_started"] }} {% if experience[0]["current"] %}- Present{% endif %}{% if experience[0]["year_ended"] %}- {{ experience[0]["year_ended"] }}{%endif%}</em>
+        <p>{{ experience[1] | safe }}</p>
+    {% endfor %}
+    </div>
+    <div class="inner">
+        <ul class="grid-icons">
+            <li><span class="icon solid fa-hands-helping"><span class="label">Volunteering experience</span></span></li>
+        </ul>
+    </div>
+</section>
