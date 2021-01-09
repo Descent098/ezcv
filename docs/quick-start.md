@@ -9,34 +9,80 @@ There are two different ways to get started:
 
 If you are familiar with git, github and markdown then I would recommend starting from [Local Installation](#local-installation).
 
-If you are unfamiliar with any of the above then see directly below for getting started with remote editing.
+If you are unfamiliar with any of the above then see directly below for getting started with remote/no-code editing.
 
 ## Remote editing
 
-...
+Before you get started make sure you sign up for a [GitHub account](https://github.com/) (note the name will be your URL if you don't want to purchase a domain name).
+
+Here is a video walkthrough of the whole remote editing process:
+
+<iframe width="100%" height="400" src="https://www.youtube.com/embed/La_LMpTmGhI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+### Setup
+
+**Note**
+Your colours may be different than the screenshots, I have a dark theme on and by default GitHub is light theme.
+
+1. Go to [the template repository](https://github.com/QU-UP/ezcv) and click "Use This Template" (while logged in):
+![Step 1](/img/remote-editing/step-1.png)
+2. Name the repository ```<username>.github.io``` (replace ``<username>`` with your github username), and **make sure** you checkoff "Include All Branches". I would also recommend setting it to public so if you need help later you can show people your project. Then hit create repository from tempalte:
+![Step 2](/img/remote-editing/step-2.png)
+3. At this point there should be an orange circle in the indicated area. Once it turns to a green checkmark, and you see the active badge beside "github-pages" go to the next step (see image for reference):
+![Step 3](/img/remote-editing/step-3.png)
+4. Go to ```<username>.github.io``` (replace ```<username>``` with your github username) in your browser, and you should see something like this:
+![Step 4](/img/remote-editing/step-4.jpg)
+
+If you see something like the image in step 4 then everything went right. If not, [submit an issue](https://github.com/QU-UP/ezcv/issues/new) to the ezcv template repo with your title as "STEP 4 FAILED" and fill out the comment with your details like this, and hit "Submit New Issue":
+
+```
+URL: https://github.com/<username>/<username>.github.io 
+```
+
+Replace the above text with the URL of your github repo.
+
+For example:
+
+![help](/img/remote-editing/halp.png)
+
+I will try to get back to you as soon as I can.
+
+### Usage
+
+From here check out the following sections for additional details:
+1. [File structure](#file-structure)
+2. [Configuration Settings](#configuration-settings)
+3. [Sections](#sections)
+4. [Image Management](#image-management)
 
 ## Local Installation
 
 To use ezcv you will need python 3.6+ (earlier versions wont work) and pip for python 3.
 
-### From PyPi
+### Installation
+
+There are two options for installation, from PyPi or from source.
+
+#### From PyPi
 
 1. Run ```pip install ezcv```
 
-### From source
+#### From source
 
 1. Clone this repo: [https://github.com/Descent098/ezcv](https://github.com/Descent098/ezcv)
 2. Run ```pip install .``` or ```sudo pip3 install .```in the root directory
 
-## Getting started
+### Initialize Project
 
 The easiest way to get started is by running:
 
 ```ezcv init <name>```
 
-Replacing the ```<name>``` argument with your name (use "" if you want to use your full name i.e. ```ezcv init "Kieran Wood"```). 
+Replacing the ```<name>``` argument with your name (use "" if you want to use your full name i.e. ```ezcv init "Kieran Wood"```).
 
-### File structure
+From here, read the below sections to learn about starting to create your content. Also a quick tip, you can use ```ezcv -p``` to quickly preview your site before pushing it to git, so you don't need to make multiple commits seeing how things look.
+
+## File structure
 
 When you run the command a new folder will be created with your name, and some starter files like this:
 
@@ -133,6 +179,7 @@ social:
 examples: true # If you want to include the example.md files in your final build (good for developing new themes)
 theme: dimension # Which of the included themes to use
 ```
+
 ## Sections
 
 Sections is the name given to the content you use to fill your site. For example if you have content that lists your work experience then that would be a section.
@@ -144,12 +191,13 @@ Here is the list of first party sections supported (check each theme to see whic
 ```
 Projects: Various projects you have worked on in the past
 Education: Your education at various educational institutions
-Publications: Any publications that you've made (site, article, book etc.)
 Work Experience: Any current/old work experience that you want to include
 Volunteering Experience: Your current/old volunteer experience that you want to include
 ```
 
-## Image management
+In your site you simply put the content you want to create inside ```content/<section name>```. For example to create a file about your ```education``` at ```U of C``` you would add a file called ```U of C.md``` inside ```content/education```. For each section there are included example files to let you know what fields are available (these won't be included in your export unless ```examples: true``` is set in your ```config.yml``` file).
+
+## Image Management
 
 To include images in your site add them to the images folder (in the same spot as your ```config.yml``` file).
 
@@ -177,4 +225,3 @@ This is a cool image:
 
 ![abstract landscape](images/abstract-landscape.jpg)
 ```
-

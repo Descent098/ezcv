@@ -46,6 +46,25 @@ from tqdm import tqdm               # Used to generate progress bars during iter
 SECTIONS_LIST = ["projects", "education", "work_experience", "volunteering_experience"]
 
 
+def _get_content_directories() -> list:
+    result = []
+    for current_path in os.listdir("content"):
+        if os.path.isdir(os.path.join("content", current_path)):
+            result.append(os.path.join("content", current_path))
+    return result
+
+
+def _get_theme_section_directories(sections:list, theme_folder:str) -> list:
+    if sections:
+        return sections
+    if not sections and os.path.exists(os.path.join(theme_folder, "sections")):
+        for section in os.listdir(os.path.join(theme_folder, "sections")):
+            if section.endswith(".jinja"):
+                section = section.replace(".jinja", "")
+                sections.append(section)
+    return sections
+
+
 def _get_site_config(config_file_path:str = "config.yml") -> defaultdict:
     """Gets the site config from provided file path and returns defaultdict of values
 
@@ -136,8 +155,8 @@ def _get_section_content(section_folder: str, examples: bool = False) -> list:
     return contents
 
 
-def _render_section(theme_folder:str, section_content_dir:str, examples:bool = False) -> tuple:
-    """Renders the particular section provided using the environment provided
+def _render_section(theme_folder:str, section_name:str, site_context:dict) -> str:
+    """Renders the particular section provided using the environment provided TODO: remake docstring
 
     Parameters
     ----------
@@ -147,13 +166,10 @@ def _render_section(theme_folder:str, section_content_dir:str, examples:bool = F
     section_content_dir : (str)
         The name of the section to render i.e. projects, education, work_experience etc.
 
-    examples : (bool, optional)
-        If False then markdown files that have example in the name are ignored, by default False
-
     Returns
     -------
-    str, list:
-        The rendered theme of the section, or an empty string if no content was found and a list of the section contents
+    str:
+        The rendered template of the section
 
     Examples
     --------
@@ -169,36 +185,30 @@ def _render_section(theme_folder:str, section_content_dir:str, examples:bool = F
     theme_folder = os.path.abspath(os.path.join(os.path.dirname(ezcv.__file__), "themes", theme))
 
     # render projects html, and get the sections content
-    html, contents = _render_section(theme_folder, section)
+    html = _render_section(theme_folder, section)
     ```
     """
-    contents = [] # Will be filled with each file in the sections' metadata and markdown content
-    content_folder = False # Set to True if current section is in /content/<section>
+    contents = site_context["sections"][section_name]
 
     # Initialize jinja loaders
     theme_loader = jinja2.FileSystemLoader(theme_folder)
     environment = jinja2.Environment(loader=theme_loader, autoescape=True, trim_blocks=True) # Grab all files in theme_folder
 
-    # If content for current section is stored within a folder called /content/<section>
-    if os.path.exists(os.path.join("content", section_content_dir)): 
-        content_folder = True
-
-    section_theme_path = f"sections/{section_content_dir}.jinja" # Where in the theme folder to find the section theme
-
-    # The folder to iterate through and find sections markdown files
-    content_iteration_directory = os.path.join("content", section_content_dir) if content_folder else section_content_dir
-
-    contents = _get_section_content(content_iteration_directory, examples)
-
-    if len(contents) > 0:
-        try:
-            theme = environment.get_template(section_theme_path)
-        except jinja2.TemplateNotFound: # If current section is not supported
-            print(f"Section {section_content_dir.split(os.sep)[-1]} is not available")
-            return "", contents
-        return theme.render({section_content_dir:contents}), contents
+    # If a section template exists set it to the path, else False i.e. if <theme folder>/sections/<section name>.jinja exists set it to that
+    section_template_file = f"sections/{section_name}.jinja"
+    if section_template_file:
+        if len(contents) > 0: # If there is any markdown content
+            try:
+                theme = environment.get_template(section_template_file)
+            except jinja2.TemplateNotFound: # If current section is not supported
+                print(f"Section {section_name} template is not available")
+                return ""
+            return theme.render({section_name:contents})
+        else:
+            return ""
     else:
-        return "", contents
+        print(f"Section {section_name} template is not available")
+        return ""
 
 
 def _render_page(theme_folder:str, page:str, site_context:dict) -> str:
@@ -224,7 +234,7 @@ def _render_page(theme_folder:str, page:str, site_context:dict) -> str:
     theme_loader = jinja2.FileSystemLoader(theme_folder)
     environment = jinja2.Environment(loader=theme_loader, autoescape=True, trim_blocks=True) # Grab all files in theme_folder
 
-    # generate new index
+    # Render template and return contents
     theme = environment.get_template(page)
     return theme.render(site_context)
 
@@ -284,7 +294,7 @@ def _export(site_context:dict, theme_folder:str, output_folder:str = "site", pag
 
 
 def generate_site(output_folder:str="site", theme:str = "dimension", sections: list = [], config_file_path="config.yml", preview:bool = False):
-    """The primary entrypoint to generating a site
+    """The primary entrypoint to generating a site TODO: Update docstring
 
     Parameters
     ----------
@@ -361,15 +371,12 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
         theme_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "themes", theme))
     else:
         raise FileNotFoundError(f"Theme {theme} does not exist")
-    
-    if not sections and os.path.exists(os.path.join(theme_folder, "sections")):
-        for section in os.listdir(os.path.join(theme_folder, "sections")):
-            if section.endswith(".jinja"):
-                section = section.replace(".jinja", "")
-                sections.append(section)
-            if section.endswith(".html"):
-                section = section.replace(".html", "")
-                sections.append(section)
+
+    # Get a list of the section names 
+    sections = _get_theme_section_directories(sections, theme_folder)
+    sections_content_dirs = _get_content_directories()
+    for section in sections_content_dirs:
+        site_context["sections"][section.split(os.sep)[-1]] = _get_section_content(section, site_context["config"]["examples"])
 
     # Get a list of all the top level pages in the theme folder and add them to the pages list
     for top_level_file in os.listdir(theme_folder):
@@ -381,9 +388,8 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
     sections_iterator = tqdm(sections)
     sections_iterator.set_description_str("Writing section content")
     for section in sections_iterator: 
-        html, contents = _render_section(theme_folder, section, site_context["config"]["examples"])
+        html = _render_section(theme_folder, section, site_context)
         site_context[f"{section}_html"] = html
-        site_context["sections"][section] = contents
 
     # Generate and export all the pages of a site
     _export(site_context, theme_folder, output_folder, pages)

@@ -1,0 +1,296 @@
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>{{ config["name"] }}</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="css/main.css" />
+		<noscript><link rel="stylesheet" href="css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		{# Get the length of each section content #}
+		{% set work_len = sections["work_experience"] | length %}
+		{% set vol_len = sections["volunteering_experience"] | length %}
+		{% set edu_len = sections["education"] | length %}
+		{% set proj_len = sections["projects"] | length %}
+
+		{# Set ID's of each section conditionally so the diagonal lines appear properly #}
+		{# order: education --> work --> volunteer --> Projects #}
+
+		{# if all sections are included #}
+		{% if work_len and vol_len and edu_len and projects_len %} 
+			{% set work_id = "two" %}
+			{% set edu_id = "three" %}
+			{% set vol_id = "four" %}
+			{% set proj_id = "five" %}
+		{# 3/4 content sections available #}
+		{% elif work_len and vol_len and proj_len %}
+			{% set work_id = "two" %}
+			{% set vol_id = "three" %}
+			{% set proj_id = "four" %}
+		{% elif edu_len and vol_len and work_len %}
+			{% set edu_id = "two" %}
+			{% set work_id = "three" %}
+			{% set vol_id = "four" %}
+		{% elif work_len and edu_len and proj_len %}
+			{% set edu_id = "two" %}
+			{% set work_id = "three" %}
+			{% set proj_id = "four" %}
+		{% elif proj_len and edu_len and vol_len %}
+			{% set edu_id = "two" %}
+			{% set vol_id = "three" %}
+			{% set proj_id = "four" %}
+		{# 2/4 content sections available #}
+		{% elif edu_len and proj_len %}
+			{% set edu_id = "two" %}
+			{% set proj_id = "three" %}
+		{% elif edu_len and vol_len  %}
+			{% set edu_id = "two" %}
+			{% set vol_id = "three" %}
+		{% elif edu_len and work_len  %}
+			{% set edu_id = "two" %}
+			{% set work_id = "three" %}
+		{% elif proj_len and vol_len  %}
+			{% set vol_id = "two" %}
+			{% set proj_id = "three" %}
+		{% elif proj_len and work_len  %}
+			{% set work_id = "two" %}
+			{% set proj_id = "three" %}
+		{% elif vol_len and work_len  %}
+			{% set work_id = "two" %}
+			{% set vol_id = "three" %}
+		{# 1/4 content sections available #}
+		{% elif edu_len  %}
+			{% set edu_id = "two" %}
+		{% elif proj_len %}
+			{% set proj_id = "two" %}
+		{% elif vol_len  %}
+			{% set vol_id = "two" %}
+		{% elif work_len  %}
+			{% set work_id = "two" %}
+		{% else %} {# If no sections are filled #}
+		{% endif %}
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header" class="alt">
+						<h1><a href="index.html">{{ config["name"] }}</a></h1>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<div class="inner">
+							<h2>Menu</h2>
+							<ul class="links">
+								<li><a href="#one">Home</a></li>
+								{% if edu_len %}
+								<li><a href="{{ edu_id }}">Education</a></li>
+								{% endif %}
+
+								{% if work_len %}
+								<li><a href="{{ work_id }}">Work Experience</a></li>
+								{% endif %}
+
+								{% if vol_len %}
+								<li><a href="{{ vol_id }}">Volunteering</a></li>
+								{% endif %}
+
+								{% if proj_len %}
+								<li><a href="{{ proj_id }}">Projects</a></li>
+								{% endif %}
+							</ul>
+							<a href="#" class="close">Close</a>
+						</div>
+					</nav>
+
+				<!-- Banner -->
+					<section id="banner">
+						<div class="inner">
+							<div class="logo"><span class="icon fa-gem"></span></div>
+							<h2>{{ config["name"] }}</h2>
+							{% if config["role"] and config["company"] %}
+							<em>{{ config["role"] }} &nbsp;&bull;&nbsp; {{ config["company"] }}</em>
+							{% elif config["role"] %}
+							<em>{{ config["role"] }}</em>
+							{% elif config["company"] %}
+							<em>{{ config["company"] }}</em>
+							{% else %}
+							{% endif %}
+							</br>
+							{{ config["biography"] }}
+						</div>
+					</section>
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+
+						{% if edu_len %}
+						<!-- education -->
+							<section id="{{ edu_id }}" class="wrapper spotlight style1">
+								<div class="inner">
+									<a href="{{ edu_id }}" class="image"><img src="images/education.jpg" alt="education" /></a>
+									<div class="content">
+										<h2 class="major icon solid fa-graduation-cap"> Education</h2>
+										<div class="row">
+										{% set col_size =  12 // edu_len  %}
+											{% for experience in sections["education"] %}
+											<div class="col-{{col_size}}">
+												<h4>{{ experience[0]["institution"] }}</h4>
+												<em>{{ experience[0]["year_started"] }} {% if experience[0]["current"] %}- Present{% endif %}{% if experience[0]["year_ended"] %}- {{ experience[0]["year_ended"] }}{%endif%}</em>
+												{{ experience[1] | safe }}
+											</div>
+											{% endfor %}
+										</div>
+									</div>
+								</div>
+							</section>
+						{% endif %}
+
+						{% if work_len %}
+						<!-- Work Experience -->
+							<section id="{{ work_id }}" class="wrapper alt spotlight style2">
+								<div class="inner">
+									<a href="{{ work_id }}" class="image"><img src="images/meeting.jpg" alt="work" /></a>
+									<div class="content">
+										<h2 class="major icon solid fa-wrench"> Work Experience</h2>
+										<div class="row">
+										{% set col_size =  12 // work_len  %}
+											{% for experience in sections["work_experience"] %}
+											<div class="col-{{col_size}}">
+												<h4>{{ experience[0]["company"] }} {{ experience[0]["role"] }}</h4>
+												<em>{{ experience[0]["year_started"] }} {% if experience[0]["current"] %}- Present{% endif %}{% if experience[0]["year_ended"] %}- {{ experience[0]["year_ended"] }}{%endif%}</em>
+												{{ experience[1] | safe }}
+											</div>
+											{% endfor %}
+										</div>
+									</div>
+								</div>
+							</section>
+						{% endif %}
+
+						{% if vol_len %}
+						<!-- Volunteering Experience -->
+							<section id="{{ vol_id }}" class="wrapper spotlight style3">
+								<div class="inner">
+									<a href="{{ vol_id }}" class="image"><img src="images/volunteer.jpg" alt="volunteering" /></a>
+									<div class="content">
+										<h2 class="major icon solid fa-hands-helping"> Volunteering Experience</h2>
+										<div class="row">
+										{% set col_size =  12 // vol_len  %}
+											{% for experience in sections["volunteering_experience"] %}
+											<div class="col-{{col_size}}">
+												<h4>{{ experience[0]["company"] }} {{ experience[0]["role"] }}</h4>
+												<em>{{ experience[0]["year_started"] }} {% if experience[0]["current"] %}- Present{% endif %}{% if experience[0]["year_ended"] %}- {{ experience[0]["year_ended"] }}{%endif%}</em>
+												{{ experience[1] | safe }}
+											</div>
+											{% endfor %}
+										</div>
+									</div>
+								</div>
+							</section>
+						{% endif %}
+
+						
+						
+						{% if proj_len %}
+						<!-- Four -->
+							<section id="{{ proj_id }}" class="wrapper alt style1">
+								<div class="inner">
+									<h2 class="major">Projects</h2>
+									<p>Below is a list of my projects</p>
+									<section class="features">
+									{% for project in sections["projects"] %}
+										<article>
+
+											{% if project[0]["image"] %}
+												{% if project[0]["image"].startswith("http") or project[0]["image"].startswith("images") %} 
+												<a href="{{ project[0]['link'] }}" class="image" target="_blank"><img src="{{ project[0]['image'] }}" alt="{{ project[0]['title'] }}" /></a>
+												{% else %}
+												<a href="{{ project[0]['link'] }}" class="image" target="_blank"><img src="images/{{ project[0]['image'] }}" alt="{{ project[0]['title'] }}" /></a>
+												{%endif%}
+											{% endif %}
+											
+											<h3 class="major">{{ project[0]['title'] }}</h3>
+											{{ project[1] | safe }}
+											<a href="{{ project[0]['link'] }}" class="special" target="_blank">Learn more</a>
+										</article>
+									{% endfor %}
+									</section>
+								</div>
+							</section>
+						{% endif %}
+
+					</section>
+
+				<!-- Footer -->
+					<section id="footer">
+					</br>
+					</br>
+					<div class="inner">
+					{% if config["social"] %}
+					<h2 class="major">Reach out!</h2>
+					<p>Ceck out some of my social media below </p>
+						<ul class="contact">
+							{% if config['social']["github"] %}
+							<li class="icon brands fa-github"><a href="https://github.com/{{config['social']['github']}}" target="_blank">{{config['social']['github']}}</a></li>
+							{% endif %}
+							{% if config['social']["youtube"] %}
+							<li class="icon brands fa-youtube"><a href="https://youtube.com/{{config['social']['youtube']}}" target="_blank">YouTube</a></li>
+							{% endif %}
+							{% if config['social']["twitch"] %}
+							<li class="icon brands fa-twitch"><a href="https://twitch.tv/{{config['social']['twitch']}}" target="_blank">{{config['social']['twitch']}}</a></li>
+							{% endif %}
+							{% if config['social']["twitter"] %}
+							<li class="icon brands fa-twitter"><a href="https://www.twitter.com/{{config['social']['twitter']}}"target="_blank">{{config['social']['twitter']}}</a></li>
+							{% endif %}
+							{% if config['social']["instagram"] %}
+							<li class="icon brands fa-instagram"><a href="https://www.instagram.com/{{config['social']['instagram']}}" target="_blank">{{config['social']['instagram']}}</a></li>
+							{% endif %}
+							{% if config['social']["facebook"] %}
+							<li class="icon brands fa-facebook"><a href="https://www.facebook.com/{{config['social']['facebook']}}" target="_blank">Facebook</a></li>
+							{% endif %}
+							{% if config['social']["linkedin"] %}
+							<li class="icon brands fa-linkedin-in"><a href="https://www.instagram.com/{{config['social']['linkedin']}}" target="_blank">{{config['social']['linkedin']}}</a></li>
+							{% endif %}
+							{% if config['social']["snapchat"] %} 
+							<li class="icon brands fa-snapchat"><a href="https://snapchat.com/add/{{config['social']['snapchat']}}" target="_blank">{{config['social']['snapchat']}}</a></li>
+							{% endif %}
+							{% if config['email'] %} 
+							<li class="icon solid fa-envelope"><a href="mailto:{{config['email']}}" target="_blank">{{config['email']}}</a></li>
+							{% endif %}
+							{% if config['phone'] %} 
+							<li class="icon solid fa-phone"><a href="tel:{{config['phone']}}" target="_blank">{{config['phone']}}</a></li>
+							{% endif %}
+							</ul>
+					{% endif %}
+							
+							<ul class="copyright">
+								<li>&copy; {{ config["name"] }} 2020. Design: <a href="https://html5up.net" target="_blank">HTML5 UP</a>. Built using: <a href="https://ezcv.readthedocs.io" target="_blank">ezcv</a>.</li>
+							</ul>
+							</div>
+						
+					</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="js/jquery.min.js"></script>
+			<script src="js/jquery.scrollex.min.js"></script>
+			<script src="js/browser.min.js"></script>
+			<script src="js/breakpoints.min.js"></script>
+			<script src="js/util.js"></script>
+			<script src="js/main.js"></script>
+
+	</body>
+</html>

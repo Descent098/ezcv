@@ -77,7 +77,6 @@ Below are a list of the supported, and unsupported sections.
 ```yml
 Projects: ❌
 Education: ❌
-Publications: ❌
 Work Experience: ❌
 Volunteering Experience: ❌
 ```
@@ -150,7 +149,6 @@ Below are a list of the supported, and unsupported sections.
 ```yml
 Projects: ✔️
 Education: ❌
-Publications: ❌
 Work Experience: ❌
 Volunteering Experience: ❌
 ```
@@ -217,7 +215,6 @@ Below are a list of the supported, and unsupported sections.
 ```yml
 Projects: ✔️
 Education: ✔️
-Publications: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️
 ```
@@ -288,7 +285,6 @@ Below are a list of the supported, and unsupported sections.
 ```yml
 Projects: ❌
 Education: ✔️
-Publications: ❌
 Work Experience: ✔️
 Volunteering Experience: ✔️
 ```
@@ -358,7 +354,6 @@ Below are a list of the supported, and unsupported sections.
 ```yml
 Projects: ✔️
 Education: ✔️
-Publications: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️
 ```
@@ -426,7 +421,6 @@ Below are a list of the supported, and unsupported sections.
 ```yml
 Projects: ❌
 Education: ❌
-Publications: ❌
 Work Experience: ❌
 Volunteering Experience: ❌
 ```
@@ -497,7 +491,76 @@ Below are a list of the supported, and unsupported sections.
 ```yml
 Projects: ✔️
 Education: ✔️
-Publications: ❌
+Work Experience: ✔️
+Volunteering Experience: ✔️
+```
+
+## Solid State
+
+Author:  [HTML5Up](https://html5up.net/)
+
+### Preview
+
+Full page preview: [https://html5up.net/solid-state](https://html5up.net/solid-state)
+
+<iframe src="https://html5up.net/uploads/demos/solid-state/" width="100%" height="500px">
+</iframe>
+
+### Usage
+
+To use this theme in your code either initialize the project with "solid_state" as the theme, or set it in your ```config.yml``` file:
+
+```yaml
+... # Other configuration settings
+theme: solid_state
+... # Other configuration settings
+```
+
+**Notes**
+
+For images in projects the dimensions are square (i.e. 500px x 500px)
+
+#### Supported config settings
+
+The following settings are supported and not supported in the ```config.yml``` file:
+
+✅: Required
+
+☑️: Optional
+
+❌: Not Supported
+
+```
+name: ✅
+background: ❌
+avatar: ❌
+email: ☑️
+phone: ☑️
+biography: ✅
+role: ☑️ 
+company: ☑️
+address: ❌
+social: ☑️
+  github: ☑️
+  twitch: ☑️
+  youtube: ☑️
+  instagram: ☑️
+  twitter: ☑️
+  snapchat: ☑️
+  linkedin: ☑️
+  facebook: ☑️
+```
+#### Supported Sections
+
+Below are a list of the supported, and unsupported sections.
+
+✔️: Supported
+
+❌: Not Supported
+
+```yml
+Projects: ✔️
+Education: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️
 ```
@@ -564,7 +627,6 @@ Below are a list of the supported, and unsupported sections.
 ```yml
 Projects: ✔️
 Education: ✔️
-Publications: ❌
 Work Experience: ✔️
 Volunteering Experience: ✔️
 ```

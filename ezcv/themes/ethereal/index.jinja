@@ -31,7 +31,7 @@
 									</ul>
 								</div>
 								<div class="image filtered span-1-75" data-position="25% 25%">
-								{% if config["avatar"].endswith("http") or config["avatar"].endswith("images") %}
+								{% if config["avatar"].startswith("http") or config["avatar"].startswith("images") %}
 									<img src="{{ config['avatar'] }}" alt="{{ config['name'] }}" />
 								{% else %}
 									<img src="images/{{ config['avatar'] }}" alt="{{ config['name'] }}" />

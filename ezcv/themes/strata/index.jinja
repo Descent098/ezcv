@@ -91,7 +91,7 @@
 		<!-- Header -->
 			<header id="header">
 				<div class="inner">
-					{% if config[0]["avatar"].startswith("http") or config[0]["avatar"].startswith("images") %}
+					{% if config["avatar"].startswith("http") or config["avatar"].startswith("images") %}
 					<a href="#" class="image avatar"><img src="{{ config['avatar'] }}" alt="{{ config['name'] }}" /></a>
             		{% else %}
         			<a href="#" class="image avatar"><img src="images/{{ config['avatar'] }}" alt="{{ config['name'] }}" /></a>
