@@ -40,10 +40,12 @@ jobs:
     - name: build html files
       run: |
         python -m pdoc ezcv --html --force
+        cd html
         ls
-        mv "./html/ezcv/*" "html"
+        mv ezcv/* .
         ls
-        rm -rf "./html/ezcv"
+        cd ..
+        ls
       if: ${{ github.event.inputs.doc_system  == 'pdoc' }}
 
     - name: Deploy Docs
