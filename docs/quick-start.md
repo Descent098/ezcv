@@ -146,7 +146,7 @@ Each site will have a ```config.yml``` file, this file is in the [YAML format](h
 | **company** | The company of employment for who's site this is | Any text (i.e. Google) |
 | **address** | Your physical address | The full text of your address |
 | **social** | Social media links | github, twitch, youtube, instagram, twitter, snapchat, linkedin, facebook |
-| **examples** | Whether to include content files that have example in the name | true or false |
+| **examples** | Whether to include content files that have "example" at the start of the filename | true or false |
 | **theme** | The name of the theme to use | the name of any included theme i.e. dimension |
 
 </br>

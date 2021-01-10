@@ -41,3 +41,12 @@ ezcv is not a great choice if:
 ## Getting started
 
 See the [quick start](quick-start.md) to get started.
+
+## Additional resources
+
+Here are some additional resources to help you get started generating content
+
+- [Generating avatars](https://getavataaars.com/)
+- [Free open source images](https://unsplash.com/)
+- [Online Vector graphics creation system](https://vectr.com/)
+- [Online photo editor](https://pixlr.com/x/)

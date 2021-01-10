@@ -136,8 +136,8 @@ def _get_section_content(section_folder: str, examples: bool = False) -> list:
                         page_meta[key] = md.Meta[key]
                 contents.append([page_meta, page_html])
 
-        else: # if files with example in the name should be ignored
-            if content.endswith(".md") and (not "example" in content):
+        else: # if files with example at the start
+            if content.endswith(".md") and not content.startswith("example"):
                 with open(f"{section_folder}{os.sep}{content}", "r") as mdfile: # Parse markdown file
                     text = mdfile.read()
 
