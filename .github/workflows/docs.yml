@@ -39,8 +39,9 @@ jobs:
 
     - name: build html files
       run: |
-        python -m pdoc ezspreadsheet --html --force
-        mv "html/ezspreadsheet.html" "html/index.html"
+        python -m pdoc ezcv --html --force
+        mv "html/ezcv/*.html" "html"
+        rm -rf "html/ezcv"
       if: ${{ github.event.inputs.doc_system }} == "pdoc"
 
     - name: Deploy Docs
