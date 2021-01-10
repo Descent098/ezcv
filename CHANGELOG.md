@@ -1,6 +1,6 @@
 # Changelog
 
-## V0.1.0; January 9th 2020
+## V0.1.0; January 10th 2020
 
 Initial release of ezcv
 
