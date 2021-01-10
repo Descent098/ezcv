@@ -33,6 +33,7 @@ setuptools.setup(
     project_urls = {
         "User Docs" :      "https://ezcv.readthedocs.io",
         "API Docs"  :      "https://kieranwood.ca/ezcv",
+        "Forum":           "https://github.com/Descent098/ezcv/discussions",
         "Source" :         "https://github.com/Descent098/ezcv",
         "Bug Report":      "https://github.com/Descent098/ezcv/issues/new?assignees=Descent098&labels=bug&template=bug_report.md&title=%5BBUG%5D",
         "Feature Request": "https://github.com/Descent098/ezcv/issues/new?labels=enhancement&template=feature_request.md&title=%5BFeature%5D",
