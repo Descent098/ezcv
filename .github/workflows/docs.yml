@@ -41,9 +41,9 @@ jobs:
       run: |
         python -m pdoc ezcv --html --force
         ls
-        mv "html/ezcv/*" "html"
+        mv "./html/ezcv/*" "html"
         ls
-        rm -rf "html/ezcv"
+        rm -rf "./html/ezcv"
       if: ${{ github.event.inputs.doc_system  == 'pdoc' }}
 
     - name: Deploy Docs
