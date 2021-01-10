@@ -17,35 +17,29 @@ Before you get started make sure you sign up for a [GitHub account](https://gith
 
 Here is a video walkthrough of the whole remote editing process:
 
-<iframe width="100%" height="400" src="https://www.youtube.com/embed/La_LMpTmGhI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="100%" height="400" src="https://www.youtube.com/embed/ScHAxljLQq0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ### Setup
 
-**Note**
-Your colours may be different than the screenshots, I have a dark theme on and by default GitHub is light theme.
+*Your colours may be different than the screenshots, I have a dark theme on and by default GitHub is light theme.*
 
 1. Go to [the template repository](https://github.com/QU-UP/ezcv) and click "Use This Template" (while logged in):
 ![Step 1](/en/latest/img/remote-editing/step-1.png)
+
 2. Name the repository ```<username>.github.io``` (replace ``<username>`` with your github username), and **make sure** you checkoff "Include All Branches". I would also recommend setting it to public so if you need help later you can show people your project. Then hit create repository from tempalte:
 ![Step 2](/en/latest/img/remote-editing/step-2.png)
+
 3. At this point there should be an orange circle in the indicated area. Once it turns to a green checkmark, and you see the active badge beside "github-pages" go to the next step (see image for reference):
 ![Step 3](/en/latest/img/remote-editing/step-3.png)
+
 4. Go to ```<username>.github.io``` (replace ```<username>``` with your github username) in your browser, and you should see something like this:
 ![Step 4](/en/latest/img/remote-editing/step-4.jpg)
 
-If you see something like the image in step 4 then everything went right. If not, [submit an issue](https://github.com/QU-UP/ezcv/issues/new) to the ezcv template repo with your title as "STEP 4 FAILED" and fill out the comment with your details like this, and hit "Submit New Issue":
-
-```
-URL: https://github.com/<username>/<username>.github.io 
-```
-
-Replace the above text with the URL of your github repo.
-
-For example:
-
-![help](/en/latest/img/remote-editing/halp.png)
+If you see something like the image in step 4 then everything went right. If not, make a comment on [the discussion post](https://github.com/Descent098/ezcv/discussions/16) and include the URL to your repo.
 
 I will try to get back to you as soon as I can.
+
+For any other issues/questions check out the [discussion forum](https://github.com/Descent098/ezcv/discussions)
 
 ### Usage
 
