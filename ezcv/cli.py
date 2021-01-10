@@ -148,7 +148,7 @@ def theme(list_themes: bool = False, copy_theme:bool = False, theme:str = ""):
 
 def main():
     """The primary entrypoint for the ezcv cli"""
-    args = docopt(usage, version="0.1.0")
+    args = docopt(usage, version="0.1.1")
 
     if len(argv) == 1: # Print usage if no arguments are given
         print("\n", usage)

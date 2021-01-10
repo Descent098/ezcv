@@ -24,7 +24,7 @@ def get_content(*filename:str) -> str:
 
 setuptools.setup(
     name = "ezcv",
-    version = "0.1.0",
+    version = "0.1.1",
     author = "Kieran Wood",
     author_email = "kieran@canadiancoding.ca",
     description = "An easy to use personal site generator",

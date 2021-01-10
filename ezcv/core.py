@@ -156,37 +156,23 @@ def _get_section_content(section_folder: str, examples: bool = False) -> list:
 
 
 def _render_section(theme_folder:str, section_name:str, site_context:dict) -> str:
-    """Renders the particular section provided using the environment provided TODO: remake docstring
+    """Renders the particular section provided using the environment provided
 
     Parameters
     ----------
     theme_folder : (str)
         The absolute path to the theme
 
-    section_content_dir : (str)
+    section_name : (str)
         The name of the section to render i.e. projects, education, work_experience etc.
+
+    site_context: (dict)
+        The dictionary containing the site's context
 
     Returns
     -------
     str:
         The rendered template of the section
-
-    Examples
-    --------
-    ### Render projects section
-    ```
-    # NOTE: This example assumes you have a folder with projects at ./projects and a section theme at <ezcv install directory>/themes/dimension/projects.jinja
-
-    from ezcv import _render_section
-
-    theme = "dimension"
-    section = "projects" # The relative path to the content folder for this 
-
-    theme_folder = os.path.abspath(os.path.join(os.path.dirname(ezcv.__file__), "themes", theme))
-
-    # render projects html, and get the sections content
-    html = _render_section(theme_folder, section)
-    ```
     """
     contents = site_context["sections"][section_name]
 
@@ -284,7 +270,11 @@ def _export(site_context:dict, theme_folder:str, output_folder:str = "site", pag
     pages_iterator = tqdm(pages)
     pages_iterator.set_description_str("Generating top level pages")
     for page in pages_iterator:  # Write new pages
-        html = _render_page(theme_folder, page, site_context)
+        try:
+            html = _render_page(theme_folder, page, site_context)
+        except jinja2.UndefinedError as e:
+            print(e)
+            raise ValueError("A required configuration value is missing")
         if page.endswith(".jinja"):
             page = f"{page[:-6:]}.html"
         pages_iterator.set_description_str(f"Writing {page}")
@@ -294,7 +284,7 @@ def _export(site_context:dict, theme_folder:str, output_folder:str = "site", pag
 
 
 def generate_site(output_folder:str="site", theme:str = "dimension", sections: list = [], config_file_path="config.yml", preview:bool = False):
-    """The primary entrypoint to generating a site TODO: Update docstring
+    """The primary entrypoint to generating a site
 
     Parameters
     ----------
@@ -316,11 +306,15 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
     Notes
     -----
     - theme options are: 
-        - freelancer; https://startbootstrap.com/theme/freelancer
         - aerial; https://html5up.net/aerial
+        - base; included theme that can be used for debugging
         - creative; https://startbootstrap.com/theme/creative
         - dimension; https://html5up.net/dimension
         - ethereal; https://html5up.net/ethereal
+        - freelancer; https://startbootstrap.com/theme/freelancer
+        - identity; https://html5up.net/identity
+        - read_only; https://html5up.net/read-only
+        - solid_state; https://html5up.net/solid-state
         - strata; https://html5up.net/strata
     - Available sections are:
         - Projects (projects)

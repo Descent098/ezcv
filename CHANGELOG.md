@@ -1,5 +1,17 @@
 # Changelog
 
+## V0.1.1; January 10th 2020
+
+Fixes following initial launch
+
+### Bug fixes
+
+- Added additional warnings for if necessary config value is not provided
+
+### Documentation improvements
+
+- Updated necessary docstrings
+
 ## V0.1.0; January 10th 2020
 
 Initial release of ezcv
