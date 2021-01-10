@@ -30,23 +30,23 @@ jobs:
       uses: mhausenblas/mkdocs-deploy-gh-pages@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      if: ${{ github.event.inputs.doc_system  == "mkdocs" }}
+      if: ${{ github.event.inputs.doc_system  == 'mkdocs' }}
 
     # if doc_type is pdoc
     - name: Remove source files
       run: rm -rf *
-      if: ${{ github.event.inputs.doc_system  == "pdoc" }}
+      if: ${{ github.event.inputs.doc_system  == 'pdoc' }}
 
     - name: build html files
       run: |
         python -m pdoc ezcv --html --force
         mv "html/ezcv/*.html" "html"
         rm -rf "html/ezcv"
-      if: ${{ github.event.inputs.doc_system  == "pdoc" }}
+      if: ${{ github.event.inputs.doc_system  == 'pdoc' }}
 
     - name: Deploy Docs
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./html
-      if: ${{ github.event.inputs.doc_system  == "pdoc" }}
+      if: ${{ github.event.inputs.doc_system  == 'pdoc' }}
