@@ -40,7 +40,7 @@ jobs:
     - name: build html files
       run: |
         python -m pdoc ezcv --html --force
-        mv "html/ezcv/*.html" "html"
+        mv "html/ezcv/*" "html"
         rm -rf "html/ezcv"
       if: ${{ github.event.inputs.doc_system  == 'pdoc' }}
 
