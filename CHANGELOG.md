@@ -1,5 +1,34 @@
 # Changelog
 
+## V0.2.0; tbd
+
+The focus for this release is to add new features and themes
+
+### Features
+
+- Created an extension system
+- Added Resume Generator
+- Setup remote theme support
+- Added new sections
+  - Blog
+  - Publications
+  - Gallery
+
+### Themes
+
+- Moved existing themes to new repo
+
+### Bug fixes
+
+- Fixed markdown files with .markdown not being recognized
+- Fixed markdown files with capitalized extensions not being recognized
+
+### Documentation Improvements
+
+- Added documentation for new features
+- Added additional onboarding videos/tutorials
+- Added section for finding help/support
+
 ## V0.1.1; January 10th 2020
 
 Fixes following initial launch
