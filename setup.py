@@ -53,6 +53,7 @@ setuptools.setup(
     "jinja2",   # used as middlewear for generating templates
     "markdown", # Used to parse markdown
     "tqdm",     # Used to generate progress bars
+    "requests"  # Used to download remote themes
         ],
     extras_require = {
         "dev" : ["mkdocs", # Used to create HTML versions of the markdown docs in the docs directory

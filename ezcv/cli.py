@@ -58,7 +58,8 @@ import tempfile             # Used to generate temporary folders for previews
 from sys import argv, exit  # Used to get length of CLI args and exit cleanly
 
 ## internal dependencies
-from ezcv.core import generate_site, _get_site_config
+from ezcv.core import generate_site, get_site_config
+from ezcv.themes import THEMES_FOLDER
 
 # Third party dependencies
 from docopt import docopt  # Used to complete argument parsing
@@ -104,9 +105,17 @@ def init(theme="dimension", name="John Doe"):
 def preview():
     """Creates a temporary folder of the site's files and then previews it in browser"""
     with tempfile.TemporaryDirectory() as temp_dir:
-        print(temp_dir)
         generate_site(temp_dir, preview=True)
-        input("Press enter when done previewing")
+        try:
+            input("Press enter when done previewing")
+        except EOFError:
+            print(f"Keyboard interupt detected, ending preview and removing {temp_dir}")
+            return
+        except KeyboardInterrupt:
+            print(f"Keyboard interupt detected, ending preview and removing {temp_dir}")
+            return
+
+        print(f"Ending preview and removing {temp_dir}")
 
 
 def theme(list_themes: bool = False, copy_theme:bool = False, theme:str = ""):
@@ -126,22 +135,20 @@ def theme(list_themes: bool = False, copy_theme:bool = False, theme:str = ""):
     if not theme:
         theme = "dimension"
 
-    themes_folder =  os.path.join(os.path.dirname(__file__), "themes")
-
     if copy_theme:
-        if os.path.exists(os.path.join(themes_folder, theme)): # If the theme exists in the themes folder
+        if os.path.exists(os.path.join(THEMES_FOLDER, theme)): # If the theme exists in the themes folder
             try: # Try to copy the theme to ./<theme>
-                shutil.copytree(os.path.join(themes_folder, theme), theme)
+                shutil.copytree(os.path.join(THEMES_FOLDER, theme), theme)
             except FileExistsError: # If a folder exists at ./<theme> remove and then re-copy
                 shutil.rmtree(theme)
-                shutil.copytree(os.path.join(themes_folder, theme), theme)
-            print(f"Copied {os.path.join(themes_folder, theme)} to .{os.sep}{theme}")
+                shutil.copytree(os.path.join(THEMES_FOLDER, theme), theme)
+            print(f"Copied {os.path.join(THEMES_FOLDER, theme)} to .{os.sep}{theme}")
         else: # Theme could not be found
             print(f"Theme {theme} not found and was unable to be copied")
 
     if list_themes:
         print(f"\nAvailable themes\n{'='*16}")
-        for theme in os.listdir(themes_folder):
+        for theme in os.listdir(THEMES_FOLDER):
             print(f"  - {theme}")
         print() # empty newline after list
 
@@ -185,7 +192,7 @@ def main():
             theme(args["--list"], args["--copy"], args["<theme>"])
         elif args["--copy"]: # If copy is flagged, but no theme is provided
             if os.path.exists("config.yml"):
-                theme(args["--list"], args["--copy"], _get_site_config()["theme"])
+                theme(args["--list"], args["--copy"], get_site_config()["theme"])
             else: # If no theme, or config.yml file is present
                 theme(args["--list"], args["--copy"], "freelancer")
         elif args["--list"]:
