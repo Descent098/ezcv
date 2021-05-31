@@ -202,7 +202,7 @@ def get_section_content(section_folder: str, examples: bool = False) -> List[Lis
     # Iterate through project files and generate markdown
     for content in os.listdir(section_folder): 
         if examples:
-            if content.endswith(".md"):
+            if content.endswith(".md") or content.endswith(".markdown"):
                 with open(f"{section_folder}{os.sep}{content}", "r") as mdfile: # Parse markdown file
                     text = mdfile.read()
 
