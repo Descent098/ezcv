@@ -7,7 +7,7 @@ Usage:
     ezcv [-h] [-v] [-p]
     ezcv init [<name>] [<theme>]
     ezcv build [-d OUTPUT_DIR] [-p]
-    ezcv theme [-l] [-c] [<theme>]
+    ezcv theme [-l] [-c] [-s SECTION_NAME] [<theme>]
 
 
 Options:
@@ -17,6 +17,7 @@ Options:
 -c, --copy            copy the provided theme, or defined site theme
 -p, --preview         preview the current state of the site
 -d OUTPUT_DIR, --dir OUTPUT_DIR The folder name to export the site to
+-s SECTION_NAME, --section SECTION_NAME The section name to initialize
 ```
 
 ## Init
@@ -83,6 +84,7 @@ There are two optional flags and one positional argument:
   - First it will check if a ```<theme>``` argument has been passed, and if it has it will copy that theme
   - Then it will check if there's a ```config.yml``` file in the current directory and copy that one
   - Then it will just default to exporting the dimension theme
+- ```-s``` Used to create a new section in a theme
 
 
 **Examples**
@@ -103,4 +105,16 @@ ezcv theme -c
 
 ```bash
 ezcv theme -c aerial
+```
+
+*Create a new section called books in the current theme*
+
+```bash
+ezcv theme -s books
+```
+
+or
+
+```bash
+ezcv theme --section="books"
 ```

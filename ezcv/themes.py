@@ -9,13 +9,13 @@
 
 # Standard Library Dependencies 
 import os                    # Used for path validation and manipulation
-import shutil                    
+import shutil                # Used to make copying and deletion of paths easier
 import tempfile              # Used to generate temporary folders for downloads
 from zipfile import ZipFile  # Used to extract all directories from zip archives
 
 # Third Party Depenencies
-import requests
-from tqdm import tqdm
+import requests              # Used to access remote files
+from tqdm import tqdm        # Used to generate progress bars during iteration
 
 THEMES_FOLDER = os.path.join(os.path.dirname(__file__), "themes")
 
@@ -101,15 +101,15 @@ def locate_theme_directory(theme:str, site_context:dict) -> str:
     Parameters
     ----------
     theme : str
-        [description]
+        The name of the theme to locate
 
     site_context : dict
-        [description]
+        The site context with the site configuration
 
     Returns
     -------
     str
-        [description]
+        The path to the theme directory
 
     Raises
     ------

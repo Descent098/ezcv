@@ -5,23 +5,23 @@
 
 
 # Standard Lib Dependencies
-import os
-from typing import Any, DefaultDict, List, Type, Union # Used to create a 
-from dataclasses import dataclass
-from collections import defaultdict
+import os                                                # Used primarily in path validation
+from collections import defaultdict                      # Used to give dicts default args
+from dataclasses import dataclass                        # Used to improve class performance
+from typing import DefaultDict, List, Tuple, Type, Union # Used to provide accurate type hints
+
 
 # Third Party Dependencies
-import markdown
+import markdown            # Used to render and read markdown files
+from colored import fg     # Used to highlight output with colors, especially errors/warnings
 
 @dataclass
-class Content:
+class Content(dict):
     """Base class for other Content types
 
     Notes
     -----
     - All subclasses are assumed to have implemented:
-        - __enter__(); Implementation of "opening" context manager
-        - __exit__(); Implementation of "closing" context manager
         - __metadata__(); Returns a defaultdict of metadata
         - __html__(); Returns the HTML to render
 
@@ -33,9 +33,9 @@ class Content:
     Raises
     ------
     NotImplementedError
-        If any of __enter__(), __exit__(), __metadata__(), or __html__() are not implemented in subclass
+        If any of __metadata__(), or __html__() are not implemented in subclass
     """
-    file_path:str # The absolute/relative path to a file
+
 
     def get_available_extensions() -> DefaultDict[str, Type]:
         """Returns a defaultdict of extensions and corresponding child types to handle them
@@ -51,6 +51,7 @@ class Content:
                 all_extensions[extension] = current_class
         return all_extensions
 
+
     def __metadata__(self):
         """A function to be replaced with the specific implementation of generating metadata defauldict
 
@@ -61,28 +62,30 @@ class Content:
         """
         raise NotImplementedError
 
-    def __html__(self):
+
+    def get_content(self, file_path:str):
+        """Generates the metadata and HTML from a peice of content
+
+        Parameters
+        ----------
+        file_path : str
+            The path to the md file
+
+        Raises
+        ------
+        NotImplementedError
+            If the function is not implemented in the subclass
+        """
+        raise NotImplementedError
+
+
+    def __html__(self, file_path:str):
         """A function to be replaced with the specific implementation of generating HTML
 
-        Raises
-        ------
-        NotImplementedError
-            If the function is not implemented in the subclass
-        """
-        raise NotImplementedError
-
-    def __enter__(self):
-        """A function to be replaced with the specific implementation of "opening" the content
-
-        Raises
-        ------
-        NotImplementedError
-            If the function is not implemented in the subclass
-        """
-        raise NotImplementedError
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        """A function to be replaced with the specific implementation of "closing" the content
+        Parameters
+        ----------
+        file_path: (str)
+            The path for the file
 
         Raises
         ------
@@ -94,43 +97,81 @@ class Content:
 
 @dataclass
 class Markdown(Content):
+    """Used for parsing markdown content
+
+    Examples
+    --------
+    ```
+    from ezcv.content import Markdown
+
+    html, metadata = Markdown().get_content('file_1.md')
+    ```
+    """
     md:markdown.Markdown = markdown.Markdown(extensions=['meta']) # Setup markdown parser with extensions
-    html:str = ""
     extensions:List[str] = (".md", ".markdown", ".mdown", ".mkdn", ".mkd", ".mdwn")
+
 
     def __metadata__(self) -> defaultdict:
         """Gets the metadata from the YAML frontmatter of the markdown file
 
+        Notes
+        -----
+        - This class requires __html__ to be run first, or self.md to be set manually
+
         Returns
         -------
         defaultdict
-            [description]
+            Returns a defaultdict with the yaml metadata of a peice of content
         """
 
         metadata:defaultdict = defaultdict(lambda:False)
-
         for key in self.md.Meta: # Create defaultdict out of metadata
             if type(self.md.Meta[key]) == list:
                 metadata[key] = self.md.Meta[key][0]
             else:
                 metadata[key] = self.md.Meta[key]
-
         return metadata
 
 
-    def __html__(self) -> str:
-        return self.html # Generated in self.__enter__()
-
-    def __enter__(self):
-        """The implementation of "opening" the content"""
-        with open(f"{self.file_path}", "r") as mdfile: # Parse markdown file
+    def __html__(self, file_path:str) -> str:
+        with open(f"{file_path}", "r") as mdfile: # Parse markdown file
             text = mdfile.read()
-        self.html = self.md.convert(text) # Convert the markdown content text to hmtl
-        return self
+        html = self.md.convert(text) # Convert the markdown content text to hmtl
+        return html # Generated in self.__enter__()
 
-    def __exit__(self, error_type, value, traceback) -> bool:
-        """The implementation of "closing" the content"""
-        return isinstance(value, TypeError)
+
+    def get_content(self, file_path: str) -> Tuple[str, defaultdict]:
+        """Gets the html content of a file, and the metadata of the file
+
+        Parameters
+        ----------
+        file_path : str
+            The path to the file to render
+
+        Returns
+        -------
+        str, defaultdict
+            Returns the html first as a string and a defaultdict of the metadata
+
+        Raises
+        ------
+        FileNotFoundError
+            If the provided file path does not exist
+
+        Examples
+        --------
+        Render a file called file_1.md
+        ```
+        from ezcv.content import Markdown
+
+        html, metadata = Markdown().get_content('file_1.md')
+        ```
+        """
+        if not os.path.exists(file_path): # If file doesn't exist
+            raise FileNotFoundError(f"{fg(1)} Could not find file: {file_path}{fg(15)}\n")
+        html = self.__html__(file_path)
+        metadata = self.__metadata__()
+        return html, metadata
 
 
 # def get_section_content_new(section_folder: str, examples: bool = False) -> List[Type[Content]]:
@@ -164,10 +205,7 @@ def get_content_directories() -> List[str]:
     return result
 
 
-
-
-
-#TODO: remove
+# NOTE: This will be deprecated and replaced with the new content system in the next release
 def get_section_content(section_folder: str, examples: bool = False) -> List[List[Union[defaultdict, str]]]:
     """Gets the markdown content and metadata from each file in a given section
 
@@ -232,6 +270,4 @@ def get_section_content(section_folder: str, examples: bool = False) -> List[Lis
                     else:
                         page_meta[key] = md.Meta[key]
                 contents.append([page_meta, page_html])
-
     return contents
-

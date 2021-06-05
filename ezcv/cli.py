@@ -59,16 +59,17 @@ from sys import argv, exit  # Used to get length of CLI args and exit cleanly
 
 ## internal dependencies
 from ezcv.core import generate_site, get_site_config
-from ezcv.themes import THEMES_FOLDER
+from ezcv.themes import THEMES_FOLDER, locate_theme_directory
 
 # Third party dependencies
-from docopt import docopt  # Used to complete argument parsing
+from colored import fg     # Used to highlight output with colors
+from docopt import docopt  # Used to complete argument parsing for the cli
 
 usage = """Usage:
     ezcv [-h] [-v] [-p]
     ezcv init [<name>] [<theme>]
     ezcv build [-d OUTPUT_DIR] [-p]
-    ezcv theme [-l] [-c] [<theme>]
+    ezcv theme [-l] [-c] [-s SECTION_NAME] [<theme>]
 
 
 Options:
@@ -78,6 +79,7 @@ Options:
 -c, --copy            copy the provided theme, or defined site theme
 -p, --preview         preview the current state of the site
 -d OUTPUT_DIR, --dir OUTPUT_DIR The folder name to export the site to
+-s SECTION_NAME, --section SECTION_NAME The section name to initialize
 """
 
 def init(theme="dimension", name="John Doe"):
@@ -153,6 +155,78 @@ def theme(list_themes: bool = False, copy_theme:bool = False, theme:str = ""):
         print() # empty newline after list
 
 
+def new_section(section_name:str) -> bool:
+    """Creates a new section (content folder, and section template in the theme)
+
+    Parameters
+    ----------
+    section_name : str
+        The name you want to give to the section, used to generate folder and template filename
+
+    Notes
+    -----
+    - Needs to be run from the main folder of a site, or at most one folder deep (i.e. the content or Images folder)
+
+    Returns
+    -------
+    bool
+        True if the creation was successful and False if it failed early
+    """    
+    if os.path.exists("config.yml"):
+        config_path = "config.yml"
+    elif os.path.exists("../config.yml") :
+        config_path = "../config.yml"
+    else:
+        print(f"{fg(1)}You are not in a project root folder, please run from folder with config.yml{fg(15)}\n")
+        return False
+
+    config = get_site_config(config_file_path=config_path)
+    if not config["theme"]: # Set to default theme if no theme is set
+        config["theme"] = "dimension"
+
+
+    theme_path = locate_theme_directory(config["theme"], {"config": config})
+    if os.path.exists(config["theme"]): # Theme is at cwd i.e. ./aerial
+        theme_path = config["theme"]
+    elif os.path.exists(os.path.join("..", config["theme"])): # Theme is one level up i.e. ../aerial
+        theme_path = os.path.join("..", config["theme"])
+    elif os.path.exists(os.path.join(THEMES_FOLDER, config["theme"])): # Theme is in package theme folder i.e. THEME_FOLDER/aerial
+        theme_path = os.path.join(THEMES_FOLDER, config["theme"])
+    else:
+        print(f"{fg(1)}Could not find theme at any of the possible locations\n\t{config['theme']}\n\t{os.path.join('..', config['theme'])}\n\t{os.path.join(THEMES_FOLDER, config['theme'])} {fg(15)}\n")
+        return False
+
+    if os.path.exists("content"):
+        content_path = "content"
+    elif os.getcwd().split(os.sep)[-1] == "content": # Inside the current content folder
+        content_path = os.getcwd()
+    else:
+        return False
+
+    # The content for the template in the generated section
+    default_section_page_templte = f"""\n{{% for page in {section_name} %}} <!--Lets you iterate through each page -->
+            {{{{ page[0] }}}} <!--Metadata access -->
+            {{{{ page[1] | safe }}}} <!--content access -->
+{{% endfor %}}
+\n"""
+
+    # Begin creating content folder and theme file
+    if not os.path.exists(os.path.join(content_path, section_name)): # If the content folder doesn't already exist
+        if not os.path.exists(os.path.join(theme_path, "sections", f"{section_name}.jinja")) and not os.path.exists(os.path.join(theme_path, "sections", f"{section_name}.html")): # If jinja theme doesn't already exist
+            os.mkdir(os.path.join(content_path, section_name))
+            with open(os.path.join(theme_path, "sections", f"{section_name}.jinja"), 'w+') as section_file:
+                section_file.write(default_section_page_templte)
+        else: # Theme file already existed
+            print(f"{fg(1)}Could not create path, path already exists at either: \n\t{os.path.join(theme_path, 'sections', f'{section_name}.jinja')}\n\tor\n\t{os.path.join(theme_path, 'sections', f'{section_name}.jinja')}\n{fg(15)}")
+            return False
+    else: # Content folder already existed
+        print(f"{fg(1)}Could not create path, path already exists at {os.path.join(content_path, section_name)}\n{fg(15)}")
+        return False
+
+    print(f"Section successfully created\n\nTheme file created at:\n\t{os.path.join(theme_path, 'sections', f'{section_name}.jinja')}\nContent folder created at:\n\t{os.path.join(content_path, section_name)}")
+    return True
+
+
 def main():
     """The primary entrypoint for the ezcv cli"""
     args = docopt(usage, version="0.2.0")
@@ -188,7 +262,11 @@ def main():
             exit()
 
     elif args["theme"]:
-        if args["<theme>"]:
+        if args["--section"]:
+            created = new_section(args["--section"])
+            if not created:
+                print(f"{fg(1)}Failed to create section {args['--section']} {fg(15)}")
+        elif args["<theme>"]:
             theme(args["--list"], args["--copy"], args["<theme>"])
         elif args["--copy"]: # If copy is flagged, but no theme is provided
             if os.path.exists("config.yml"):
