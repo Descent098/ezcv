@@ -211,3 +211,21 @@ and you can access the content of all the files in ```/content/foo``` in ```foo.
 
 {% endfor %}
 ```
+
+## Adding Google Analytics
+
+To add support for google analytics to your theme you can use the snippet below to the head tag of the template.
+
+
+```jinja2
+{% if config["ua_code"] %}
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{config['ua_code']}}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '{{config["ua_code"]}}');
+</script>
+{% endif %}
+```

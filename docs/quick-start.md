@@ -142,6 +142,10 @@ Each site will have a ```config.yml``` file, this file is in the [YAML format](h
 | **social** | Social media links | github, twitch, youtube, instagram, twitter, snapchat, linkedin, facebook |
 | **examples** | Whether to include content files that have "example" at the start of the filename | true or false |
 | **theme** | The name of the theme to use | the name of any included theme i.e. dimension |
+| **ua_code** | The UA code provided to you by Google Analytics | Any code in the format UA-000000-0 (the 0's can be any number) |
+
+
+\* [This guide can help you setup a UA code](https://support.google.com/analytics/answer/1008080?hl=en#zippy=%2Cin-this-article)
 
 </br>
 

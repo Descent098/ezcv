@@ -6,13 +6,14 @@ The focus for this release is to add new features and themes
 
 ### Features
 
-- Created an extension system
 - Added Resume Generator
 - Setup remote theme support
 - Added new sections
   - Blog
-  - Publications
   - Gallery
+- Google analytics config option
+- Custom Favicon 
+- Added new section creation CLI
 
 ### Themes
 
