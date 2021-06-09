@@ -143,6 +143,7 @@ Each site will have a ```config.yml``` file, this file is in the [YAML format](h
 | **examples** | Whether to include content files that have "example" at the start of the filename | true or false |
 | **theme** | The name of the theme to use | the name of any included theme i.e. dimension |
 | **ua_code** | The UA code provided to you by Google Analytics | Any code in the format UA-000000-0 (the 0's can be any number) |
+| **resume** | Whether or not to generate the resume page | Either true or false (false by default) |
 
 
 \* [This guide can help you setup a UA code](https://support.google.com/analytics/answer/1008080?hl=en#zippy=%2Cin-this-article)
@@ -174,8 +175,11 @@ social:
   snapchat: username # Username others use to add you
   linkedin: name # go to linkedin and go to your profile, your name will be at the end of the url i.e. www.linkedin.com/in/<name>
   facebook: your id # go to facebook and go to your profile, your ID will be at the end of the url i.e. www.facebook.com/<your id>
+  url: https://kieranwood.ca # The URL the site will be hosted on (used by resume)
 examples: true # If you want to include the example.md files in your final build (good for developing new themes)
 theme: dimension # Which of the included themes to use
+ua_code: UA-000000-0 # The UA code for google analytics
+resume: true # Whether to generate the resume page or not
 ```
 
 ## Sections

@@ -111,10 +111,10 @@ def preview():
         try:
             input("Press enter when done previewing")
         except EOFError:
-            print(f"Keyboard interupt detected, ending preview and removing {temp_dir}")
+            print(f"\nKeyboard interupt detected, ending preview and removing {temp_dir}")
             return
         except KeyboardInterrupt:
-            print(f"Keyboard interupt detected, ending preview and removing {temp_dir}")
+            print(f"\nKeyboard interupt detected, ending preview and removing {temp_dir}")
             return
 
         print(f"Ending preview and removing {temp_dir}")

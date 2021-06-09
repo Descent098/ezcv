@@ -197,6 +197,7 @@ def _export(site_context:dict, theme_folder:str, output_folder:str = "site", pag
         if not os.path.exists(output_image_dir): # Create output_folder/images if it's not present
             os.mkdir(output_image_dir)
         for file in os.listdir("images"): # Copy file from source images folder to output image directory
+            # TODO: Add catch for if image already exists
             shutil.copyfile(os.path.join("images", file), os.path.join(output_image_dir, file))
 
     # Iterate through top level pages and write to the output folder
@@ -305,6 +306,9 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
 
     # Get a list of all the top level pages in the theme folder and add them to the pages list
     for top_level_file in os.listdir(theme_folder):
+        if top_level_file == "resume.jinja" and not site_context["config"]["resume"]: # Ignore resume.jinja if resume config var is False
+            continue
+
         if top_level_file.endswith(".jinja") or top_level_file.endswith(".html"):
             pages.append(top_level_file)
     

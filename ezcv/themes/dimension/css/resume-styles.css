@@ -1,0 +1,28 @@
+#social-links {
+    font-size: 1.1em;
+  }
+  
+  .project-link {
+    text-decoration: initial;
+    color: #141414;
+  }
+  
+  .project-link:hover {
+    text-decoration: initial;
+    color: #929292;
+  }
+
+  .image{
+    float: left;
+  }
+
+  .image>img{
+    max-width: 200px;
+    max-height: 200px;
+    margin-right:-2px;
+  }
+
+  .project-text{
+    text-align: center;
+    vertical-align: middle;
+  }
