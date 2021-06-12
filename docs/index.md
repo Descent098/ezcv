@@ -14,6 +14,8 @@ ezcv is a purpose built static site generator for creating personal resume/portf
 - Flexible templating with Jinja2
 - Fully customizable configuration files and sections
 - Simple markdown syntax for content building
+- Integrated HTML resume generator
+- Integration with Google analytics
 
 ## Who is ezcv for?
 

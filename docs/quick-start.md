@@ -227,3 +227,15 @@ This is a cool image:
 
 ![abstract landscape](images/abstract-landscape.jpg)
 ```
+
+## Resume Generator
+
+Built into the system is a resume generator. This generator used the built in sections (Work experience, Education, Volunteering Experience, and projects) along with the configuration file to generate a PDF and HTML resume.
+
+To turn this feature on set:
+
+```yaml
+resume:true
+```
+
+In your config.yml file.
