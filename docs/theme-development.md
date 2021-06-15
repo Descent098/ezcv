@@ -229,3 +229,19 @@ To add support for google analytics to your theme you can use the snippet below 
 </script>
 {% endif %}
 ```
+
+## Customizing Favicons
+
+To use a custom favicon in your theme overwrite the ```images/favicon.png``` file. In the documentation it is assumed this line exists, and users are told to place a file at this path if they want to override the included favicon. As such if you are starting from scratch be sure to include this line in the head tag:
+
+```html
+<head>
+... <!-- Other code -->
+<link rel="icon" type="image/png" href="images/favicon.png"/>
+... <!-- Other code -->
+</head>
+```
+
+## Customizing Resume Generation
+
+Inside all themes they are packaged with a ```resume.jinja``` file. This file is what generates the html resume at `sitename/resume`. Any changes you want to make to the resume should be done to this file. Everything is self contained (stylesheets are CDN linked, or done inline in the `<style>` tag), so any changes you make to global stylesheets **will not** show up unless you import the stylesheet into ```resume.jinja``` with a link tag.

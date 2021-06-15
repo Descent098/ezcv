@@ -228,9 +228,13 @@ This is a cool image:
 ![abstract landscape](images/abstract-landscape.jpg)
 ```
 
-## Resume Generator
+## Extra Features
 
-Built into the system is a resume generator. This generator used the built in sections (Work experience, Education, Volunteering Experience, and projects) along with the configuration file to generate a PDF and HTML resume.
+Below is a description of several features that are built in, explained in higher detail.
+
+### Resume Generator
+
+Built into the system is a resume generator. This generator used the built in sections (Work experience, Education, Volunteering Experience, and projects) along with the configuration file to generate a HTML resume.
 
 To turn this feature on set:
 
@@ -238,4 +242,8 @@ To turn this feature on set:
 resume:true
 ```
 
-In your config.yml file.
+In your config.yml file (it is set to false by default). 
+
+### Customizing Favicon
+
+To upload a custom favicon simply create a file called in the images folder called ```favicon.png```. Ideally you want an image that is around 150px x 150px and it must be a PNG file. 

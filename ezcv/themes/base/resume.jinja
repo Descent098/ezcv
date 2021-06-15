@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/resume-styles.css">
+    <link rel="icon" type="image/png" href="images/favicon.png"/>
     {% if config["ua_code"] %}
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id={{config['ua_code']}}"></script>
@@ -20,10 +21,69 @@
     {% endif %}
 </head>
 
+{# Stylesheet is done inline to avoid needing seperate CSS files #}
+<style>
+#social-links {
+    font-size: 1.1em;
+    }
+
+    .project-link {
+    text-decoration: initial;
+    color: #141414;
+    }
+
+    .project-link:hover {
+    text-decoration: initial;
+    color: #929292;
+    }
+
+    .image{
+    float: left;
+    }
+
+    .image>img{
+    max-width: 200px;
+    max-height: 200px;
+    margin-right:-2px;
+    }
+
+    .project-text{
+    text-align: center;
+    vertical-align: middle;
+    }
+
+    @media print { 
+    .project-subheading, .image, .print-hidden{display: none;}
+
+    .print-columns{
+        column-count: 2;
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+    }
+    *{
+        font-size: small;
+    }
+
+    .print-column-break{
+        break-before: always;
+        -webkit-break-before: always;
+        -webkit-column-break-before: always;
+    }
+
+    .resume-name{
+        margin-top: -15px;
+    }
+    }
+
+    @media not print{
+    .print-shown{display: none;}
+    }
+</style>
+
 <body class="text-left">
     <div style="padding-top: 5px;"></div>
     <div>
-        <div class="container print-column">
+        <div class="container print-columns">
             <div class="row" style="filter: hue-rotate(269deg);margin-top: 5px;">
                 <div class="col-md-6">
                     <!-- Social links and name in header -->
@@ -83,7 +143,7 @@
         </div>
         {%endif%}
     </div>
-    <div class="print-column">
+    <div class="print-columns">
         <div class="container">
             <div class="row">
 
@@ -168,8 +228,8 @@
         </div>
     </div>
     <div>
-        <div class="container">
-            <div class="row print-column">
+        <div class="container print-columns">
+            <div class="row">
 
                 {% for project in sections["projects"] %}
                 <div class="col-md-6">
