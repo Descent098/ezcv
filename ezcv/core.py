@@ -75,10 +75,7 @@ def get_site_config(config_file_path:str = "config.yml", remotes_file_path:str =
             config["remotes"] = remotes
 
     # Convert config dict to defaultdict so that all empty values are False instead of giving KeyNotFoundError
-    default_dict_config = defaultdict(lambda: False)
-
-    for key in config: # Copy config dict to default_dict_config
-        default_dict_config[key] = config[key]
+    default_dict_config = defaultdict(lambda: False, config)
 
     return default_dict_config
 
@@ -283,7 +280,10 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
     pages = [] # Filled with a list of all the pages to render
 
     # The data passed to render all pages
-    site_context:dict[str, Union[list, defaultdict, dict]] = {"config": get_site_config(config_file_path)} 
+    site_context:dict[str, Union[list, defaultdict, dict]] = {"config": get_site_config(config_file_path)}
+
+    if site_context["config"]["ignore_exif_data"]:
+        Image.ignore_exif_data = True
 
     # If no theme argument, and a theme is defined in the site config file
     if site_context["config"]["theme"] and theme == "dimension": 

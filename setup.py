@@ -48,12 +48,14 @@ setuptools.setup(
         },
 
     install_requires = [
-    "docopt",   # Used for argument parsing if you are writing a CLI
-    "pyyaml",   # Used for config file parsing
-    "jinja2",   # used as middlewear for generating templates
-    "markdown", # Used to parse markdown
-    "tqdm",     # Used to generate progress bars
-    "requests"  # Used to download remote themes
+    "docopt",              # Used for argument parsing if you are writing a CLI
+    "pyyaml",              # Used for config file parsing
+    "jinja2",              # used as middlewear for generating templates
+    "markdown",            # Used to parse markdown
+    "tqdm",                # Used to generate progress bars
+    "requests",            # Used to download remote themes
+    "exifread",            # Used to read exif data from images
+    "python-markdown-math" # Used to render latex math equations
         ],
     extras_require = {
         "dev" : ["mkdocs", # Used to create HTML versions of the markdown docs in the docs directory

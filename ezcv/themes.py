@@ -18,7 +18,7 @@ import requests              # Used to access remote files
 from tqdm import tqdm        # Used to generate progress bars during iteration
 
 THEMES_FOLDER = os.path.join(os.path.dirname(__file__), "themes")
-
+#TODO: Add a way to update themes from CLI
 def get_theme_section_directories(theme_folder:str, sections:list = []) -> list:
     """Gets a list of the available sections
 

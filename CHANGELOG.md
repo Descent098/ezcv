@@ -14,10 +14,19 @@ The focus for this release is to add new features and themes
 - Google analytics config option
 - Custom Favicon 
 - Added new section creation CLI
+- Added support for all standard markdown file extensions (.md, .markdown, .mdown, .mkdn, .mkd, .mdwn)
+- Added many new markdown extensions
+  - [footnotes](https://python-markdown.github.io/extensions/footnotes/)
+  - [tables](https://python-markdown.github.io/extensions/tables/)
+  - [toc (Table of contents)](https://python-markdown.github.io/extensions/toc/)
+  - [abbr(abbreviations)](https://python-markdown.github.io/extensions/abbreviations/)
+  - [def_list(Definition lists)](https://python-markdown.github.io/extensions/definition_lists/)
+  - [sane_lists(Sane lists)](https://python-markdown.github.io/extensions/sane_lists/)
+  - [mdx_math(Latex/formulas)](https://github.com/mitya57/python-markdown-math)
 
 ### Themes
 
-- Moved existing themes to new repo
+- Moved existing themes to new repo https://github.com/QU-UP/ezcv-themes
 
 ### Bug fixes
 
