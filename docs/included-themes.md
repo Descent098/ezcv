@@ -79,6 +79,7 @@ Projects: ❌
 Education: ❌
 Work Experience: ❌
 Volunteering Experience: ❌
+Gallery: ❌
 ```
 
 ## Creative
@@ -151,6 +152,7 @@ Projects: ✔️
 Education: ❌
 Work Experience: ❌
 Volunteering Experience: ❌
+Gallery: ✔️
 ```
 
 ## Dimension
@@ -217,6 +219,7 @@ Projects: ✔️
 Education: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️
+Gallery: ✔️
 ```
 
 ## Ethereal
@@ -243,6 +246,8 @@ theme: ethereal
 **Notes**
 
 For best usage the avatar should be (525px x 900px)
+
+**With the gallery the design will be different if you have a set of images that are divisible by either 2, 3, or 4**
 
 #### Supported config settings
 
@@ -287,6 +292,7 @@ Projects: ❌
 Education: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️
+Gallery: ✔️
 ```
 
 ## Freelancer
@@ -356,6 +362,78 @@ Projects: ✔️
 Education: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️
+Gallery: ❌
+```
+
+## Greyscale
+
+Author:  [Start Bootstrap](https://startbootstrap.com)
+
+Theme page: [https://startbootstrap.com/theme/grayscale](https://startbootstrap.com/theme/grayscale)
+
+### Preview
+
+Full page preview: [https://startbootstrap.com/previews/grayscale](https://startbootstrap.com/previews/grayscale)
+
+<iframe src="https://startbootstrap.github.io/startbootstrap-grayscale/" width="100%" height="500px">
+</iframe>
+
+
+### Usage
+
+To use this theme in your code either initialize the project with "grayscale" as the theme, or set it in your ```config.yml``` file:
+
+```yaml
+... # Other configuration settings
+theme: grayscale
+... # Other configuration settings
+```
+
+#### Supported config settings
+
+The following settings are supported and not supported in the ```config.yml``` file:
+
+✅: Required
+
+☑️: Optional
+
+❌: Not Supported
+
+```
+name: ✅
+background: ☑️ (recommended)
+avatar: ❌
+email: ☑️
+phone: ☑️
+biography: ☑️ (recommended)
+role: ☑️ (recommended)
+company: ☑️ (recommended)
+address: ☑️
+social: ☑️
+  github: ☑️
+  twitch: ☑️
+  youtube: ☑️
+  instagram: ☑️
+  twitter: ☑️
+  snapchat: ☑️
+  linkedin: ☑️
+  facebook: ☑️
+```
+
+#### Supported Sections
+
+Below are a list of the supported, and unsupported sections.
+
+✔️: Supported
+
+❌: Not Supported
+
+```yml
+Projects: ✔️
+Education: ✔️
+Work Experience: ✔️
+Volunteering Experience: ✔️
+Gallery: ✔️
 ```
 
 ## Identity
@@ -423,6 +501,146 @@ Projects: ❌
 Education: ❌
 Work Experience: ❌
 Volunteering Experience: ❌
+Gallery: ❌
+```
+
+## Lens
+
+Author:  [HTML5Up](https://html5up.net)
+
+### Preview
+
+Full page preview: [https://html5up.net/lens](https://html5up.net/lens)
+
+<iframe src="https://html5up.net/uploads/demos/lens/" width="100%" height="500px">
+</iframe>
+
+
+### Usage
+
+To use this theme in your code either initialize the project with "strata" as the theme, or set it in your ```config.yml``` file:
+
+```yaml
+... # Other configuration settings
+theme: lens
+... # Other configuration settings
+```
+
+#### Supported config settings
+
+The following settings are supported and not supported in the ```config.yml``` file:
+
+✅: Required
+
+☑️: Optional
+
+❌: Not Supported
+
+```
+name: ✅
+background: ❌
+avatar: ☑️
+email: ☑️
+phone: ☑️
+biography: ✅
+role: ☑️
+company: ☑️
+address: ❌
+social: ☑️
+  github: ☑️
+  twitch: ☑️
+  youtube: ☑️
+  instagram: ☑️
+  twitter: ☑️
+  snapchat: ☑️
+  linkedin: ☑️
+  facebook: ☑️
+```
+
+#### Supported Sections
+
+Below are a list of the supported, and unsupported sections.
+
+✔️: Supported
+
+❌: Not Supported
+
+```yml
+Projects: ❌
+Education: ❌
+Work Experience: ❌
+Volunteering Experience: ❌
+Gallery: ✔️
+```
+
+## Paradigm Shift
+
+Author:  [HTML5Up](https://html5up.net/)
+
+### Preview
+
+Full page preview: [https://html5up.net/paradigm-shift](https://html5up.net/paradigm-shift)
+
+<iframe src="https://html5up.net/uploads/demos/paradigm-shift/" width="100%" height="500px">
+</iframe>
+
+
+
+### Usage
+
+To use this theme in your code either initialize the project with "identity" as the theme, or set it in your ```config.yml``` file:
+
+```yaml
+... # Other configuration settings
+theme: paradigm_shift
+... # Other configuration settings
+```
+
+#### Supported config settings
+
+The following settings are supported and not supported in the ```config.yml``` file:
+
+✅: Required
+
+☑️: Optional
+
+❌: Not Supported
+
+```
+name: ✅
+background: ☑️
+avatar: ✅
+email: ☑️
+phone: ☑️
+biography: ☑️
+role: ☑️ 
+company: ☑️
+address: ☑️
+social: ☑️
+  github: ☑️
+  twitch: ☑️
+  youtube: ☑️
+  instagram: ☑️
+  twitter: ☑️
+  snapchat: ☑️
+  linkedin: ☑️
+  facebook: ☑️
+```
+
+#### Supported Sections
+
+Below are a list of the supported, and unsupported sections.
+
+✔️: Supported
+
+❌: Not Supported
+
+```yml
+Projects: ✔️
+Education: ✔️
+Work Experience: ✔️
+Volunteering Experience: ✔️
+Gallery: ✔️
 ```
 
 ## Read Only
@@ -493,6 +711,78 @@ Projects: ✔️
 Education: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️
+Gallery: ❌
+```
+
+## Resume
+
+Author:  [Start Bootstrap](https://startbootstrap.com)
+
+Theme page: [https://startbootstrap.com/theme/resume](https://startbootstrap.com/theme/resume)
+
+### Preview
+
+Full page preview: [https://startbootstrap.com/previews/resume](https://startbootstrap.com/previews/resume)
+
+<iframe src="https://startbootstrap.github.io/startbootstrap-resume/" width="100%" height="500px">
+</iframe>
+
+
+### Usage
+
+To use this theme in your code either initialize the project with "grayscale" as the theme, or set it in your ```config.yml``` file:
+
+```yaml
+... # Other configuration settings
+theme: resume
+... # Other configuration settings
+```
+
+#### Supported config settings
+
+The following settings are supported and not supported in the ```config.yml``` file:
+
+✅: Required
+
+☑️: Optional
+
+❌: Not Supported
+
+```
+name: ✅
+background: ❌
+avatar: ✅
+email: ☑️ (recommended)
+phone: ☑️ (recommended)
+biography: ☑️ (recommended)
+role: ☑️ (recommended)
+company: ☑️ (recommended)
+address: ☑️
+social: ☑️
+  github: ☑️
+  twitch: ☑️
+  youtube: ☑️
+  instagram: ☑️
+  twitter: ☑️
+  snapchat: ☑️
+  linkedin: ☑️
+  facebook: ☑️
+```
+
+#### Supported Sections
+
+Below are a list of the supported, and unsupported sections.
+
+✔️: Supported
+
+❌: Not Supported
+
+```yml
+Projects: ✔️
+Education: ✔️
+Work Experience: ✔️
+Volunteering Experience: ✔️
+Gallery: ✔️
 ```
 
 ## Solid State
@@ -563,6 +853,7 @@ Projects: ✔️
 Education: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️
+Gallery: ❌
 ```
 
 ## Strata
@@ -629,4 +920,5 @@ Projects: ✔️
 Education: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️
+Gallery: ✔️
 ```

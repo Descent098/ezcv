@@ -6,7 +6,7 @@
 # Standard Lib Dependencies
 import os                                                # Used primarily in path validation
 from collections import defaultdict                      # Used to give dicts default args
-from dataclasses import dataclass                        # Used to improve class performance
+from dataclasses import dataclass, field                 # Used to improve class performance
 from typing import DefaultDict, List, Tuple, Type, Union # Used to provide accurate type hints
 
 
@@ -189,7 +189,7 @@ class Markdown(Content):
     md:markdown.Markdown = markdown.Markdown(extensions=['meta', 'footnotes', 'tables', 'toc', 'abbr', 'def_list', 'sane_lists', "mdx_math"]) # Setup markdown parser with extensions
     extensions:List[str] = (".md", ".markdown", ".mdown", ".mkdn", ".mkd", ".mdwn")
 
-    #TODO: Add docs about new extensions including adding to example sites, and add latex support to all sites
+    #TODO: Add docs about new extensions including adding to example sites, and add attribute lists
     def __metadata__(self) -> defaultdict:
         """Gets the metadata from the YAML frontmatter of the markdown file
 
@@ -264,6 +264,7 @@ class Image(Content):
     """
     ignore_exif_data:bool = False
     extensions:List[str] = (".jpg", ".png", ".tiff", ".avix")
+    image_paths:List[str] = field(default_factory=lambda: []) # TODO: find way to implement this properly
 
 
     def __metadata__(self, filename:str) -> defaultdict:
@@ -323,4 +324,6 @@ class Image(Content):
     def get_content(self, file_path: str):
         tags = self.__metadata__(file_path)
         html = self.__html__(tags)
+        tags["file_path"] = f"images/gallery/{file_path.split(os.path.sep)[-1]}"
+        self.image_paths.append(file_path)
         return tags, html

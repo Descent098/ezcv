@@ -245,3 +245,91 @@ To use a custom favicon in your theme overwrite the ```images/favicon.png``` fil
 ## Customizing Resume Generation
 
 Inside all themes they are packaged with a ```resume.jinja``` file. This file is what generates the html resume at `sitename/resume`. Any changes you want to make to the resume should be done to this file. Everything is self contained (stylesheets are CDN linked, or done inline in the `<style>` tag), so any changes you make to global stylesheets **will not** show up unless you import the stylesheet into ```resume.jinja``` with a link tag.
+
+## Submitting a theme to be officially supported
+
+Currently all themes (except the base and dimension themes) are pulled from a remote repository https://github.com/QU-UP/ezcv-themes. If you want to submit a theme, then head there and [submit it](https://github.com/QU-UP/ezcv-themes/issues/new?assignees=&labels=new-theme&template=new_theme.md&title=%5BTheme%5D) and then create a pull request with the ticket submission referenced.
+
+
+## Custom Styling for gallery's
+
+Gallery images have classes for each peice of information
+
+```html
+<p class='lens'>LEICA DG 100-400/F4.0-6.3</p>
+<p class='focal-length'>256mm (full frame equivalent)</p>
+<p class='iso'>ISO 400</p>
+<p class='shutter-speed'>1/160 Second(s)</p>
+<p class='aperture'>f6.3</p>
+<p class='camera-type'>Panasonic DC-G95</p>
+```
+
+**As much as I would like to say I can guarentee this works for every type of exif data I only have 1 camera body to test with, so if something seems off please report it.**
+
+### Notes
+A few notes and idiocyncracies when using the HTML that gets exported
+
+- The focal length will have the additional "(full frame equivalent)" added for lenses that are on non-standard sensor sizes (micro 4/3, APSC etc.)
+- The camera type can include just the manufacturer, just the model name, or both based on how the exif data is burned in
+
+### Overriding the default display completely
+Let's say you want to do completely custom HTML like this:
+
+```html
+
+
+<div class="image">
+    <img src="images/foo"> {# This is the image path #}
+    <div class="camera-metadata">
+      <p class='camera-type'>Panasonic DC-G95</p>
+    </div>
+    <div class="lens-metadata">
+      <p class='focal-length'>256mm (full frame equivalent)</p>
+      <p class='lens'>LEICA DG 100-400/F4.0-6.3</p>
+    </div>
+    <div class="exposure-details">
+      <p class='iso'>ISO 400</p>
+      <p class='shutter-speed'>1/160 Second(s)</p>
+      <p class='aperture'>f6.3</p>
+    </div>
+</div>
+```
+
+To do so you would need to hook into the content and use the dictionary keys provided by the API **not the classes from above**. So the list of keys would be:
+
+``
+"EXIF LensModel" == Lens Model
+"EXIF FocalLengthIn35mmFilm" == Focal length (converted to full frame equivalent) 
+"EXIF FocalLength" == Focal length (raw and unconverted) 
+"EXIF ISOSpeedRatings" == ISO
+"EXIF ExposureTime" == Shutter Speed
+"EXIF FNumber" == aperture \*(see note at bottom)
+"Image Make" == The camera brand name (i.e. Panasonic)
+"Image Model" == The camera model name (i.e. DC-G95)
+``
+
+\* The aperture is in rational form. So for example f6.3 would be 63/10
+
+
+So to complete the example above you would do:
+```jinja2
+{% for image in sections["gallery"] %}
+
+<div class="image">
+    <img src="images/gallery/{{ image[0]['file_path'] }}"> {# This is the image path #}
+
+    <div class="camera-metadata">
+      <p class='camera-type'>{{ image[0]['Image Make'] }} {{ image[0]['Image Model'] }}</p>
+    </div>
+    <div class="lens-metadata">
+      <p class='focal-length'>{{ image[0]['EXIF FocalLengthIn35mmFilm'] }}</p>
+      <p class='lens'>{{ image[0]['EXIF LensModel'] }}</p>
+    </div>
+    <div class="exposure-details">
+      <p class='iso'>ISO {{ image[0]['EXIF ISOSpeedRatings'] }}</p>
+      <p class='shutter-speed'>{{ image[0]['EXIF ExposureTime'] }} Second(s)</p>
+      <p class='aperture'>f {{ image[0]['EXIF FNumber'] }}</p>
+    </div>
+</div>
+{% endif %}
+```

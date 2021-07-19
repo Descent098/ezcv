@@ -144,6 +144,7 @@ Each site will have a ```config.yml``` file, this file is in the [YAML format](h
 | **theme** | The name of the theme to use | the name of any included theme i.e. dimension |
 | **ua_code** | The UA code provided to you by Google Analytics | Any code in the format UA-000000-0 (the 0's can be any number) |
 | **resume** | Whether or not to generate the resume page | Either true or false (false by default) |
+| **ignore_exif_data** | Whether to use exif data for gallery images | Either true or false (false by default) |
 
 
 \* [This guide can help you setup a UA code](https://support.google.com/analytics/answer/1008080?hl=en#zippy=%2Cin-this-article)
@@ -180,6 +181,7 @@ examples: true # If you want to include the example.md files in your final build
 theme: dimension # Which of the included themes to use
 ua_code: UA-000000-0 # The UA code for google analytics
 resume: true # Whether to generate the resume page or not
+ignore_exif_data : false # Whether to use exif data for gallery images
 ```
 
 ## Sections

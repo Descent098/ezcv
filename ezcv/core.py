@@ -32,6 +32,7 @@ generate_site(output_folder="my_site", theme = "aerial", preview = True)
 """
 
 # Standard Lib Dependencies
+from ezcv.filters import inject_filters
 import os                           # Used for path validation
 import shutil                       # Used for file/folder copying and removal
 import webbrowser                   # Used to automatically open the default system browser
@@ -99,7 +100,6 @@ def _render_section(theme_folder:str, section_name:str, site_context:dict) -> st
     str:
         The rendered template of the section
     """
-    from pprint import pprint
     try:
         contents = site_context["sections"][section_name]
     except KeyError:
@@ -110,6 +110,8 @@ def _render_section(theme_folder:str, section_name:str, site_context:dict) -> st
     theme_loader = jinja2.FileSystemLoader(theme_folder)
     environment = jinja2.Environment(loader=theme_loader, autoescape=True, trim_blocks=True) # Grab all files in theme_folder
 
+    inject_filters(environment) # Add in custom filters
+
     # If a section template exists set it to the path, else False i.e. if <theme folder>/sections/<section name>.jinja exists set it to that
     section_template_file = f"sections/{section_name}.jinja"
     if section_template_file:
@@ -119,7 +121,7 @@ def _render_section(theme_folder:str, section_name:str, site_context:dict) -> st
             except jinja2.TemplateNotFound: # If current section is not supported
                 print(f"Section {section_name} template is not available")
                 return ""
-            return theme.render({section_name:contents})
+            return theme.render({section_name:contents, "config": site_context["config"]})
         else:
             return ""
     else:
@@ -149,6 +151,8 @@ def _render_page(theme_folder:str, page:str, site_context:dict) -> str:
     # Initialize jinja loaders
     theme_loader = jinja2.FileSystemLoader(theme_folder)
     environment = jinja2.Environment(loader=theme_loader, autoescape=True, trim_blocks=True) # Grab all files in theme_folder
+
+    inject_filters(environment) # Add in custom filters
 
     # Render template and return contents
     theme = environment.get_template(page)
@@ -196,6 +200,15 @@ def _export(site_context:dict, theme_folder:str, output_folder:str = "site", pag
         for file in os.listdir("images"): # Copy file from source images folder to output image directory
             # TODO: Add catch for if image already exists
             shutil.copyfile(os.path.join("images", file), os.path.join(output_image_dir, file))
+
+    # Copy Gallery images
+    output_fallery_image_dir = os.path.join(output_folder, "images", "gallery")
+    if os.path.exists(os.path.join("content", "gallery")):
+        if not os.path.exists(output_fallery_image_dir): # Create output_folder/images/gallery if it's not present
+            os.mkdir(output_fallery_image_dir)
+        for file in os.listdir(os.path.join("content", "gallery")): # Copy file from source images folder to output image directory
+            # TODO: Add catch for if image already exists
+            shutil.copyfile(os.path.join("content", "gallery", file), os.path.join(output_fallery_image_dir, file))
 
     # Iterate through top level pages and write to the output folder
     print("\nGenerating output html from theme")
