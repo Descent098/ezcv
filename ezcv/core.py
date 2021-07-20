@@ -32,16 +32,16 @@ generate_site(output_folder="my_site", theme = "aerial", preview = True)
 """
 
 # Standard Lib Dependencies
-from ezcv.filters import inject_filters
 import os                           # Used for path validation
 import shutil                       # Used for file/folder copying and removal
 import webbrowser                   # Used to automatically open the default system browser
 from collections import defaultdict # Used to instatiate dictionaries with default arguments on unspecified keys
-from typing import Union
+from typing import Union            # Used to add additional typehints to help with documentation and usage on functions
 
 # Internal Dependencies
 from ezcv.themes import *
 from ezcv.content import *
+from ezcv.filters import inject_filters
 
 # Third Party Dependencies
 import yaml                         # Used for config file parsing
@@ -49,7 +49,7 @@ import jinja2                       # used as middlewear for generating template
 from tqdm import tqdm               # Used to generate progress bars during iteration
 
 # The global list of currently supported first party sections
-SECTIONS_LIST = ["projects", "education", "work_experience", "volunteering_experience"]
+SECTIONS_LIST = ["projects", "education", "work_experience", "volunteering_experience", "gallery"]
 
 def get_site_config(config_file_path:str = "config.yml", remotes_file_path:str = os.path.join(THEMES_FOLDER, "remotes.yml")) -> defaultdict:
     """Gets the site config from provided file path and returns defaultdict of values

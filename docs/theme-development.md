@@ -6,6 +6,7 @@ There are 3 key peices of data you should be aware about when developing your th
 2. The sections dictionary; Where all the raw data from your markdown content is stored
 3. Sections HTML; If you are doing a component based model this is where the resulting html is stored
 
+Additionally it is assumed you are aware of how to develop using [Jinja Templating.](https://jinja.palletsprojects.com/en/3.0.x/templates/)
 
 ## Folder Layout
 
@@ -212,6 +213,16 @@ and you can access the content of all the files in ```/content/foo``` in ```foo.
 {% endfor %}
 ```
 
+### Accessing configuration variables in section templates
+
+Additionally you can access the configuration details using
+
+```jinja2
+{{ config["name"] }}
+```
+
+where name is the configuration variable (i.e. biography, phone etc.)
+
 ## Adding Google Analytics
 
 To add support for google analytics to your theme you can use the snippet below to the head tag of the template.
@@ -332,4 +343,232 @@ So to complete the example above you would do:
     </div>
 </div>
 {% endif %}
+```
+
+## Available custom filters
+
+There are several additional filters on top of the [jinja defaults](https://jinja.palletsprojects.com/en/3.0.x/templates/#builtin-filters) that have been added to ezcv to make it easier to develop themes
+
+### split_to_sublists
+
+Takes a list and splits it into sublists of size n.
+
+#### Basic usage
+
+```jinja2
+{{ list|split_to_sublists(n, strict) }}
+```
+
+**Parameters**
+
+```
+initial_list : list
+    The initial list to split into sublists
+
+n : int
+    The size of each sublist
+
+strict: bool
+    Whether to force an error if the length of the initial list is not divisible by n (split into even groups), default True
+```
+
+
+The list is passed in automatically via the pipe `|` operator as first argument, but you need to explicitly define n (the size of each sublist) and optionally provide strict.
+
+#### Notes
+**The list must be divisible by n if strict is True**. So for example if you set `n` to `3` and then give a list with `4` elements an error will be raised since `4 % 3 != 0`. You can avoid this by doing an explicit modulus check like:
+
+```jinja2
+{% if list|length % n == 0 %}
+  {% for sublist in list|split_to_sublists(n) %}
+  {% endfor %}
+{% endif %}
+```
+
+or alternatively you can explicitly set `strict` to false which will just allow the last list to be less than `n`, like so:
+```jinja2
+{% for sublist in list|split_to_sublists(n, False) %}
+  {# sublist| length can now be anywhere from 1 to n#}
+{% endfor %}
+```
+
+
+#### Example
+
+Let's say you want unique styling that takes images from a gallery and splits the list into sublists of 3 to individually process you could do:
+
+```jinja2
+{% if gallery|length % 3 == 0 %}
+  {% for sublist in gallery|split_to_sublists(3) %}
+    <div class="row">
+
+      <div class="col-md-4">
+        <img src="{{ sublist.0[0]['file_path'] }}" alt="{{ sublist.0[0]['file_path'].split()[-1] }}">
+      </div>
+
+      <div class="col-md-4">
+        <img src="{{ sublist.1[0]['file_path'] }}" alt="{{ sublist.1[0]['file_path'].split()[-1]}}">
+      </div>
+
+      <div class="col-md-4">
+        <img src="{{ sublist.2[0]['file_path'] }}" alt="{{ sublist.2[0]['file_path'].split()[-1] }}">
+      </div>
+
+    </div>
+  {% endfor %}
+{% endif }
+```
+
+The above jinja is roughly equivalent to something like this in pure python:
+
+
+```python
+gallery = ["image 1" , "image 2", "image 3", "image 4" , "image 5", "image 6"]
+
+if len(images) % 3 == 0:
+    for sublist in split_to_sublists(gallery, 3): # Returns [["image 1" , "image 2", "image 3"], ["image 4" , "image 5", "image 6"]]
+      ... # Do stuff with each sublist
+```
+
+
+
+### get_image_path
+
+Takes in the path to an image and returns it in usable format to use in img tags as src attribute
+
+#### Basic usage
+
+```jinja2
+{{ path | get_image_path  }}
+```
+
+**Parameters**
+
+```
+path : str
+    The raw image path from metadata
+```
+
+#### Example
+
+Passing in an image path from a project in the projects section:
+
+```jinja2
+{% for project in projects %}
+  {% if project[0]["image"] %}
+  <img src="{{ project[0]['image'] | get_image_path }}" alt="{{ project[0]['image'] | get_filename_without_extension }}" />
+  {% endif %}
+{% endfor %}
+```
+
+The above jinja is roughly equivalent to something like this in pure python:
+
+```python
+project = [{"image": "image.jpg"}, ["other stuff"]]
+
+if project[0]["image"]:
+  print(get_image_path(project[0]['image'])) # Prints /images/image.jpg which is a usable path
+
+project = [{"image": "https://example.com/img/image.jpg"}, ["other stuff"]]
+
+if project[0]["image"]:
+  print(get_image_path(project[0]['image'])) # Prints https://example.com/img/image.jpg which is a usable path
+```
+
+
+
+### get_filename_without_extension
+
+Takes in path to filename and returns filename without extension
+
+#### Basic usage
+
+```jinja2
+{{ path | get_filename_without_extension  }}
+```
+
+**Parameters**
+
+```
+path : str
+    The original path to file
+```
+
+#### Example
+
+Taking in an image path and returning just the file name to use in `alt` attribute:
+
+```jinja2
+{% for project in projects %}
+  {% if project[0]["image"] %}
+  <img src="{{ project[0]['image'] | get_image_path }}" alt="{{ project[0]['image'] | get_filename_without_extension }}" />
+  {% endif %}
+{% endfor %}
+```
+
+The above jinja is roughly equivalent to something like this in pure python:
+
+```python
+project = [{"image": "/path/to/John Doe.jpg"}, ["other stuff"]]
+
+if project[0]["image"]:
+  print(get_filename_without_extension(project[0]['image'])) # Prints "John Doe"
+
+```
+
+
+
+### pretty_datetime
+
+A utility function for pretty printing dates provided for jobs/getting a degree/volunteering etc
+
+
+#### Basic usage
+
+```jinja
+{{ month_started | pretty_datetime(year_started, month_ended, year_ended, current) }}
+```
+
+**Parameters**
+
+```
+month_started : str
+    The month started i.e. October
+
+year_started : str
+    The year started i.e. 2013
+
+month_ended : str
+    The month ended i.e. December
+
+year_ended : str
+    The year ended i.e. 2017
+
+current : bool
+    A boolean describing if this is somewhere you are currently working/studying/volunteering at
+```
+
+#### Example
+
+Printing the date details of a degree in the `education` section:
+
+```jinja2
+{% for experience in education %}
+  {{ experience[0]["month_started"] | pretty_datetime(experience[0]["year_started"], experience[0]["month_ended"], experience[0]["year_ended"], experience[0]["current"]) }}
+{%endfor%}
+```
+
+The above jinja is roughly equivalent to something like this in pure python:
+
+```python
+
+month_started = "October"
+year_started = "2013"
+
+month_ended = "December"
+year_ended = "2017 
+
+current = False
+
+print(pretty_datetime(month_started, year_started, month_ended, year_ended, current)) # October 2013 - December 2017
 ```

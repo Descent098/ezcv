@@ -365,7 +365,7 @@ Volunteering Experience: ✔️
 Gallery: ❌
 ```
 
-## Greyscale
+## Grayscale
 
 Author:  [Start Bootstrap](https://startbootstrap.com)
 
@@ -388,6 +388,9 @@ To use this theme in your code either initialize the project with "grayscale" as
 theme: grayscale
 ... # Other configuration settings
 ```
+
+**Notes**
+It is recommended to make images ~ 600px x 440px for projects
 
 #### Supported config settings
 
@@ -730,7 +733,7 @@ Full page preview: [https://startbootstrap.com/previews/resume](https://startboo
 
 ### Usage
 
-To use this theme in your code either initialize the project with "grayscale" as the theme, or set it in your ```config.yml``` file:
+To use this theme in your code either initialize the project with "resume" as the theme, or set it in your ```config.yml``` file:
 
 ```yaml
 ... # Other configuration settings
