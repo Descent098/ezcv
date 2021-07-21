@@ -23,10 +23,21 @@ The focus for this release is to add new features and themes
   - [def_list(Definition lists)](https://python-markdown.github.io/extensions/definition_lists/)
   - [sane_lists(Sane lists)](https://python-markdown.github.io/extensions/sane_lists/)
   - [mdx_math(Latex/formulas)](https://github.com/mitya57/python-markdown-math)
+- Created filters module for creating custom Jinja filters (will be an exposed API for adding your own in v0.3.0)
+- [Created several custom filters for optimizing & simplifying theme development](https://ezcv.readthedocs.io/en/latest/theme-development/#available-custom-filters)
+    - [split_to_sublists; Takes a list and splits it into sublists of size n](https://ezcv.readthedocs.io/en/latest/theme-development/#split_to_sublists)
+    - [get_image_path; Takes in the path to an image and returns it in usable format to use in img tags as src attribute](https://ezcv.readthedocs.io/en/latest/theme-development/#get_image_path)
+    - [get_filename_without_extension; Takes in path and returns filename without extension](https://ezcv.readthedocs.io/en/latest/theme-development/#get_filename_without_extension)
+    - [pretty_datetime; A utility function for pretty printing dates provided for jobs/getting a degree/volunteering etc](https://ezcv.readthedocs.io/en/latest/theme-development/#pretty_datetime)
 
 ### Themes
 
 - Moved existing themes to new repo https://github.com/QU-UP/ezcv-themes
+- Added new themes
+  - [resume](https://ezcv.readthedocs.io/en/latest/included-themes/#resume)
+  - [Grayscale](https://ezcv.readthedocs.io/en/latest/included-themes/#grayscale)
+  - [Paradigm Shift](https://ezcv.readthedocs.io/en/latest/included-themes/#paradigm-shift)
+  - [Lens](https://ezcv.readthedocs.io/en/latest/included-themes/#lens)
 
 ### Bug fixes
 

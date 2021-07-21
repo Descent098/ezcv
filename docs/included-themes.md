@@ -436,7 +436,7 @@ Projects: ✔️
 Education: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️
-Gallery: ✔️
+Gallery: ❌
 ```
 
 ## Identity
