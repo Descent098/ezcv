@@ -717,7 +717,7 @@ Volunteering Experience: ✔️
 Gallery: ❌
 ```
 
-## Resume
+## cv
 
 Author:  [Start Bootstrap](https://startbootstrap.com)
 
@@ -733,13 +733,16 @@ Full page preview: [https://startbootstrap.com/previews/resume](https://startboo
 
 ### Usage
 
-To use this theme in your code either initialize the project with "resume" as the theme, or set it in your ```config.yml``` file:
+To use this theme in your code either initialize the project with "cv" as the theme, or set it in your ```config.yml``` file:
 
 ```yaml
 ... # Other configuration settings
-theme: resume
+theme: cv
 ... # Other configuration settings
 ```
+
+**Notes**
+For the avatar image use a 1:1 ratio (square image), and ideally around ~500x500
 
 #### Supported config settings
 
@@ -754,7 +757,7 @@ The following settings are supported and not supported in the ```config.yml``` f
 ```
 name: ✅
 background: ❌
-avatar: ✅
+avatar: ☑️ (HIGHLY recommended)
 email: ☑️ (recommended)
 phone: ☑️ (recommended)
 biography: ☑️ (recommended)
@@ -785,7 +788,7 @@ Projects: ✔️
 Education: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️
-Gallery: ✔️
+Gallery: ❌
 ```
 
 ## Solid State
