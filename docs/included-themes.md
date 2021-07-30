@@ -599,6 +599,24 @@ theme: paradigm_shift
 ... # Other configuration settings
 ```
 
+**Notes**
+
+This theme supports an extra config variable called `fancy_gallery` which can be set to `true` in order to force all gallery photos to be in landscape mode instead of switching between landscape and portrait. It would be used like this:
+
+
+
+```yaml
+...# Other settings
+disable_fancy_gallery: true
+...# Other settings
+```
+
+
+
+The `background` and `avatar` settings will both be used in the same location for the same thing and are interchangeable. If both are provided then only the value from the `avatar` config variable is used. Dimensions should be as close to 1350x1110 pixels as possible.
+
+
+
 #### Supported config settings
 
 The following settings are supported and not supported in the ```config.yml``` file:
@@ -611,14 +629,14 @@ The following settings are supported and not supported in the ```config.yml``` f
 
 ```
 name: ✅
-background: ☑️
-avatar: ✅
+background: ✅ (Can use either avatar or background, but need to fill in one or the other. See notes for details)
+avatar: ✅ (Can use either avatar or background, but need to fill in one or the other. See notes for details)
 email: ☑️
 phone: ☑️
 biography: ☑️
 role: ☑️ 
 company: ☑️
-address: ☑️
+address: ❌
 social: ☑️
   github: ☑️
   twitch: ☑️

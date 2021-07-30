@@ -8,6 +8,8 @@ There are 3 key peices of data you should be aware about when developing your th
 
 Additionally it is assumed you are aware of how to develop using [Jinja Templating.](https://jinja.palletsprojects.com/en/3.0.x/templates/)
 
+It is also highly recommended to include everything found in the [support for standard features](#support-for-standard-features) section.
+
 ## Folder Layout
 
 When creating a theme this is the only officially supported file structure layout (others work but are not guarenteed to):
@@ -223,7 +225,11 @@ Additionally you can access the configuration details using
 
 where name is the configuration variable (i.e. biography, phone etc.)
 
-## Adding Google Analytics
+## Support for standard features
+
+This section contains details for implementing "standard" features that are used in all first-party themes, and are highly recommended to be included in custom themes.
+
+### Adding support for Google Analytics
 
 To add support for google analytics to your theme you can use the snippet below to the head tag of the template.
 
@@ -241,7 +247,15 @@ To add support for google analytics to your theme you can use the snippet below 
 {% endif %}
 ```
 
-## Customizing Favicons
+### Adding support for LaTex
+
+In order for a theme to support latex you will need to add the following script import
+
+```html
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+```
+
+### Adding support for customizing Favicons
 
 To use a custom favicon in your theme overwrite the ```images/favicon.png``` file. In the documentation it is assumed this line exists, and users are told to place a file at this path if they want to override the included favicon. As such if you are starting from scratch be sure to include this line in the head tag:
 
@@ -253,13 +267,26 @@ To use a custom favicon in your theme overwrite the ```images/favicon.png``` fil
 </head>
 ```
 
-## Customizing Resume Generation
+### Adding suport for Resume Generation
 
 Inside all themes they are packaged with a ```resume.jinja``` file. This file is what generates the html resume at `sitename/resume`. Any changes you want to make to the resume should be done to this file. Everything is self contained (stylesheets are CDN linked, or done inline in the `<style>` tag), so any changes you make to global stylesheets **will not** show up unless you import the stylesheet into ```resume.jinja``` with a link tag.
 
-## Submitting a theme to be officially supported
 
-Currently all themes (except the base and dimension themes) are pulled from a remote repository https://github.com/QU-UP/ezcv-themes. If you want to submit a theme, then head there and [submit it](https://github.com/QU-UP/ezcv-themes/issues/new?assignees=&labels=new-theme&template=new_theme.md&title=%5BTheme%5D) and then create a pull request with the ticket submission referenced.
+## Adding support for optional features
+
+Below are the recommended methods to add support for optional configuration options, and optional features.
+
+### Adding support for avatars
+
+When people enter a value for avatar it is just an image path. Since this can be referenced in multiple ways it's recommended to use the `get_image_path` filter as shown below. Additionally it is recommended to have a fallback of some kind, because the config value could be `False`. It's also recommended to put somewhere in your documentation what the image dimensions should be for the avatar image since it's used in different ways by different themes.
+
+```
+{% if config['avatar'] %}
+  <img src="{{ config['avatar'] | get_image_path }}" alt="{{config['name']}}" />
+{% else %}
+  <img src="/images/avatar.png" alt="{{config['name']}}" />
+{% endif %}
+```
 
 
 ## Custom Styling for gallery's
@@ -572,3 +599,7 @@ current = False
 
 print(pretty_datetime(month_started, year_started, month_ended, year_ended, current)) # October 2013 - December 2017
 ```
+
+## Submitting a theme to be officially supported
+
+Currently all themes (except the base and dimension themes) are pulled from a remote repository https://github.com/QU-UP/ezcv-themes. If you want to submit a theme, then head there and [submit it](https://github.com/QU-UP/ezcv-themes/issues/new?assignees=&labels=new-theme&template=new_theme.md&title=%5BTheme%5D) and then create a pull request with the ticket submission referenced.
