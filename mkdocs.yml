@@ -3,8 +3,10 @@ site_name: ezcv
 nav:
     - Home: index.md
     - Quick Start: quick-start.md
-    - CLI: cli.md
     - Included Themes: included-themes.md
+    - Usage: usage.md
+    - CLI: cli.md
+    - Contributor Docs: contributor-docs.md
     - Theme Development: theme-development.md
 
 theme: readthedocs

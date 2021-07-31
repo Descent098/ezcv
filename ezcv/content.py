@@ -263,7 +263,7 @@ class Image(Content):
     - Since there are so many conditionals it is recommended to use the existing gallery stylesheet
     """
     ignore_exif_data:bool = False
-    extensions:List[str] = (".jpg", ".png", ".tiff", ".avix")
+    extensions:List[str] = (".jpg", ".png", ".jpeg", ".gif", ".svg", ".webp", ".apng", ".jfif", ".pjpeg", ".pjp")
     image_paths:List[str] = field(default_factory=lambda: []) # TODO: find way to implement this properly
 
 
@@ -271,7 +271,7 @@ class Image(Content):
         if self.ignore_exif_data:
             return defaultdict(lambda:False)
 
-        elif filename.lower().endswith("jpg") or filename.lower().endswith("tiff"):
+        elif filename.lower().endswith("jpg"):
             with open(filename ,"rb") as f:
                 tags = exifread.process_file(f)
             tags = defaultdict(lambda:False, tags)

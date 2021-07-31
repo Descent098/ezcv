@@ -227,7 +227,7 @@ def _export(site_context:dict, theme_folder:str, output_folder:str = "site", pag
         with open(f"{output_folder}{os.sep}{page}", "w+") as outfile:
             outfile.write(html)
 
-
+#TODO: add extra_filters to generate_site
 def generate_site(output_folder:str="site", theme:str = "dimension", sections: list = [], config_file_path="config.yml", preview:bool = False):
     """The primary entrypoint to generating a site
 
