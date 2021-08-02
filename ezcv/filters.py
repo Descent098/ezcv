@@ -16,9 +16,13 @@ get_filename_without_extension() -> str:
 
 pretty_datetime() -> str:
     A utility function for pretty printing dates provided for jobs/getting a degree/volunteering etc
+
+pretty_defaultdict() -> str:
+    Returns a prettyprinted form of a defaultdict
 """
 # Standard library dependencies
-from typing import Callable, List # Used to typehint accurately for documentation
+from pprint import pformat
+from typing import Callable, DefaultDict, List # Used to typehint accurately for documentation
 
 # Third Party Dependencies
 import jinja2           # Used mostly to typehint and allow for autocompletion in the file
@@ -40,7 +44,7 @@ def inject_filters(env:jinja2.Environment, extra_filters:List[Callable] = []) ->
     jinja2.Environment
         The input environment with the filters injected
     """
-    filters = [split_to_sublists, get_image_path, get_filename_without_extension, pretty_datetime]
+    filters = [split_to_sublists, get_image_path, get_filename_without_extension, pretty_datetime, pretty_defaultdict]
 
     if extra_filters:
         for filter in extra_filters:
@@ -285,3 +289,42 @@ def pretty_datetime(month_started:str, year_started:str, month_ended:str, year_e
         end = ""
 
     return f"{beginning}{sep}{end}"
+
+
+def pretty_defaultdict(ugly_dict:DefaultDict) -> str:
+    """Returns a prettyprinted form of a defaultdict
+
+    Parameters
+    ----------
+    ugly_dict : DefaultDict
+        A defaultdictionary to pretty print
+
+    Notes
+    -----
+    Needs to be used with the safe filter to work properly
+
+    Returns
+    -------
+    str
+        The 
+
+    Examples
+    --------
+    ### Pretty printing the `config` defaultdictionary:
+
+    #### JINJA USAGE
+    ```jinja2
+    {{ config | pretty_defaultdict | safe }}
+    ```
+
+    The above jinja is roughly equivalent to something like this in pure python:
+
+    ```python
+    from ezcv.core import get_site_config
+
+    config = get_site_config()
+
+    print(pretty_defaultdict(config)) # Prints config dict in pretty form
+    ```
+    """
+    return pformat(dict(ugly_dict)).replace("\n", "<br>").replace("{", "{<br>").replace("}", "<br>    }")

@@ -8,8 +8,8 @@ The focus for this release is to add new features and themes
 
 - Added Resume Generator
 - Setup remote theme support
-- Added new sections
-  - Gallery
+- Added new section; gallery
+  - Supports multiple images being put together into a gallery
 - Google analytics config option
 - Custom Favicon 
 - Added new section creation CLI
@@ -30,6 +30,7 @@ The focus for this release is to add new features and themes
     - [get_image_path; Takes in the path to an image and returns it in usable format to use in img tags as src attribute](https://ezcv.readthedocs.io/en/latest/theme-development/#get_image_path)
     - [get_filename_without_extension; Takes in path and returns filename without extension](https://ezcv.readthedocs.io/en/latest/theme-development/#get_filename_without_extension)
     - [pretty_datetime; A utility function for pretty printing dates provided for jobs/getting a degree/volunteering etc](https://ezcv.readthedocs.io/en/latest/theme-development/#pretty_datetime)
+    - [pretty_defaultdict; Returns a prettyprinted form of a defaultdict](https://ezcv.readthedocs.io/en/latest/theme-development/#pretty_defaultdict)
 
 ### Themes
 
@@ -89,4 +90,3 @@ Initial release of ezcv
 
 - Added initial [api docs](https://kieranwood.ca/ezcv)
 - Added initial [user docs](https://ezcv.readthedocs.io)
-

@@ -603,6 +603,46 @@ current = False
 print(pretty_datetime(month_started, year_started, month_ended, year_ended, current)) # October 2013 - December 2017
 ```
 
+### pretty_defaultdict
+
+Returns a prettyprinted form of a defaultdict
+
+
+#### Basic usage
+
+```jinja
+{{ ugly_dict | pretty_defaultdict | safe }}
+```
+
+**Notes**
+
+Must be used with the safe filter since there is HTML included inline
+
+**Parameters**
+
+```
+ugly_dict : defaultdict
+    A defaultdictionary to pretty print
+```
+
+#### Example
+
+Pretty printing the `config` defaultdictionary:
+
+```jinja2
+{{ config | pretty_defaultdict | safe }}
+```
+
+The above jinja is roughly equivalent to something like this in pure python:
+
+```python
+from ezcv.core import get_site_config
+
+config = get_site_config()
+
+print(pretty_defaultdict(config)) # Prints config dict in pretty form
+```
+
 ## Submitting a theme to be officially supported
 
 Currently all themes (except the base and dimension themes) are pulled from a remote repository https://github.com/QU-UP/ezcv-themes. If you want to submit a theme, then head there and [submit it](https://github.com/QU-UP/ezcv-themes/issues/new?assignees=&labels=new-theme&template=new_theme.md&title=%5BTheme%5D) and then create a pull request with the ticket submission referenced.

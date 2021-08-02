@@ -157,8 +157,96 @@ Filters are used inside templates to do... pretty much anything that python can 
 There are specific sections of the jinja documentation [dedicated to filters](https://jinja.palletsprojects.com/en/3.0.x/templates/#filters), but I will explain the basics of developing them.
 
 ### Filter syntax
-- Basic explanation of syntax
-  - Remember there must be at least 1 arg, and first one on left of invoke is always added first
+
+To write a filter you will need to have at least 1 argument being passed in. When someone uses your filter anything they put left of the pipe (`|`) will be passed as the first variable.
+
+#### Single argument filter
+
+A filter is just a basic python function. So if you wanted to make a filter that takes in an int and then doubles it and returns it's string form you would do something like:
+
+```python
+def double_it(n:int) -> str:
+  """Takes in an int, doubles it and returns it's string form"""
+  return str(2*n)
+```
+
+Then make sure to add it to the environment by going into ```ezcv.filters.inject_filters()```, and adding the function object to the `filters` variable.
+
+You can then use the filter like so:
+
+```jinja2
+<h2> 2 * 2 = {{ 2 | double_it }}</h2>
+```
+
+#### Multi-argument filter
+
+Multi argument filters have very similar syntax to single argument filters, the main place the syntax deviates is in how you call it with jinja. Changing our `double_it()` example from before to taking in 2 integers `n` and `m` and then multiplying them by each other like so:
+
+```python
+def multiply(n:int, m:int) -> str:
+  """Takes in two numbers and multiplies them by each other"""
+  return str(n * m)
+```
+
+We then make sure to add it to the environment by going into ```ezcv.filters.inject_filters()```, and adding the function object to the `filters` variable.
+
+Now we can use the filter like so:
+
+```jinja2
+<h2> 4 * 6 = {{ 4 | multiply(6) }}</h2>
+```
+
+The variable to the left of the pipe is automatically put as the first variable (`n`), and then every subsequent variable is structured like a standard python function call. So with a function like:
+
+```python
+def multiply_multiple_numbers(n:int, m:int, z:int) -> str:
+  """Takes in three numbers and multiplies them by each other"""
+  return str(n * m * z)
+```
+
+You would invoke it like this:
+
+```jinja2
+<h2> 4 * 6 * 2 = {{ 4 | multiply_multiple_numbers(6, 2) }}</h2>
+```
+
+You can also use python standard unpacking to allow arbitrary amounts of arguments, such as:
+
+```python
+def multiply_many_numbers(*numbers:int) -> str:
+  """Takes in an arbitrary amount of numbers and multiplies them by each other"""
+  result = 1
+
+  for number in numbers:
+    result *= number
+
+  return str(result)
+```
+
+Which would be called after being added to ```ezcv.filters.inject_filters()``` with any number of arugment like this:
+
+```
+<h2> 2 * 3 * 4 * 5 * 6 * 7 = {{ 2 | multiply_many_numbers(3, 4, 5, 6, 7) }}</h2>
+```
+
+The same goes for using keyword arguments, just keep in mind you still **must** have that first argument passed. So something like:
+
+```python
+def string_values(n:int, **kwargs) -> str:
+    """Takes in arguments and prints them"""
+
+    return str(kwargs)
+```
+
+Could be called like this after being added to ```ezcv.filters.inject_filters()```:
+
+```jinja
+<h2> {{ 2 | string_values(arg_1 = "wow", arg_2 = "wowee", arg_3="zooweemama") }}</h2>
+```
+
+Notice our first number is just a throwaway value, but it is necessary in this case.
+
+More details about jinja filters can be found [here](https://ttl255.com/jinja2-tutorial-part-4-template-filters/#writingyourownfilters)
 
 ### Updating existing filters
 To update existing filters head to ```ezcv.filters``` and locate the filter you want to change. Be sure to familiarize yourself with the [syntax](#filter-syntax) first.
