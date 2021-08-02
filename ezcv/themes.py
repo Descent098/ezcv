@@ -52,7 +52,7 @@ def get_theme_section_directories(theme_folder:str, sections:list = []) -> list:
 
 
 def setup_remote_theme(name: str, url: str):
-    """downloads a remote theme (zip file) and extracts it to cwd
+    """downloads a remote theme (zip file) and extracts it to the THEMES_FOLDER
 
     Parameters
     ----------
@@ -137,3 +137,24 @@ def locate_theme_directory(theme:str, site_context:dict) -> str:
         raise FileNotFoundError(f"Theme {theme} does not exist")
 
     return theme_folder
+
+
+def get_remote_themes(remotes_file_path:str = os.path.join(THEMES_FOLDER, "remotes.yml")) -> dict:
+    """Takes in the path to a yml/YAML file and returns a dict of name:url pairs to download themes
+
+    Parameters
+    ----------
+    remotes_file_path : str, optional
+        The path to the yml/YAML file that defines remote themes, by default os.path.join(THEMES_FOLDER, "remotes.yml")
+
+    Returns
+    -------
+    dict
+        A key-value pair of name to url of themes
+    """
+    import yaml
+    if os.path.exists(remotes_file_path):
+        with open(remotes_file_path, "r") as remotes_file:
+            remotes = yaml.safe_load(remotes_file)
+
+    return remotes

@@ -59,7 +59,7 @@ from sys import argv, exit  # Used to get length of CLI args and exit cleanly
 
 ## internal dependencies
 from ezcv.core import generate_site, get_site_config
-from ezcv.themes import THEMES_FOLDER, locate_theme_directory
+from ezcv.themes import THEMES_FOLDER, get_remote_themes, locate_theme_directory, setup_remote_theme
 
 # Third party dependencies
 from colored import fg     # Used to highlight output with colors
@@ -100,6 +100,16 @@ def init(theme="dimension", name="John Doe"):
     # Generate initial config.yml file
     with open(os.path.join(name, "config.yml"), "w+") as config_file:
         config_file.write(f"# See https://ezcv.readthedocs.io for documentation\nname: {name}\ntheme: {theme}\nresume: false")
+
+    if theme != "dimension":
+        # Check if theme is remote theme, and download it if it is
+        
+        remote_themes = get_remote_themes()
+        if remote_themes.get(theme, False):
+            original_directory = os.path.abspath(os.getcwd()) # Store CWD
+            os.chdir(os.path.abspath(name))                   # Go into new site folder
+            setup_remote_theme(theme, remote_themes[theme])   # Download theme 
+            os.chdir(original_directory)                      # Navigate back to original cwd
 
     print(f"Site generated and is available at {os.path.abspath(name)}")
 
@@ -253,8 +263,6 @@ def main():
             init(args["<theme>"], args["<name>"])
         elif args["<name>"]: # Only a name is specified
             init(name = args["<name>"])
-        elif args["<theme>"]: # Only a theme is specified
-            init(args["<theme>"])
         else: # No values are specified
             init()
 

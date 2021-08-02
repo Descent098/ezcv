@@ -74,10 +74,7 @@ def get_site_config(config_file_path:str = "config.yml", remotes_file_path:str =
     with open(config_file_path, "r") as config_file:
         config = yaml.safe_load(config_file)
 
-    if os.path.exists(remotes_file_path):
-        with open(remotes_file_path, "r") as remotes_file:
-            remotes = yaml.safe_load(remotes_file)
-            config["remotes"] = remotes
+    config["remotes"] = get_remote_themes()
 
     # Convert config dict to defaultdict so that all empty values are False instead of giving KeyNotFoundError
     default_dict_config = defaultdict(lambda: False, config)

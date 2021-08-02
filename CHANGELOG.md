@@ -9,12 +9,13 @@ The focus for this release is to add new features and themes
 - Added Resume Generator
 - Setup remote theme support
 - Added new sections
-  - Blog
   - Gallery
 - Google analytics config option
 - Custom Favicon 
 - Added new section creation CLI
+- When initializing with a theme that is not downloaded it will try to be downloaded on initialization instead of first build
 - Added support for all standard markdown file extensions (.md, .markdown, .mdown, .mkdn, .mkd, .mdwn)
+- Added support for many image file extensions as content (.jpg, .png, .jpeg, .gif, .svg, .webp, .apng, .jfif, .pjpeg, .pjp)
 - Added many new markdown extensions
   - [footnotes](https://python-markdown.github.io/extensions/footnotes/)
   - [tables](https://python-markdown.github.io/extensions/tables/)
@@ -88,3 +89,4 @@ Initial release of ezcv
 
 - Added initial [api docs](https://kieranwood.ca/ezcv)
 - Added initial [user docs](https://ezcv.readthedocs.io)
+

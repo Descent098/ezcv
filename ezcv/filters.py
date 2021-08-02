@@ -165,7 +165,7 @@ def get_image_path(path:str) -> str:
         return path
 
     elif path.startswith("images"):
-        return f"images/{path}"
+        return f"{path}"
 
     else:
         return f"images/{path}"
