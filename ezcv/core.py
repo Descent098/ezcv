@@ -6,8 +6,12 @@
 
 Functions
 ---------
-generate_site:
+generate_site():
     The primary entrypoint to generating a site
+
+get_site_config() -> defaultdict:
+    Gets the site config from provided file path and returns defaultdict of values
+
 
 Module Variables
 ----------------

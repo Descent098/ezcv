@@ -11,6 +11,8 @@ If you are familiar with git, github and markdown then I would recommend startin
 
 If you are unfamiliar with any of the above then see directly below for getting started with remote/no-code editing. Remote/no-code editing combined with [drag-n-drop](/usage#drag-n-drop-upload) editing is typically the easiest method to create content.
 
+If you have any questions be sure to check out our [Q & A section of the discussion board](https://github.com/Descent098/ezcv/discussions/categories/q-a).
+
 ## Remote editing
 
 Before you get started make sure you sign up for a [GitHub account](https://github.com/) (note the name will be your URL if you don't want to purchase a domain name).

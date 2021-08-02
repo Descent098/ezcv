@@ -5,16 +5,16 @@
 
 Functions
 ---------
-init:
+init():
     Initializes an ezcv site
 
-preview:
+preview():
     Creates a temporary folder of the site's files and then previews it in browser
 
-theme:
+theme():
     Used to get information about the available themes and/or copy a theme folder
 
-main:
+main():
     The primary entrypoint for the ezcv cli
 
 Examples
@@ -149,10 +149,20 @@ def theme(list_themes: bool = False, copy_theme:bool = False, theme:str = ""):
             print(f"Theme {theme} not found and was unable to be copied")
 
     if list_themes:
-        print(f"\nAvailable themes\n{'='*16}")
+        # Get local themes
+        print(f"\nAvailable local themes\n{'='*22}")
         for theme in os.listdir(THEMES_FOLDER):
-            print(f"  - {theme}")
+            if not theme == "remotes.yml":
+                print(f"  - {theme}")
+
+        # Get remote themes
+        print(f"\nAvailable remote themes\n{'='*23}")
+        import yaml
+        with open(os.path.join(THEMES_FOLDER, "remotes.yml")) as remote_themes:
+            for theme in yaml.safe_load(remote_themes):
+                print(f"  - {theme}")
         print() # empty newline after list
+
 
 
 def new_section(section_name:str) -> bool:

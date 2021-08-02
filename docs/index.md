@@ -42,7 +42,7 @@ ezcv is not a great choice if:
 
 ## Getting started
 
-See the [quick start](quick-start.md) to get started.
+See the [quick start](quick-start.md) to get started, and see be sure to check out our [discussion board](https://github.com/Descent098/ezcv/discussions) for guides and additional support.
 
 ## Additional resources
 

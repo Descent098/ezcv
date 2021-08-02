@@ -425,9 +425,7 @@ In your site you simply put the content you want to create inside ```content/<se
 
 #### Creating Files for sections
 
-**This information applies for all sections except the gallery, details for that can be found [here](#image-gallery)**
-
-When creating content for sections you will need to use markdown files
+Every section except for galleries uses markdown and so details for creating content can be found [here](#creating-markdown-content). For the image gallery specifically details can be found [here](#image-gallery).
 
 ## Image Management
 
@@ -480,4 +478,26 @@ To upload a custom favicon simply create a file called in the images folder call
 
 ### Image Gallery
 
-TODO 
+To use the image gallery make sure you have a folder in your content folder called `gallery`. Inside you can include any of the following image formats:
+
+- .jpg
+- .png
+- .jpeg
+- .gif
+- .svg
+- .webp
+- .apng
+- .jfif
+- .pjpeg
+- .pjp
+
+When using image files that support it you can also include [Exif data](https://en.wikipedia.org/wiki/Exif)(this is done automatically by the camera %90 of the time) that will be pulled by some themes to show off the camera settings used to take a photo. 
+
+If you do not want this information to show even on images that have Exif data you can add this to your `config.yml` file:
+
+```yaml
+... # Other stuff
+ignore_exif_data : true # Whether to ignore exif data for gallery images
+... # Other stuff
+```
+

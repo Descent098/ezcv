@@ -2,19 +2,19 @@
 
 Functions
 ---------
-inject_filters:
+inject_filters() -> jinja2.Environment:
     Takes in a jinja environment and injects the filters from this module + functions fom the extra_filters parameter
 
-split_to_sublists:
+split_to_sublists() -> List[list]:
     Takes a list and splits it into sublists of size n
 
-get_image_path:
+get_image_path() -> str:
     Takes in the path to an image and returns it in usable format to use in img tags as src attribute
 
-get_filename_without_extension:
+get_filename_without_extension() -> str:
     Takes in path and returns filename without extension
 
-pretty_datetime:
+pretty_datetime() -> str:
     A utility function for pretty printing dates provided for jobs/getting a degree/volunteering etc
 """
 # Standard library dependencies

@@ -3,8 +3,6 @@
 - Section template discovery and creation
 - Remote repo management
 - Theme discovery & updating
-
-
 """
 
 # Standard Library Dependencies 
@@ -18,9 +16,17 @@ import requests              # Used to access remote files
 from tqdm import tqdm        # Used to generate progress bars during iteration
 
 THEMES_FOLDER = os.path.join(os.path.dirname(__file__), "themes")
-#TODO: Add a way to update themes from CLI
+
+#TODO: Add a way to update themes from CLI, will require theme metadata to implement
 def get_theme_section_directories(theme_folder:str, sections:list = []) -> list:
-    """Gets a list of the available sections
+    """Gets a list of the available sections for a theme
+
+    Explanation
+    -----------
+    Essentially this function goes into a theme folder (full path to a theme), looks for a folder 
+    called sections and returns a list of all the .jinja files available stripped of the extension
+    so i.e. if `<theme folder>/sections` had 3 files `education.jinja`, `work_experience.jinja` and
+    `volunteering_experience.jinja` this function would return ['education', 'work_experience', 'volunteering_experience']
 
     Parameters
     ----------
@@ -28,12 +34,12 @@ def get_theme_section_directories(theme_folder:str, sections:list = []) -> list:
         A list of sections names, or an empty list if they need to be searched for
 
     theme_folder : str
-        The path to the theme folder
+        The full path to the theme folder (typically from calling locate_theme_directory() )
 
     Returns
     -------
     list
-        The name(s) of the section templates that exist within the sections list
+        The name(s) of the section templates that exist within the sections list without extensions
     """
     if sections:
         return sections
@@ -43,6 +49,7 @@ def get_theme_section_directories(theme_folder:str, sections:list = []) -> list:
                 section = section.replace(".jinja", "")
                 sections.append(section)
     return sections
+
 
 def setup_remote_theme(name: str, url: str):
     """downloads a remote theme (zip file) and extracts it to cwd
@@ -95,8 +102,9 @@ def setup_remote_theme(name: str, url: str):
             shutil.move(os.path.join(theme_folder_path, name, current_file), os.path.join(theme_folder_path))
         shutil.rmtree(os.path.join(theme_folder_path, name))
 
+
 def locate_theme_directory(theme:str, site_context:dict) -> str:
-    """Preprocess theme folder, and find correct path
+    """Preprocess theme folder, and find correct full path to a theme
 
     Parameters
     ----------

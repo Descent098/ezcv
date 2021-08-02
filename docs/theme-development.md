@@ -32,7 +32,7 @@ When creating a theme this is the only officially supported file structure layou
 
 ## Base Theme
 
-To make things easier to understand there is a base theme that has every feature supported in plain unstyled html. To use this base theme I would recommend copying it to your working directory and then changing your ```config.yml``` to use it. so you would do:
+To make things easier to understand there is a base theme that has every feature supported in plain unstyled html. To use this base theme I would recommend copying it to your working directory and then changing your ```config.yml``` to use it. So you would do:
 
 ```shell
 ezcv theme -c base
@@ -44,7 +44,7 @@ and then in your ```config.yml``` set:
 theme: base
 ```
 
-This will let you see in plain html **just** what ezcv is doing.
+This will let you see in plain html **just** what ezcv is doing, and what data is available and how it's structured. I would recommend doing this to learn, but it is likely easier to modify an existing theme for most projects.
 
 
 ## Modifying Existing themes
@@ -288,6 +288,9 @@ When people enter a value for avatar it is just an image path. Since this can be
 {% endif %}
 ```
 
+## Custom styling for resume
+
+To customize the styling for resumes you need to modify `resume.jinja`. Keep in mind that `resume.jinja` also has an inline custom stylesheet for print styling so keep that in mind when making changes (since many people will just print the generated resume if they need a hardcopy).
 
 ## Custom Styling for gallery's
 

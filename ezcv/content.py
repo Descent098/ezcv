@@ -1,7 +1,28 @@
 """This module is for handling all the functionality around content including:
+
 - Getting the list of content directories
 - Getting the metadata and contents of content files for sections
 - Classes for parsing all extensions
+
+Classes
+-------
+Content:
+    Base class for other Content types
+
+Markdown:
+    Used for parsing markdown content
+
+Image:
+    Used for parsing images
+
+Functions
+-------
+get_content_directories() -> List[str]:
+    Gets a list of the existing content directories i.e. ["projects", "education"]
+
+get_section_content() -> List[List[Union[defaultdict, str]]]:
+    Takes in a section folder and gets all the content from the files using the Content subclass asigned to the file extension
+
 """
 # Standard Lib Dependencies
 import os                                                # Used primarily in path validation
@@ -15,7 +36,7 @@ import exifread            # Used to get metadata of image files
 import markdown            # Used to render and read markdown files
 from colored import fg     # Used to highlight output with colors, especially errors/warnings
 
-#TODO: Update docstrings
+
 def get_content_directories() -> List[str]:
     """Gets a list of the existing content directories i.e. ["projects", "education"]
 
@@ -31,18 +52,50 @@ def get_content_directories() -> List[str]:
     return result
 
 
-def get_section_content(section_folder: str, examples: bool = False) -> List[List[Union[defaultdict, str]]]:
+def get_section_content(section_content_folder: str, examples: bool = False) -> List[List[Union[defaultdict, str]]]:
+    """Takes in a section folder and gets all the content from the files using the Content subclass asigned to the file extension
+
+    Parameters
+    ----------
+    section_content_folder : str
+        The string representation of the path to the section folder (i.e. 'content/education')
+
+    examples : bool, optional
+        Whether or not to render files with example in the name, by default False
+
+    Returns
+    -------
+    List[List[Union[defaultdict, str]]]
+        A list representing each file in the section of sublists where the metadata is the first element (as a defaultdict), and the HTML is the second (as a string)
+
+
+    Examples
+    --------
+    getting the section content of the education section
+
+    ```
+    from ezcv.content import get_section_content
+
+    section_content_folder = 'content/education'
+
+    content = get_section_content(section_content_folder)
+
+    print(content[0]) # Prints [defaultdict(<function <lambda> at 0x000001F1B97CE040>, {'title': 'This is the title', 'company': 'This is the company'}), '<p>This is some content</p>']
+    ```
+    """
     content:List[List[Union[defaultdict, str]]] = []
     extension_handlers:DefaultDict[str, Type] = Content.get_available_extensions()
 
-    for file_name in os.listdir(section_folder):
+    for file_name in os.listdir(section_content_folder):                   # Iterate through the section_content folder and get the content from each file
         if not examples and file_name.startswith("example"):
             continue
         else:
-            extension = "." + file_name.lower().split(".")[-1]
-            if extension_handlers[extension]:
-                extension_handler = extension_handlers[extension]()
-                metadata, html = extension_handler.get_content(os.path.join(section_folder, file_name))
+            extension = "." + file_name.lower().split(".")[-1]      # Get the file extension
+            if extension_handlers[extension]:                       # Checking if there exists a Content subclass capable of handling the file
+                extension_handler = extension_handlers[extension]() # Instantiate the proper extension
+
+                # Get the content and add it to the list
+                metadata, html = extension_handler.get_content(os.path.join(section_content_folder, file_name))
                 content.append([metadata, html])
     return content
 
@@ -189,13 +242,13 @@ class Markdown(Content):
     md:markdown.Markdown = markdown.Markdown(extensions=['meta', 'footnotes', 'tables', 'toc', 'abbr', 'def_list', 'sane_lists', "mdx_math"]) # Setup markdown parser with extensions
     extensions:List[str] = (".md", ".markdown", ".mdown", ".mkdn", ".mkd", ".mdwn")
 
-    #TODO: Add docs about new extensions including adding to example sites, and add attribute lists
+
     def __metadata__(self) -> defaultdict:
         """Gets the metadata from the YAML frontmatter of the markdown file
 
         Notes
         -----
-        - This class requires __html__ to be run first, or self.md to be set manually
+        - This class requires __html__ to be run first, or self.md to be set manually and run self.md.convert(text:str) over the text of the document
 
         Returns
         -------
@@ -213,13 +266,25 @@ class Markdown(Content):
 
 
     def __html__(self, file_path:str) -> str:
+        """Parses the markdown file and returns a string with the resulting HTML
+
+        Parameters
+        ----------
+        file_path : str
+            The path to the file to generate the HTML for
+
+        Returns
+        -------
+        str
+            The HTML rendered from the markdown file
+        """
         with open(f"{file_path}", "r") as mdfile: # Parse markdown file
             text = mdfile.read()
         html = self.md.convert(text) # Convert the markdown content text to hmtl
-        return html # Generated in self.__enter__()
+        return html
 
 
-    def get_content(self, file_path: str) -> Tuple[str, defaultdict]:
+    def get_content(self, file_path: str) -> Tuple[defaultdict, str]:
         """Gets the html content of a file, and the metadata of the file
 
         Parameters
@@ -230,7 +295,7 @@ class Markdown(Content):
         Returns
         -------
         str, defaultdict
-            Returns the html first as a string and a defaultdict of the metadata
+            Returns a defaultdict of the metadata first then the html content as a string
 
         Raises
         ------
@@ -243,7 +308,7 @@ class Markdown(Content):
         ```
         from ezcv.content import Markdown
 
-        html, metadata = Markdown().get_content('file_1.md')
+        metadata, html  = Markdown().get_content('file_1.md')
         ```
         """
         if not os.path.exists(file_path): # If file doesn't exist
@@ -261,6 +326,15 @@ class Image(Content):
     -----
     - Exif data is NOT available on PNG images (it is only available of jpg and tiff)
     - Since there are so many conditionals it is recommended to use the existing gallery stylesheet
+
+    Examples
+    --------
+    Render a file called 1.jpg
+    ```
+    from ezcv.content import Image
+
+    metadata, html = Image().get_content('1.jpg')
+    ```
     """
     ignore_exif_data:bool = False
     extensions:List[str] = (".jpg", ".png", ".jpeg", ".gif", ".svg", ".webp", ".apng", ".jfif", ".pjpeg", ".pjp")
@@ -268,6 +342,18 @@ class Image(Content):
 
 
     def __metadata__(self, filename:str) -> defaultdict:
+        """Return the metadata of the file (and exif data if available)
+
+        Parameters
+        ----------
+        filename : str
+            The path to the file to get the metadata from
+
+        Returns
+        -------
+        defaultdict
+            A defaultdict of the keys with the metadata in it
+        """
         if self.ignore_exif_data:
             return defaultdict(lambda:False)
 
@@ -282,7 +368,18 @@ class Image(Content):
 
 
     def __html__(self, tags:defaultdict) -> str:
-        #TODO: Document class names
+        """Parses the tags of the image and returns HTML for the EXIF data
+
+        Parameters
+        ----------
+        file_path : str
+            The path to the file to generate the HTML for
+
+        Returns
+        -------
+        str
+            The HTML of the EXIF data from the file
+        """
         html = ""
 
         # Lens detail
@@ -321,7 +418,33 @@ class Image(Content):
         return html
 
 
-    def get_content(self, file_path: str):
+    def get_content(self, file_path: str) -> Tuple[defaultdict, str]:
+        """Gets the html content of a file, and the metadata/exif of the file
+
+        Parameters
+        ----------
+        file_path : str
+            The path to the file to render
+
+        Returns
+        -------
+        str, defaultdict
+            Returns the defaultdict of the metadata, and then the html of the exif data
+
+        Raises
+        ------
+        FileNotFoundError
+            If the provided file path does not exist
+
+        Examples
+        --------
+        Render a file called 1.jpg
+        ```
+        from ezcv.content import Image
+
+        metadata, html = Image().get_content('1.jpg')
+        ```
+        """
         tags = self.__metadata__(file_path)
         html = self.__html__(tags)
         tags["file_path"] = f"images/gallery/{file_path.split(os.path.sep)[-1]}"

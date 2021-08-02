@@ -34,14 +34,14 @@ The focus for this release is to add new features and themes
 
 - Moved existing themes to new repo https://github.com/QU-UP/ezcv-themes
 - Added new themes
-  - [resume](https://ezcv.readthedocs.io/en/latest/included-themes/#resume)
+  - [cv](https://ezcv.readthedocs.io/en/latest/included-themes/#resume)
   - [Grayscale](https://ezcv.readthedocs.io/en/latest/included-themes/#grayscale)
   - [Paradigm Shift](https://ezcv.readthedocs.io/en/latest/included-themes/#paradigm-shift)
   - [Lens](https://ezcv.readthedocs.io/en/latest/included-themes/#lens)
 
 ### Bug fixes
 
-- Fixed markdown files with .markdown not being recognized
+- Fixed markdown files with different standard extensions not being recognized
 - Fixed markdown files with capitalized extensions not being recognized
 
 ### Documentation Improvements

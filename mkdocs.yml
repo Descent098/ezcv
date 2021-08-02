@@ -6,7 +6,7 @@ nav:
     - Included Themes: included-themes.md
     - Usage: usage.md
     - CLI: cli.md
-    - Contributor Docs: contributor-docs.md
+    - Contributor/Developer Docs: contributor-docs.md
     - Theme Development: theme-development.md
 
 theme: readthedocs
