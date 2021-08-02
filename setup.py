@@ -24,7 +24,7 @@ def get_content(*filename:str) -> str:
 
 setuptools.setup(
     name = "ezcv",
-    version = "0.2.0",
+    version = "0.2.1",
     author = "Kieran Wood",
     author_email = "kieran@canadiancoding.ca",
     description = "An easy to use personal site generator",
@@ -48,14 +48,15 @@ setuptools.setup(
         },
 
     install_requires = [
-    "docopt",              # Used for argument parsing if you are writing a CLI
-    "pyyaml",              # Used for config file parsing
-    "jinja2",              # used as middlewear for generating templates
-    "markdown",            # Used to parse markdown
-    "tqdm",                # Used to generate progress bars
-    "requests",            # Used to download remote themes
-    "exifread",            # Used to read exif data from images
-    "python-markdown-math" # Used to render latex math equations
+    "docopt",                # Used for argument parsing if you are writing a CLI
+    "pyyaml",                # Used for config file parsing
+    "jinja2",                # used as middlewear for generating templates
+    "markdown",              # Used to parse markdown
+    "tqdm",                  # Used to generate progress bars
+    "requests",              # Used to download remote themes
+    "exifread",              # Used to read exif data from images
+    "python-markdown-math",  # Used to render latex math equations
+    "colored"
         ],
     extras_require = {
         "dev" : ["mkdocs", # Used to create HTML versions of the markdown docs in the docs directory

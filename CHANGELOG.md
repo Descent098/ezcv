@@ -1,5 +1,14 @@
 # Changelog
 
+
+## V0.2.1; August 2nd 2021
+
+Fixed bugs after release
+
+### Bug fixes
+- Fixed the fact that colored was not included as setup.py dependency
+
+
 ## V0.2.0; August 2nd 2021
 
 The focus for this release is to add new features and themes
