@@ -5,10 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.9.2" />
 <title>ezcv.core API documentation</title>
-<meta name="description" content="The module containing all primary functionality of ezcv including:
-- Section parsing
-- HTML generation
-- Site exporting …" />
+<meta name="description" content="The module containing all primary functionality of ezcv including: …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -25,13 +22,17 @@
 <h1 class="title">Module <code>ezcv.core</code></h1>
 </header>
 <section id="section-intro">
-<p>The module containing all primary functionality of ezcv including:
-- Section parsing
-- HTML generation
-- Site exporting</p>
+<p>The module containing all primary functionality of ezcv including:</p>
+<ul>
+<li>Content parsing</li>
+<li>HTML generation</li>
+<li>Site exporting</li>
+</ul>
 <h2 id="functions">Functions</h2>
-<p>generate_site:
+<p>generate_site():
 The primary entrypoint to generating a site</p>
+<p>get_site_config() -&gt; defaultdict:
+Gets the site config from provided file path and returns defaultdict of values</p>
 <h2 id="module-variables">Module Variables</h2>
 <p>SECTIONS_LIST (list[str]):
 The list of the first party supported sections</p>
@@ -51,14 +52,19 @@ generate_site(output_folder=&quot;my_site&quot;, theme = &quot;aerial&quot;, pre
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;The module containing all primary functionality of ezcv including:
-    - Section parsing
-    - HTML generation
-    - Site exporting
+
+- Content parsing
+- HTML generation
+- Site exporting
 
 Functions
 ---------
-generate_site:
+generate_site():
     The primary entrypoint to generating a site
+
+get_site_config() -&gt; defaultdict:
+    Gets the site config from provided file path and returns defaultdict of values
+
 
 Module Variables
 ----------------
@@ -87,37 +93,22 @@ import os                           # Used for path validation
 import shutil                       # Used for file/folder copying and removal
 import webbrowser                   # Used to automatically open the default system browser
 from collections import defaultdict # Used to instatiate dictionaries with default arguments on unspecified keys
+from typing import Union            # Used to add additional typehints to help with documentation and usage on functions
+
+# Internal Dependencies
+from ezcv.themes import *
+from ezcv.content import *
+from ezcv.filters import inject_filters
 
 # Third Party Dependencies
 import yaml                         # Used for config file parsing
 import jinja2                       # used as middlewear for generating templates
-import markdown                     # Used to parse markdown metadata and content
 from tqdm import tqdm               # Used to generate progress bars during iteration
 
 # The global list of currently supported first party sections
-SECTIONS_LIST = [&#34;projects&#34;, &#34;education&#34;, &#34;work_experience&#34;, &#34;volunteering_experience&#34;]
+SECTIONS_LIST = [&#34;projects&#34;, &#34;education&#34;, &#34;work_experience&#34;, &#34;volunteering_experience&#34;, &#34;gallery&#34;]
 
-
-def _get_content_directories() -&gt; list:
-    result = []
-    for current_path in os.listdir(&#34;content&#34;):
-        if os.path.isdir(os.path.join(&#34;content&#34;, current_path)):
-            result.append(os.path.join(&#34;content&#34;, current_path))
-    return result
-
-
-def _get_theme_section_directories(sections:list, theme_folder:str) -&gt; list:
-    if sections:
-        return sections
-    if not sections and os.path.exists(os.path.join(theme_folder, &#34;sections&#34;)):
-        for section in os.listdir(os.path.join(theme_folder, &#34;sections&#34;)):
-            if section.endswith(&#34;.jinja&#34;):
-                section = section.replace(&#34;.jinja&#34;, &#34;&#34;)
-                sections.append(section)
-    return sections
-
-
-def _get_site_config(config_file_path:str = &#34;config.yml&#34;) -&gt; defaultdict:
+def get_site_config(config_file_path:str = &#34;config.yml&#34;, remotes_file_path:str = os.path.join(THEMES_FOLDER, &#34;remotes.yml&#34;)) -&gt; defaultdict:
     &#34;&#34;&#34;Gets the site config from provided file path and returns defaultdict of values
 
     Parameters
@@ -130,81 +121,18 @@ def _get_site_config(config_file_path:str = &#34;config.yml&#34;) -&gt; defaultd
     defaultdict:
         The configuration, if any key is not present it defaults to False
     &#34;&#34;&#34;
+    if not os.path.exists(config_file_path):
+        raise FileNotFoundError(f&#34;Config file at {config_file_path} was not found&#34;)
+
     with open(config_file_path, &#34;r&#34;) as config_file:
         config = yaml.safe_load(config_file)
 
-    # Convert config dict to defaultdict so that all empty values are False instead of giving KeyNotFoundError
-    default_dict_config = defaultdict(lambda: False)
+    config[&#34;remotes&#34;] = get_remote_themes()
 
-    for key in config: # Copy config dict to default_dict_config
-        default_dict_config[key] = config[key]
+    # Convert config dict to defaultdict so that all empty values are False instead of giving KeyNotFoundError
+    default_dict_config = defaultdict(lambda: False, config)
 
     return default_dict_config
-
-
-def _get_section_content(section_folder: str, examples: bool = False) -&gt; list:
-    &#34;&#34;&#34;Gets the markdown content and metadata from each file in a given section
-
-    Parameters
-    ----------
-    section_folder : (str)
-        The folder path to the sections content folder i.e. ./content/projects
-
-    examples : (bool, optional)
-        Whether or not to include markdown files that have example in the name, by default False
-
-    Returns
-    -------
-    list:
-        A list of lists with the metadata of each page at index 0 and the content at index 1,
-            returns and empty list if the folder does not exist or is empty
-
-    Examples
-    --------
-    Get the contents of the ./projects content folder
-    ```
-    from ezcv.core import _get_section_content
-
-    contents = _get_section_content(&#34;projects&#34;)
-    ```
-    &#34;&#34;&#34;
-    contents = []
-    if not os.path.exists(section_folder):
-        return []
-    for content in os.listdir(section_folder): # Iterate through project files and generate markdown
-        if examples:
-            if content.endswith(&#34;.md&#34;):
-                with open(f&#34;{section_folder}{os.sep}{content}&#34;, &#34;r&#34;) as mdfile: # Parse markdown file
-                    text = mdfile.read()
-
-                md = markdown.Markdown(extensions=[&#39;meta&#39;]) # Setup markdown parser with extensions
-                page_html = md.convert(text) # Convert the markdown content text to hmtl
-                page_meta = defaultdict(lambda:False)
-                # Grab the metadata from the frontmatter of the markdown file
-                for key in md.Meta: # Copy config dict to default_dict_config
-                    if type(md.Meta[key]) == list:
-                        page_meta[key] = md.Meta[key][0]
-                    else:
-                        page_meta[key] = md.Meta[key]
-                contents.append([page_meta, page_html])
-
-        else: # if files with example at the start
-            if content.endswith(&#34;.md&#34;) and not content.startswith(&#34;example&#34;):
-                with open(f&#34;{section_folder}{os.sep}{content}&#34;, &#34;r&#34;) as mdfile: # Parse markdown file
-                    text = mdfile.read()
-
-                md = markdown.Markdown(extensions=[&#39;meta&#39;]) # Setup markdown parser with extensions
-                page_html = md.convert(text) # Convert the markdown content text to hmtl
-                page_meta = defaultdict(lambda:False)
-                # Grab the metadata from the frontmatter of the markdown file
-                for key in md.Meta: # Copy config dict to default_dict_config
-                    if type(md.Meta[key]) == list:
-                        page_meta[key] = md.Meta[key][0]
-                    else:
-                        page_meta[key] = md.Meta[key]
-                contents.append([page_meta, page_html])
-
-    return contents
 
 
 def _render_section(theme_folder:str, section_name:str, site_context:dict) -&gt; str:
@@ -226,11 +154,17 @@ def _render_section(theme_folder:str, section_name:str, site_context:dict) -&gt;
     str:
         The rendered template of the section
     &#34;&#34;&#34;
-    contents = site_context[&#34;sections&#34;][section_name]
+    try:
+        contents = site_context[&#34;sections&#34;][section_name]
+    except KeyError:
+        print(f&#34;Could not find content for section &#39;{section_name}&#39;, skipping&#34;)
+        return &#34;&#34;
 
     # Initialize jinja loaders
     theme_loader = jinja2.FileSystemLoader(theme_folder)
     environment = jinja2.Environment(loader=theme_loader, autoescape=True, trim_blocks=True) # Grab all files in theme_folder
+
+    inject_filters(environment) # Add in custom filters
 
     # If a section template exists set it to the path, else False i.e. if &lt;theme folder&gt;/sections/&lt;section name&gt;.jinja exists set it to that
     section_template_file = f&#34;sections/{section_name}.jinja&#34;
@@ -241,7 +175,7 @@ def _render_section(theme_folder:str, section_name:str, site_context:dict) -&gt;
             except jinja2.TemplateNotFound: # If current section is not supported
                 print(f&#34;Section {section_name} template is not available&#34;)
                 return &#34;&#34;
-            return theme.render({section_name:contents})
+            return theme.render({section_name:contents, &#34;config&#34;: site_context[&#34;config&#34;]})
         else:
             return &#34;&#34;
     else:
@@ -272,9 +206,12 @@ def _render_page(theme_folder:str, page:str, site_context:dict) -&gt; str:
     theme_loader = jinja2.FileSystemLoader(theme_folder)
     environment = jinja2.Environment(loader=theme_loader, autoescape=True, trim_blocks=True) # Grab all files in theme_folder
 
+    inject_filters(environment) # Add in custom filters
+
     # Render template and return contents
     theme = environment.get_template(page)
     return theme.render(site_context)
+
 
 def _export(site_context:dict, theme_folder:str, output_folder:str = &#34;site&#34;, pages:list=[&#34;index.jinja&#34;]):
     &#34;&#34;&#34;Generates all the site html from pages specified and outputs them to the output folder
@@ -315,7 +252,17 @@ def _export(site_context:dict, theme_folder:str, output_folder:str = &#34;site&#
         if not os.path.exists(output_image_dir): # Create output_folder/images if it&#39;s not present
             os.mkdir(output_image_dir)
         for file in os.listdir(&#34;images&#34;): # Copy file from source images folder to output image directory
+            # TODO: Add catch for if image already exists
             shutil.copyfile(os.path.join(&#34;images&#34;, file), os.path.join(output_image_dir, file))
+
+    # Copy Gallery images
+    output_fallery_image_dir = os.path.join(output_folder, &#34;images&#34;, &#34;gallery&#34;)
+    if os.path.exists(os.path.join(&#34;content&#34;, &#34;gallery&#34;)):
+        if not os.path.exists(output_fallery_image_dir): # Create output_folder/images/gallery if it&#39;s not present
+            os.mkdir(output_fallery_image_dir)
+        for file in os.listdir(os.path.join(&#34;content&#34;, &#34;gallery&#34;)): # Copy file from source images folder to output image directory
+            # TODO: Add catch for if image already exists
+            shutil.copyfile(os.path.join(&#34;content&#34;, &#34;gallery&#34;, file), os.path.join(output_fallery_image_dir, file))
 
     # Iterate through top level pages and write to the output folder
     print(&#34;\nGenerating output html from theme&#34;)
@@ -334,7 +281,7 @@ def _export(site_context:dict, theme_folder:str, output_folder:str = &#34;site&#
         with open(f&#34;{output_folder}{os.sep}{page}&#34;, &#34;w+&#34;) as outfile:
             outfile.write(html)
 
-
+#TODO: add extra_filters to generate_site
 def generate_site(output_folder:str=&#34;site&#34;, theme:str = &#34;dimension&#34;, sections: list = [], config_file_path=&#34;config.yml&#34;, preview:bool = False):
     &#34;&#34;&#34;The primary entrypoint to generating a site
 
@@ -400,32 +347,35 @@ def generate_site(output_folder:str=&#34;site&#34;, theme:str = &#34;dimension&#
     pages = [] # Filled with a list of all the pages to render
 
     # The data passed to render all pages
-    site_context = {&#34;config&#34;: _get_site_config(config_file_path)} 
+    site_context:dict[str, Union[list, defaultdict, dict]] = {&#34;config&#34;: get_site_config(config_file_path)}
+
+    if site_context[&#34;config&#34;][&#34;ignore_exif_data&#34;]:
+        Image.ignore_exif_data = True
 
     # If no theme argument, and a theme is defined in the site config file
     if site_context[&#34;config&#34;][&#34;theme&#34;] and theme == &#34;dimension&#34;: 
         theme = site_context[&#34;config&#34;][&#34;theme&#34;]
 
+    # Find theme directory based on name, or download it if it&#39;s a remote theme
+    theme_folder = locate_theme_directory(theme, site_context)
+
+    # Initialize sections key in site context to empty dict
     site_context[&#34;sections&#34;] = {}
 
-    # Preprocess theme folder, and find correct path
-    if os.path.exists(os.path.abspath(theme)):
-        theme_folder = os.path.abspath(theme)
-    elif os.path.exists(os.path.abspath(os.path.join(&#34;themes&#34;, theme))):
-        theme_folder = os.path.abspath(os.path.join(&#34;themes&#34;, theme))
-    elif os.path.exists(os.path.abspath(os.path.join(os.path.dirname(__file__), &#34;themes&#34;, theme))):
-        theme_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), &#34;themes&#34;, theme))
-    else:
-        raise FileNotFoundError(f&#34;Theme {theme} does not exist&#34;)
+    # Get a list of the section names, and section theme directories
+    sections = get_theme_section_directories(theme_folder, sections)
+    sections_content_dirs = get_content_directories()
 
-    # Get a list of the section names 
-    sections = _get_theme_section_directories(sections, theme_folder)
-    sections_content_dirs = _get_content_directories()
-    for section in sections_content_dirs:
-        site_context[&#34;sections&#34;][section.split(os.sep)[-1]] = _get_section_content(section, site_context[&#34;config&#34;][&#34;examples&#34;])
+    # Go through all section content files to get content (i.e. ./sections/education/*.md) 
+    for section in sections_content_dirs: 
+        # Get content to store in site_context[&#34;sections&#34;][section]
+        site_context[&#34;sections&#34;][section.split(os.sep)[-1]] = get_section_content(section, site_context[&#34;config&#34;][&#34;examples&#34;])
 
     # Get a list of all the top level pages in the theme folder and add them to the pages list
     for top_level_file in os.listdir(theme_folder):
+        if top_level_file == &#34;resume.jinja&#34; and not site_context[&#34;config&#34;][&#34;resume&#34;]: # Ignore resume.jinja if resume config var is False
+            continue
+
         if top_level_file.endswith(&#34;.jinja&#34;) or top_level_file.endswith(&#34;.html&#34;):
             pages.append(top_level_file)
     
@@ -585,32 +535,35 @@ generate_site(output_folder=&quot;my_site&quot;, sections=[&quot;projects&quot;]
     pages = [] # Filled with a list of all the pages to render
 
     # The data passed to render all pages
-    site_context = {&#34;config&#34;: _get_site_config(config_file_path)} 
+    site_context:dict[str, Union[list, defaultdict, dict]] = {&#34;config&#34;: get_site_config(config_file_path)}
+
+    if site_context[&#34;config&#34;][&#34;ignore_exif_data&#34;]:
+        Image.ignore_exif_data = True
 
     # If no theme argument, and a theme is defined in the site config file
     if site_context[&#34;config&#34;][&#34;theme&#34;] and theme == &#34;dimension&#34;: 
         theme = site_context[&#34;config&#34;][&#34;theme&#34;]
 
+    # Find theme directory based on name, or download it if it&#39;s a remote theme
+    theme_folder = locate_theme_directory(theme, site_context)
+
+    # Initialize sections key in site context to empty dict
     site_context[&#34;sections&#34;] = {}
 
-    # Preprocess theme folder, and find correct path
-    if os.path.exists(os.path.abspath(theme)):
-        theme_folder = os.path.abspath(theme)
-    elif os.path.exists(os.path.abspath(os.path.join(&#34;themes&#34;, theme))):
-        theme_folder = os.path.abspath(os.path.join(&#34;themes&#34;, theme))
-    elif os.path.exists(os.path.abspath(os.path.join(os.path.dirname(__file__), &#34;themes&#34;, theme))):
-        theme_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), &#34;themes&#34;, theme))
-    else:
-        raise FileNotFoundError(f&#34;Theme {theme} does not exist&#34;)
+    # Get a list of the section names, and section theme directories
+    sections = get_theme_section_directories(theme_folder, sections)
+    sections_content_dirs = get_content_directories()
 
-    # Get a list of the section names 
-    sections = _get_theme_section_directories(sections, theme_folder)
-    sections_content_dirs = _get_content_directories()
-    for section in sections_content_dirs:
-        site_context[&#34;sections&#34;][section.split(os.sep)[-1]] = _get_section_content(section, site_context[&#34;config&#34;][&#34;examples&#34;])
+    # Go through all section content files to get content (i.e. ./sections/education/*.md) 
+    for section in sections_content_dirs: 
+        # Get content to store in site_context[&#34;sections&#34;][section]
+        site_context[&#34;sections&#34;][section.split(os.sep)[-1]] = get_section_content(section, site_context[&#34;config&#34;][&#34;examples&#34;])
 
     # Get a list of all the top level pages in the theme folder and add them to the pages list
     for top_level_file in os.listdir(theme_folder):
+        if top_level_file == &#34;resume.jinja&#34; and not site_context[&#34;config&#34;][&#34;resume&#34;]: # Ignore resume.jinja if resume config var is False
+            continue
+
         if top_level_file.endswith(&#34;.jinja&#34;) or top_level_file.endswith(&#34;.html&#34;):
             pages.append(top_level_file)
     
@@ -634,6 +587,52 @@ generate_site(output_folder=&quot;my_site&quot;, sections=[&quot;projects&quot;]
             except webbrowser.Error:
                 continue
         webbrowser.open(f&#34;file:///{os.path.abspath(output_folder)}/index.html&#34;)</code></pre>
+</details>
+</dd>
+<dt id="ezcv.core.get_site_config"><code class="name flex">
+<span>def <span class="ident">get_site_config</span></span>(<span>config_file_path: str = 'config.yml', remotes_file_path: str = '/opt/hostedtoolcache/Python/3.9.6/x64/lib/python3.9/site-packages/ezcv/themes/remotes.yml') ‑> collections.defaultdict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets the site config from provided file path and returns defaultdict of values</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>config_file_path</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The path to the config file, by default "config.yml"</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>defaultdict:</code></dt>
+<dd>The configuration, if any key is not present it defaults to False</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_site_config(config_file_path:str = &#34;config.yml&#34;, remotes_file_path:str = os.path.join(THEMES_FOLDER, &#34;remotes.yml&#34;)) -&gt; defaultdict:
+    &#34;&#34;&#34;Gets the site config from provided file path and returns defaultdict of values
+
+    Parameters
+    ----------
+    config_file_path : str, optional
+        The path to the config file, by default &#34;config.yml&#34;
+
+    Returns
+    -------
+    defaultdict:
+        The configuration, if any key is not present it defaults to False
+    &#34;&#34;&#34;
+    if not os.path.exists(config_file_path):
+        raise FileNotFoundError(f&#34;Config file at {config_file_path} was not found&#34;)
+
+    with open(config_file_path, &#34;r&#34;) as config_file:
+        config = yaml.safe_load(config_file)
+
+    config[&#34;remotes&#34;] = get_remote_themes()
+
+    # Convert config dict to defaultdict so that all empty values are False instead of giving KeyNotFoundError
+    default_dict_config = defaultdict(lambda: False, config)
+
+    return default_dict_config</code></pre>
 </details>
 </dd>
 </dl>
@@ -663,6 +662,7 @@ generate_site(output_folder=&quot;my_site&quot;, sections=[&quot;projects&quot;]
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
 <li><code><a title="ezcv.core.generate_site" href="#ezcv.core.generate_site">generate_site</a></code></li>
+<li><code><a title="ezcv.core.get_site_config" href="#ezcv.core.get_site_config">get_site_config</a></code></li>
 </ul>
 </li>
 </ul>

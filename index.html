@@ -48,6 +48,22 @@
 <li>Generating temporary preview</li>
 <li>Getting lists of themes and/or copying themes</li>
 </ul>
+<h4 id="content">Content</h4>
+<p>This module is for handling all the functionality around content including:</p>
+<ul>
+<li>Getting the list of content directories</li>
+<li>Getting the metadata and contents of content files for sections</li>
+<li>Classes for parsing all extensions</li>
+</ul>
+<h4 id="filter">Filter</h4>
+<p>This is a module that provides additional jinja filters to help with theme development</p>
+<h4 id="themes">Themes</h4>
+<p>Contains utilities related to theme management, discovery and creation including:</p>
+<ul>
+<li>Section template discovery and creation</li>
+<li>Remote repo management</li>
+<li>Theme discovery &amp; updating</li>
+</ul>
 <h2 id="quickstart">Quickstart</h2>
 <h4 id="generating-a-site-using-all-settings-defined-in-configyml">Generating a site using all settings defined in "config.yml"</h4>
 <pre><code>from ezcv.core import generate_site
@@ -94,6 +110,25 @@ The module containing all cli functionality of ezcv including:
 - Generating temporary preview
 - Getting lists of themes and/or copying themes
 
+#### Content
+This module is for handling all the functionality around content including:
+
+- Getting the list of content directories
+- Getting the metadata and contents of content files for sections
+- Classes for parsing all extensions
+
+#### Filter
+
+This is a module that provides additional jinja filters to help with theme development
+
+#### Themes
+
+Contains utilities related to theme management, discovery and creation including:
+
+- Section template discovery and creation
+- Remote repo management
+- Theme discovery &amp; updating
+
 Quickstart
 ----------
 #### Generating a site using all settings defined in &#34;config.yml&#34;
@@ -122,12 +157,21 @@ generate_site(output_folder=&#34;my_site&#34;, theme = &#34;aerial&#34;, preview
 - Generating temporary preview
 - Getting lists of …</p></div>
 </dd>
+<dt><code class="name"><a title="ezcv.content" href="content.html">ezcv.content</a></code></dt>
+<dd>
+<div class="desc"><p>This module is for handling all the functionality around content including: …</p></div>
+</dd>
 <dt><code class="name"><a title="ezcv.core" href="core.html">ezcv.core</a></code></dt>
 <dd>
-<div class="desc"><p>The module containing all primary functionality of ezcv including:
-- Section parsing
-- HTML generation
-- Site exporting …</p></div>
+<div class="desc"><p>The module containing all primary functionality of ezcv including: …</p></div>
+</dd>
+<dt><code class="name"><a title="ezcv.filters" href="filters.html">ezcv.filters</a></code></dt>
+<dd>
+<div class="desc"><p>This is a module that provides additional jinja filters to help with theme development …</p></div>
+</dd>
+<dt><code class="name"><a title="ezcv.themes" href="themes.html">ezcv.themes</a></code></dt>
+<dd>
+<div class="desc"><p>Contains utilities related to theme management, discovery and creation including: …</p></div>
 </dd>
 </dl>
 </section>
@@ -151,6 +195,9 @@ generate_site(output_folder=&#34;my_site&#34;, theme = &#34;aerial&#34;, preview
 <li><a href="#modules">Modules</a><ul>
 <li><a href="#core">core</a></li>
 <li><a href="#cli">cli</a></li>
+<li><a href="#content">Content</a></li>
+<li><a href="#filter">Filter</a></li>
+<li><a href="#themes">Themes</a></li>
 </ul>
 </li>
 <li><a href="#quickstart">Quickstart</a><ul>
@@ -164,7 +211,10 @@ generate_site(output_folder=&#34;my_site&#34;, theme = &#34;aerial&#34;, preview
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
 <li><code><a title="ezcv.cli" href="cli.html">ezcv.cli</a></code></li>
+<li><code><a title="ezcv.content" href="content.html">ezcv.content</a></code></li>
 <li><code><a title="ezcv.core" href="core.html">ezcv.core</a></code></li>
+<li><code><a title="ezcv.filters" href="filters.html">ezcv.filters</a></code></li>
+<li><code><a title="ezcv.themes" href="themes.html">ezcv.themes</a></code></li>
 </ul>
 </li>
 </ul>

@@ -30,13 +30,13 @@
 - Generating temporary preview
 - Getting lists of themes and/or copying themes</p>
 <h2 id="functions">Functions</h2>
-<p>init:
+<p>init():
 Initializes an ezcv site</p>
-<p>preview:
+<p>preview():
 Creates a temporary folder of the site's files and then previews it in browser</p>
-<p>theme:
+<p>theme():
 Used to get information about the available themes and/or copy a theme folder</p>
-<p>main:
+<p>main():
 The primary entrypoint for the ezcv cli</p>
 <h2 id="examples">Examples</h2>
 <h4 id="create-a-new-site">Create a new site</h4>
@@ -73,16 +73,16 @@ theme(list_themes = True)
 
 Functions
 ---------
-init:
+init():
     Initializes an ezcv site
 
-preview:
+preview():
     Creates a temporary folder of the site&#39;s files and then previews it in browser
 
-theme:
+theme():
     Used to get information about the available themes and/or copy a theme folder
 
-main:
+main():
     The primary entrypoint for the ezcv cli
 
 Examples
@@ -126,16 +126,18 @@ import tempfile             # Used to generate temporary folders for previews
 from sys import argv, exit  # Used to get length of CLI args and exit cleanly
 
 ## internal dependencies
-from ezcv.core import generate_site, _get_site_config
+from ezcv.core import generate_site, get_site_config
+from ezcv.themes import THEMES_FOLDER, get_remote_themes, locate_theme_directory, setup_remote_theme
 
 # Third party dependencies
-from docopt import docopt  # Used to complete argument parsing
+from colored import fg     # Used to highlight output with colors
+from docopt import docopt  # Used to complete argument parsing for the cli
 
 usage = &#34;&#34;&#34;Usage:
     ezcv [-h] [-v] [-p]
     ezcv init [&lt;name&gt;] [&lt;theme&gt;]
     ezcv build [-d OUTPUT_DIR] [-p]
-    ezcv theme [-l] [-c] [&lt;theme&gt;]
+    ezcv theme [-l] [-c] [-s SECTION_NAME] [&lt;theme&gt;]
 
 
 Options:
@@ -145,6 +147,7 @@ Options:
 -c, --copy            copy the provided theme, or defined site theme
 -p, --preview         preview the current state of the site
 -d OUTPUT_DIR, --dir OUTPUT_DIR The folder name to export the site to
+-s SECTION_NAME, --section SECTION_NAME The section name to initialize
 &#34;&#34;&#34;
 
 def init(theme=&#34;dimension&#34;, name=&#34;John Doe&#34;):
@@ -164,7 +167,17 @@ def init(theme=&#34;dimension&#34;, name=&#34;John Doe&#34;):
 
     # Generate initial config.yml file
     with open(os.path.join(name, &#34;config.yml&#34;), &#34;w+&#34;) as config_file:
-        config_file.write(f&#34;# See https://ezcv.readthedocs.io for documentation\nname: {name}\ntheme: {theme}&#34;)
+        config_file.write(f&#34;# See https://ezcv.readthedocs.io for documentation\nname: {name}\ntheme: {theme}\nresume: false&#34;)
+
+    if theme != &#34;dimension&#34;:
+        # Check if theme is remote theme, and download it if it is
+        
+        remote_themes = get_remote_themes()
+        if remote_themes.get(theme, False):
+            original_directory = os.path.abspath(os.getcwd()) # Store CWD
+            os.chdir(os.path.abspath(name))                   # Go into new site folder
+            setup_remote_theme(theme, remote_themes[theme])   # Download theme 
+            os.chdir(original_directory)                      # Navigate back to original cwd
 
     print(f&#34;Site generated and is available at {os.path.abspath(name)}&#34;)
 
@@ -172,9 +185,17 @@ def init(theme=&#34;dimension&#34;, name=&#34;John Doe&#34;):
 def preview():
     &#34;&#34;&#34;Creates a temporary folder of the site&#39;s files and then previews it in browser&#34;&#34;&#34;
     with tempfile.TemporaryDirectory() as temp_dir:
-        print(temp_dir)
         generate_site(temp_dir, preview=True)
-        input(&#34;Press enter when done previewing&#34;)
+        try:
+            input(&#34;Press enter when done previewing&#34;)
+        except EOFError:
+            print(f&#34;\nKeyboard interupt detected, ending preview and removing {temp_dir}&#34;)
+            return
+        except KeyboardInterrupt:
+            print(f&#34;\nKeyboard interupt detected, ending preview and removing {temp_dir}&#34;)
+            return
+
+        print(f&#34;Ending preview and removing {temp_dir}&#34;)
 
 
 def theme(list_themes: bool = False, copy_theme:bool = False, theme:str = &#34;&#34;):
@@ -194,29 +215,109 @@ def theme(list_themes: bool = False, copy_theme:bool = False, theme:str = &#34;&
     if not theme:
         theme = &#34;dimension&#34;
 
-    themes_folder =  os.path.join(os.path.dirname(__file__), &#34;themes&#34;)
-
     if copy_theme:
-        if os.path.exists(os.path.join(themes_folder, theme)): # If the theme exists in the themes folder
+        if os.path.exists(os.path.join(THEMES_FOLDER, theme)): # If the theme exists in the themes folder
             try: # Try to copy the theme to ./&lt;theme&gt;
-                shutil.copytree(os.path.join(themes_folder, theme), theme)
+                shutil.copytree(os.path.join(THEMES_FOLDER, theme), theme)
             except FileExistsError: # If a folder exists at ./&lt;theme&gt; remove and then re-copy
                 shutil.rmtree(theme)
-                shutil.copytree(os.path.join(themes_folder, theme), theme)
-            print(f&#34;Copied {os.path.join(themes_folder, theme)} to .{os.sep}{theme}&#34;)
+                shutil.copytree(os.path.join(THEMES_FOLDER, theme), theme)
+            print(f&#34;Copied {os.path.join(THEMES_FOLDER, theme)} to .{os.sep}{theme}&#34;)
         else: # Theme could not be found
             print(f&#34;Theme {theme} not found and was unable to be copied&#34;)
 
     if list_themes:
-        print(f&#34;\nAvailable themes\n{&#39;=&#39;*16}&#34;)
-        for theme in os.listdir(themes_folder):
-            print(f&#34;  - {theme}&#34;)
+        # Get local themes
+        print(f&#34;\nAvailable local themes\n{&#39;=&#39;*22}&#34;)
+        for theme in os.listdir(THEMES_FOLDER):
+            if not theme == &#34;remotes.yml&#34;:
+                print(f&#34;  - {theme}&#34;)
+
+        # Get remote themes
+        print(f&#34;\nAvailable remote themes\n{&#39;=&#39;*23}&#34;)
+        import yaml
+        with open(os.path.join(THEMES_FOLDER, &#34;remotes.yml&#34;)) as remote_themes:
+            for theme in yaml.safe_load(remote_themes):
+                print(f&#34;  - {theme}&#34;)
         print() # empty newline after list
+
+
+
+def new_section(section_name:str) -&gt; bool:
+    &#34;&#34;&#34;Creates a new section (content folder, and section template in the theme)
+
+    Parameters
+    ----------
+    section_name : str
+        The name you want to give to the section, used to generate folder and template filename
+
+    Notes
+    -----
+    - Needs to be run from the main folder of a site, or at most one folder deep (i.e. the content or Images folder)
+
+    Returns
+    -------
+    bool
+        True if the creation was successful and False if it failed early
+    &#34;&#34;&#34;    
+    if os.path.exists(&#34;config.yml&#34;):
+        config_path = &#34;config.yml&#34;
+    elif os.path.exists(&#34;../config.yml&#34;) :
+        config_path = &#34;../config.yml&#34;
+    else:
+        print(f&#34;{fg(1)}You are not in a project root folder, please run from folder with config.yml{fg(15)}\n&#34;)
+        return False
+
+    config = get_site_config(config_file_path=config_path)
+    if not config[&#34;theme&#34;]: # Set to default theme if no theme is set
+        config[&#34;theme&#34;] = &#34;dimension&#34;
+
+
+    theme_path = locate_theme_directory(config[&#34;theme&#34;], {&#34;config&#34;: config})
+    if os.path.exists(config[&#34;theme&#34;]): # Theme is at cwd i.e. ./aerial
+        theme_path = config[&#34;theme&#34;]
+    elif os.path.exists(os.path.join(&#34;..&#34;, config[&#34;theme&#34;])): # Theme is one level up i.e. ../aerial
+        theme_path = os.path.join(&#34;..&#34;, config[&#34;theme&#34;])
+    elif os.path.exists(os.path.join(THEMES_FOLDER, config[&#34;theme&#34;])): # Theme is in package theme folder i.e. THEME_FOLDER/aerial
+        theme_path = os.path.join(THEMES_FOLDER, config[&#34;theme&#34;])
+    else:
+        print(f&#34;{fg(1)}Could not find theme at any of the possible locations\n\t{config[&#39;theme&#39;]}\n\t{os.path.join(&#39;..&#39;, config[&#39;theme&#39;])}\n\t{os.path.join(THEMES_FOLDER, config[&#39;theme&#39;])} {fg(15)}\n&#34;)
+        return False
+
+    if os.path.exists(&#34;content&#34;):
+        content_path = &#34;content&#34;
+    elif os.getcwd().split(os.sep)[-1] == &#34;content&#34;: # Inside the current content folder
+        content_path = os.getcwd()
+    else:
+        return False
+
+    # The content for the template in the generated section
+    default_section_page_templte = f&#34;&#34;&#34;\n{{% for page in {section_name} %}} &lt;!--Lets you iterate through each page --&gt;
+            {{{{ page[0] }}}} &lt;!--Metadata access --&gt;
+            {{{{ page[1] | safe }}}} &lt;!--content access --&gt;
+{{% endfor %}}
+\n&#34;&#34;&#34;
+
+    # Begin creating content folder and theme file
+    if not os.path.exists(os.path.join(content_path, section_name)): # If the content folder doesn&#39;t already exist
+        if not os.path.exists(os.path.join(theme_path, &#34;sections&#34;, f&#34;{section_name}.jinja&#34;)) and not os.path.exists(os.path.join(theme_path, &#34;sections&#34;, f&#34;{section_name}.html&#34;)): # If jinja theme doesn&#39;t already exist
+            os.mkdir(os.path.join(content_path, section_name))
+            with open(os.path.join(theme_path, &#34;sections&#34;, f&#34;{section_name}.jinja&#34;), &#39;w+&#39;) as section_file:
+                section_file.write(default_section_page_templte)
+        else: # Theme file already existed
+            print(f&#34;{fg(1)}Could not create path, path already exists at either: \n\t{os.path.join(theme_path, &#39;sections&#39;, f&#39;{section_name}.jinja&#39;)}\n\tor\n\t{os.path.join(theme_path, &#39;sections&#39;, f&#39;{section_name}.jinja&#39;)}\n{fg(15)}&#34;)
+            return False
+    else: # Content folder already existed
+        print(f&#34;{fg(1)}Could not create path, path already exists at {os.path.join(content_path, section_name)}\n{fg(15)}&#34;)
+        return False
+
+    print(f&#34;Section successfully created\n\nTheme file created at:\n\t{os.path.join(theme_path, &#39;sections&#39;, f&#39;{section_name}.jinja&#39;)}\nContent folder created at:\n\t{os.path.join(content_path, section_name)}&#34;)
+    return True
 
 
 def main():
     &#34;&#34;&#34;The primary entrypoint for the ezcv cli&#34;&#34;&#34;
-    args = docopt(usage, version=&#34;0.1.1&#34;)
+    args = docopt(usage, version=&#34;0.2.1&#34;)
 
     if len(argv) == 1: # Print usage if no arguments are given
         print(&#34;\n&#34;, usage)
@@ -230,8 +331,6 @@ def main():
             init(args[&#34;&lt;theme&gt;&#34;], args[&#34;&lt;name&gt;&#34;])
         elif args[&#34;&lt;name&gt;&#34;]: # Only a name is specified
             init(name = args[&#34;&lt;name&gt;&#34;])
-        elif args[&#34;&lt;theme&gt;&#34;]: # Only a theme is specified
-            init(args[&#34;&lt;theme&gt;&#34;])
         else: # No values are specified
             init()
 
@@ -249,11 +348,15 @@ def main():
             exit()
 
     elif args[&#34;theme&#34;]:
-        if args[&#34;&lt;theme&gt;&#34;]:
+        if args[&#34;--section&#34;]:
+            created = new_section(args[&#34;--section&#34;])
+            if not created:
+                print(f&#34;{fg(1)}Failed to create section {args[&#39;--section&#39;]} {fg(15)}&#34;)
+        elif args[&#34;&lt;theme&gt;&#34;]:
             theme(args[&#34;--list&#34;], args[&#34;--copy&#34;], args[&#34;&lt;theme&gt;&#34;])
         elif args[&#34;--copy&#34;]: # If copy is flagged, but no theme is provided
             if os.path.exists(&#34;config.yml&#34;):
-                theme(args[&#34;--list&#34;], args[&#34;--copy&#34;], _get_site_config()[&#34;theme&#34;])
+                theme(args[&#34;--list&#34;], args[&#34;--copy&#34;], get_site_config()[&#34;theme&#34;])
             else: # If no theme, or config.yml file is present
                 theme(args[&#34;--list&#34;], args[&#34;--copy&#34;], &#34;freelancer&#34;)
         elif args[&#34;--list&#34;]:
@@ -313,7 +416,17 @@ if __name__ == &#34;__main__&#34;: # For testing
 
     # Generate initial config.yml file
     with open(os.path.join(name, &#34;config.yml&#34;), &#34;w+&#34;) as config_file:
-        config_file.write(f&#34;# See https://ezcv.readthedocs.io for documentation\nname: {name}\ntheme: {theme}&#34;)
+        config_file.write(f&#34;# See https://ezcv.readthedocs.io for documentation\nname: {name}\ntheme: {theme}\nresume: false&#34;)
+
+    if theme != &#34;dimension&#34;:
+        # Check if theme is remote theme, and download it if it is
+        
+        remote_themes = get_remote_themes()
+        if remote_themes.get(theme, False):
+            original_directory = os.path.abspath(os.getcwd()) # Store CWD
+            os.chdir(os.path.abspath(name))                   # Go into new site folder
+            setup_remote_theme(theme, remote_themes[theme])   # Download theme 
+            os.chdir(original_directory)                      # Navigate back to original cwd
 
     print(f&#34;Site generated and is available at {os.path.abspath(name)}&#34;)</code></pre>
 </details>
@@ -329,7 +442,7 @@ if __name__ == &#34;__main__&#34;: # For testing
 </summary>
 <pre><code class="python">def main():
     &#34;&#34;&#34;The primary entrypoint for the ezcv cli&#34;&#34;&#34;
-    args = docopt(usage, version=&#34;0.1.1&#34;)
+    args = docopt(usage, version=&#34;0.2.1&#34;)
 
     if len(argv) == 1: # Print usage if no arguments are given
         print(&#34;\n&#34;, usage)
@@ -343,8 +456,6 @@ if __name__ == &#34;__main__&#34;: # For testing
             init(args[&#34;&lt;theme&gt;&#34;], args[&#34;&lt;name&gt;&#34;])
         elif args[&#34;&lt;name&gt;&#34;]: # Only a name is specified
             init(name = args[&#34;&lt;name&gt;&#34;])
-        elif args[&#34;&lt;theme&gt;&#34;]: # Only a theme is specified
-            init(args[&#34;&lt;theme&gt;&#34;])
         else: # No values are specified
             init()
 
@@ -362,11 +473,15 @@ if __name__ == &#34;__main__&#34;: # For testing
             exit()
 
     elif args[&#34;theme&#34;]:
-        if args[&#34;&lt;theme&gt;&#34;]:
+        if args[&#34;--section&#34;]:
+            created = new_section(args[&#34;--section&#34;])
+            if not created:
+                print(f&#34;{fg(1)}Failed to create section {args[&#39;--section&#39;]} {fg(15)}&#34;)
+        elif args[&#34;&lt;theme&gt;&#34;]:
             theme(args[&#34;--list&#34;], args[&#34;--copy&#34;], args[&#34;&lt;theme&gt;&#34;])
         elif args[&#34;--copy&#34;]: # If copy is flagged, but no theme is provided
             if os.path.exists(&#34;config.yml&#34;):
-                theme(args[&#34;--list&#34;], args[&#34;--copy&#34;], _get_site_config()[&#34;theme&#34;])
+                theme(args[&#34;--list&#34;], args[&#34;--copy&#34;], get_site_config()[&#34;theme&#34;])
             else: # If no theme, or config.yml file is present
                 theme(args[&#34;--list&#34;], args[&#34;--copy&#34;], &#34;freelancer&#34;)
         elif args[&#34;--list&#34;]:
@@ -383,6 +498,101 @@ if __name__ == &#34;__main__&#34;: # For testing
         exit()</code></pre>
 </details>
 </dd>
+<dt id="ezcv.cli.new_section"><code class="name flex">
+<span>def <span class="ident">new_section</span></span>(<span>section_name: str) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Creates a new section (content folder, and section template in the theme)</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>section_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name you want to give to the section, used to generate folder and template filename</dd>
+</dl>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>Needs to be run from the main folder of a site, or at most one folder deep (i.e. the content or Images folder)</li>
+</ul>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if the creation was successful and False if it failed early</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def new_section(section_name:str) -&gt; bool:
+    &#34;&#34;&#34;Creates a new section (content folder, and section template in the theme)
+
+    Parameters
+    ----------
+    section_name : str
+        The name you want to give to the section, used to generate folder and template filename
+
+    Notes
+    -----
+    - Needs to be run from the main folder of a site, or at most one folder deep (i.e. the content or Images folder)
+
+    Returns
+    -------
+    bool
+        True if the creation was successful and False if it failed early
+    &#34;&#34;&#34;    
+    if os.path.exists(&#34;config.yml&#34;):
+        config_path = &#34;config.yml&#34;
+    elif os.path.exists(&#34;../config.yml&#34;) :
+        config_path = &#34;../config.yml&#34;
+    else:
+        print(f&#34;{fg(1)}You are not in a project root folder, please run from folder with config.yml{fg(15)}\n&#34;)
+        return False
+
+    config = get_site_config(config_file_path=config_path)
+    if not config[&#34;theme&#34;]: # Set to default theme if no theme is set
+        config[&#34;theme&#34;] = &#34;dimension&#34;
+
+
+    theme_path = locate_theme_directory(config[&#34;theme&#34;], {&#34;config&#34;: config})
+    if os.path.exists(config[&#34;theme&#34;]): # Theme is at cwd i.e. ./aerial
+        theme_path = config[&#34;theme&#34;]
+    elif os.path.exists(os.path.join(&#34;..&#34;, config[&#34;theme&#34;])): # Theme is one level up i.e. ../aerial
+        theme_path = os.path.join(&#34;..&#34;, config[&#34;theme&#34;])
+    elif os.path.exists(os.path.join(THEMES_FOLDER, config[&#34;theme&#34;])): # Theme is in package theme folder i.e. THEME_FOLDER/aerial
+        theme_path = os.path.join(THEMES_FOLDER, config[&#34;theme&#34;])
+    else:
+        print(f&#34;{fg(1)}Could not find theme at any of the possible locations\n\t{config[&#39;theme&#39;]}\n\t{os.path.join(&#39;..&#39;, config[&#39;theme&#39;])}\n\t{os.path.join(THEMES_FOLDER, config[&#39;theme&#39;])} {fg(15)}\n&#34;)
+        return False
+
+    if os.path.exists(&#34;content&#34;):
+        content_path = &#34;content&#34;
+    elif os.getcwd().split(os.sep)[-1] == &#34;content&#34;: # Inside the current content folder
+        content_path = os.getcwd()
+    else:
+        return False
+
+    # The content for the template in the generated section
+    default_section_page_templte = f&#34;&#34;&#34;\n{{% for page in {section_name} %}} &lt;!--Lets you iterate through each page --&gt;
+            {{{{ page[0] }}}} &lt;!--Metadata access --&gt;
+            {{{{ page[1] | safe }}}} &lt;!--content access --&gt;
+{{% endfor %}}
+\n&#34;&#34;&#34;
+
+    # Begin creating content folder and theme file
+    if not os.path.exists(os.path.join(content_path, section_name)): # If the content folder doesn&#39;t already exist
+        if not os.path.exists(os.path.join(theme_path, &#34;sections&#34;, f&#34;{section_name}.jinja&#34;)) and not os.path.exists(os.path.join(theme_path, &#34;sections&#34;, f&#34;{section_name}.html&#34;)): # If jinja theme doesn&#39;t already exist
+            os.mkdir(os.path.join(content_path, section_name))
+            with open(os.path.join(theme_path, &#34;sections&#34;, f&#34;{section_name}.jinja&#34;), &#39;w+&#39;) as section_file:
+                section_file.write(default_section_page_templte)
+        else: # Theme file already existed
+            print(f&#34;{fg(1)}Could not create path, path already exists at either: \n\t{os.path.join(theme_path, &#39;sections&#39;, f&#39;{section_name}.jinja&#39;)}\n\tor\n\t{os.path.join(theme_path, &#39;sections&#39;, f&#39;{section_name}.jinja&#39;)}\n{fg(15)}&#34;)
+            return False
+    else: # Content folder already existed
+        print(f&#34;{fg(1)}Could not create path, path already exists at {os.path.join(content_path, section_name)}\n{fg(15)}&#34;)
+        return False
+
+    print(f&#34;Section successfully created\n\nTheme file created at:\n\t{os.path.join(theme_path, &#39;sections&#39;, f&#39;{section_name}.jinja&#39;)}\nContent folder created at:\n\t{os.path.join(content_path, section_name)}&#34;)
+    return True</code></pre>
+</details>
+</dd>
 <dt id="ezcv.cli.preview"><code class="name flex">
 <span>def <span class="ident">preview</span></span>(<span>)</span>
 </code></dt>
@@ -395,9 +605,17 @@ if __name__ == &#34;__main__&#34;: # For testing
 <pre><code class="python">def preview():
     &#34;&#34;&#34;Creates a temporary folder of the site&#39;s files and then previews it in browser&#34;&#34;&#34;
     with tempfile.TemporaryDirectory() as temp_dir:
-        print(temp_dir)
         generate_site(temp_dir, preview=True)
-        input(&#34;Press enter when done previewing&#34;)</code></pre>
+        try:
+            input(&#34;Press enter when done previewing&#34;)
+        except EOFError:
+            print(f&#34;\nKeyboard interupt detected, ending preview and removing {temp_dir}&#34;)
+            return
+        except KeyboardInterrupt:
+            print(f&#34;\nKeyboard interupt detected, ending preview and removing {temp_dir}&#34;)
+            return
+
+        print(f&#34;Ending preview and removing {temp_dir}&#34;)</code></pre>
 </details>
 </dd>
 <dt id="ezcv.cli.theme"><code class="name flex">
@@ -435,23 +653,30 @@ if __name__ == &#34;__main__&#34;: # For testing
     if not theme:
         theme = &#34;dimension&#34;
 
-    themes_folder =  os.path.join(os.path.dirname(__file__), &#34;themes&#34;)
-
     if copy_theme:
-        if os.path.exists(os.path.join(themes_folder, theme)): # If the theme exists in the themes folder
+        if os.path.exists(os.path.join(THEMES_FOLDER, theme)): # If the theme exists in the themes folder
             try: # Try to copy the theme to ./&lt;theme&gt;
-                shutil.copytree(os.path.join(themes_folder, theme), theme)
+                shutil.copytree(os.path.join(THEMES_FOLDER, theme), theme)
             except FileExistsError: # If a folder exists at ./&lt;theme&gt; remove and then re-copy
                 shutil.rmtree(theme)
-                shutil.copytree(os.path.join(themes_folder, theme), theme)
-            print(f&#34;Copied {os.path.join(themes_folder, theme)} to .{os.sep}{theme}&#34;)
+                shutil.copytree(os.path.join(THEMES_FOLDER, theme), theme)
+            print(f&#34;Copied {os.path.join(THEMES_FOLDER, theme)} to .{os.sep}{theme}&#34;)
         else: # Theme could not be found
             print(f&#34;Theme {theme} not found and was unable to be copied&#34;)
 
     if list_themes:
-        print(f&#34;\nAvailable themes\n{&#39;=&#39;*16}&#34;)
-        for theme in os.listdir(themes_folder):
-            print(f&#34;  - {theme}&#34;)
+        # Get local themes
+        print(f&#34;\nAvailable local themes\n{&#39;=&#39;*22}&#34;)
+        for theme in os.listdir(THEMES_FOLDER):
+            if not theme == &#34;remotes.yml&#34;:
+                print(f&#34;  - {theme}&#34;)
+
+        # Get remote themes
+        print(f&#34;\nAvailable remote themes\n{&#39;=&#39;*23}&#34;)
+        import yaml
+        with open(os.path.join(THEMES_FOLDER, &#34;remotes.yml&#34;)) as remote_themes:
+            for theme in yaml.safe_load(remote_themes):
+                print(f&#34;  - {theme}&#34;)
         print() # empty newline after list</code></pre>
 </details>
 </dd>
@@ -484,6 +709,7 @@ if __name__ == &#34;__main__&#34;: # For testing
 <ul class="">
 <li><code><a title="ezcv.cli.init" href="#ezcv.cli.init">init</a></code></li>
 <li><code><a title="ezcv.cli.main" href="#ezcv.cli.main">main</a></code></li>
+<li><code><a title="ezcv.cli.new_section" href="#ezcv.cli.new_section">new_section</a></code></li>
 <li><code><a title="ezcv.cli.preview" href="#ezcv.cli.preview">preview</a></code></li>
 <li><code><a title="ezcv.cli.theme" href="#ezcv.cli.theme">theme</a></code></li>
 </ul>

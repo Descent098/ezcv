@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>ezcv.themes API documentation</title>
+<meta name="description" content="Contains utilities related to theme management, discovery and creation including: …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>ezcv.themes</code></h1>
+</header>
+<section id="section-intro">
+<p>Contains utilities related to theme management, discovery and creation including:</p>
+<ul>
+<li>Section template discovery and creation</li>
+<li>Remote repo management</li>
+<li>Theme discovery &amp; updating</li>
+</ul>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;Contains utilities related to theme management, discovery and creation including:
+
+- Section template discovery and creation
+- Remote repo management
+- Theme discovery &amp; updating
+&#34;&#34;&#34;
+
+# Standard Library Dependencies 
+import os                    # Used for path validation and manipulation
+import shutil                # Used to make copying and deletion of paths easier
+import tempfile              # Used to generate temporary folders for downloads
+from zipfile import ZipFile  # Used to extract all directories from zip archives
+
+# Third Party Depenencies
+import requests              # Used to access remote files
+from tqdm import tqdm        # Used to generate progress bars during iteration
+
+THEMES_FOLDER = os.path.join(os.path.dirname(__file__), &#34;themes&#34;)
+
+#TODO: Add a way to update themes from CLI, will require theme metadata to implement
+def get_theme_section_directories(theme_folder:str, sections:list = []) -&gt; list:
+    &#34;&#34;&#34;Gets a list of the available sections for a theme
+
+    Explanation
+    -----------
+    Essentially this function goes into a theme folder (full path to a theme), looks for a folder 
+    called sections and returns a list of all the .jinja files available stripped of the extension
+    so i.e. if `&lt;theme folder&gt;/sections` had 3 files `education.jinja`, `work_experience.jinja` and
+    `volunteering_experience.jinja` this function would return [&#39;education&#39;, &#39;work_experience&#39;, &#39;volunteering_experience&#39;]
+
+    Parameters
+    ----------
+    sections : (list, optional)
+        A list of sections names, or an empty list if they need to be searched for
+
+    theme_folder : str
+        The full path to the theme folder (typically from calling locate_theme_directory() )
+
+    Returns
+    -------
+    list
+        The name(s) of the section templates that exist within the sections list without extensions
+    &#34;&#34;&#34;
+    if sections:
+        return sections
+    if not sections and os.path.exists(os.path.join(theme_folder, &#34;sections&#34;)):
+        for section in os.listdir(os.path.join(theme_folder, &#34;sections&#34;)):
+            if section.endswith(&#34;.jinja&#34;):
+                section = section.replace(&#34;.jinja&#34;, &#34;&#34;)
+                sections.append(section)
+    return sections
+
+
+def setup_remote_theme(name: str, url: str):
+    &#34;&#34;&#34;downloads a remote theme (zip file) and extracts it to the THEMES_FOLDER
+
+    Parameters
+    ----------
+    name : str
+        The name of the theme (will be the folder name for the theme also)
+
+    url : str
+        The URL to the .zip file
+    &#34;&#34;&#34;
+    theme_folder_path = os.path.join(THEMES_FOLDER, name)
+
+    if os.path.exists(theme_folder_path): # If theme folder already exists
+        return # Exit function
+
+    else: # Download remote theme
+
+        # Setting up necessary download variables
+        file_stream = requests.get(url, stream=True) # The open http request for the file
+        chunk_size = 1024 # Setting the progress bar chunk size to measure in kb
+        total_length = int(file_stream.headers.get(&#39;content-length&#39;)) # Getting file size
+
+        # Setting up the download progress bar
+        progress_bar = tqdm(total=total_length, unit=&#39;iB&#39;, unit_scale=True)
+        progress_bar.set_description(f&#34;Download progress for {name}:&#34;)
+
+        # Write the incoming data stream to a file and update progress bar as it downloads
+        with tempfile.TemporaryDirectory() as temp_dir:
+            zip_folder_path = os.path.join(temp_dir, f&#34;{name}.zip&#34;)
+            
+            with open(zip_folder_path, &#39;wb&#39;) as download_file: 
+                for chunk in file_stream.iter_content(chunk_size): 
+                    if chunk:
+                        progress_bar.update(len(chunk))
+                        download_file.write(chunk)
+            print(f&#34;file Downloaded to {zip_folder_path}&#34;)
+            progress_bar.close()
+
+            # Extract zip file to theme folder
+            with ZipFile(zip_folder_path, &#34;r&#34;) as archive:
+                    archive.extractall(theme_folder_path) # Extract to theme folder
+                    print(f&#34;Extracted theme from {zip_folder_path} to folder {theme_folder_path}&#34;)
+
+    # If theme is at THEME_FOLDER/&lt;name&gt;/&lt;name&gt; move code to THEME_FOLDER/&lt;name&gt;
+    if os.path.exists(os.path.join(theme_folder_path, name)): 
+        print(f&#34;moving {os.path.join(theme_folder_path, name)} to {theme_folder_path}&#34;)
+        for current_file in os.listdir(os.path.join(theme_folder_path, name)):
+            shutil.move(os.path.join(theme_folder_path, name, current_file), os.path.join(theme_folder_path))
+        shutil.rmtree(os.path.join(theme_folder_path, name))
+
+
+def locate_theme_directory(theme:str, site_context:dict) -&gt; str:
+    &#34;&#34;&#34;Preprocess theme folder, and find correct full path to a theme
+
+    Parameters
+    ----------
+    theme : str
+        The name of the theme to locate
+
+    site_context : dict
+        The site context with the site configuration
+
+    Returns
+    -------
+    str
+        The path to the theme directory
+
+    Raises
+    ------
+    FileNotFoundError
+        If no theme folder exists, or remote is defined
+    &#34;&#34;&#34;
+    if os.path.exists(os.path.abspath(theme)):
+        theme_folder = os.path.abspath(theme)
+    elif os.path.exists(os.path.abspath(os.path.join(&#34;themes&#34;, theme))):
+        theme_folder = os.path.abspath(os.path.join(&#34;themes&#34;, theme))
+    elif os.path.exists(os.path.abspath(os.path.join(THEMES_FOLDER, theme))):
+        theme_folder = os.path.abspath(os.path.join(THEMES_FOLDER, theme))
+    elif theme in site_context[&#34;config&#34;][&#34;remotes&#34;]:
+        setup_remote_theme(theme, site_context[&#34;config&#34;][&#34;remotes&#34;][theme])
+        theme_folder = os.path.abspath(os.path.join(THEMES_FOLDER, theme))
+    else:
+        raise FileNotFoundError(f&#34;Theme {theme} does not exist&#34;)
+
+    return theme_folder
+
+
+def get_remote_themes(remotes_file_path:str = os.path.join(THEMES_FOLDER, &#34;remotes.yml&#34;)) -&gt; dict:
+    &#34;&#34;&#34;Takes in the path to a yml/YAML file and returns a dict of name:url pairs to download themes
+
+    Parameters
+    ----------
+    remotes_file_path : str, optional
+        The path to the yml/YAML file that defines remote themes, by default os.path.join(THEMES_FOLDER, &#34;remotes.yml&#34;)
+
+    Returns
+    -------
+    dict
+        A key-value pair of name to url of themes
+    &#34;&#34;&#34;
+    import yaml
+    if os.path.exists(remotes_file_path):
+        with open(remotes_file_path, &#34;r&#34;) as remotes_file:
+            remotes = yaml.safe_load(remotes_file)
+
+    return remotes</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="ezcv.themes.get_remote_themes"><code class="name flex">
+<span>def <span class="ident">get_remote_themes</span></span>(<span>remotes_file_path: str = '/opt/hostedtoolcache/Python/3.9.6/x64/lib/python3.9/site-packages/ezcv/themes/remotes.yml') ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Takes in the path to a yml/YAML file and returns a dict of name:url pairs to download themes</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>remotes_file_path</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The path to the yml/YAML file that defines remote themes, by default os.path.join(THEMES_FOLDER, "remotes.yml")</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code></dt>
+<dd>A key-value pair of name to url of themes</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_remote_themes(remotes_file_path:str = os.path.join(THEMES_FOLDER, &#34;remotes.yml&#34;)) -&gt; dict:
+    &#34;&#34;&#34;Takes in the path to a yml/YAML file and returns a dict of name:url pairs to download themes
+
+    Parameters
+    ----------
+    remotes_file_path : str, optional
+        The path to the yml/YAML file that defines remote themes, by default os.path.join(THEMES_FOLDER, &#34;remotes.yml&#34;)
+
+    Returns
+    -------
+    dict
+        A key-value pair of name to url of themes
+    &#34;&#34;&#34;
+    import yaml
+    if os.path.exists(remotes_file_path):
+        with open(remotes_file_path, &#34;r&#34;) as remotes_file:
+            remotes = yaml.safe_load(remotes_file)
+
+    return remotes</code></pre>
+</details>
+</dd>
+<dt id="ezcv.themes.get_theme_section_directories"><code class="name flex">
+<span>def <span class="ident">get_theme_section_directories</span></span>(<span>theme_folder: str, sections: list = []) ‑> list</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets a list of the available sections for a theme</p>
+<h2 id="explanation">Explanation</h2>
+<p>Essentially this function goes into a theme folder (full path to a theme), looks for a folder
+called sections and returns a list of all the .jinja files available stripped of the extension
+so i.e. if <code>&lt;theme folder&gt;/sections</code> had 3 files <code>education.jinja</code>, <code>work_experience.jinja</code> and
+<code>volunteering_experience.jinja</code> this function would return ['education', 'work_experience', 'volunteering_experience']</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>sections</code></strong> :&ensp;<code>(list</code>, optional<code>)</code></dt>
+<dd>A list of sections names, or an empty list if they need to be searched for</dd>
+<dt><strong><code>theme_folder</code></strong> :&ensp;<code>str</code></dt>
+<dd>The full path to the theme folder (typically from calling locate_theme_directory() )</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list</code></dt>
+<dd>The name(s) of the section templates that exist within the sections list without extensions</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_theme_section_directories(theme_folder:str, sections:list = []) -&gt; list:
+    &#34;&#34;&#34;Gets a list of the available sections for a theme
+
+    Explanation
+    -----------
+    Essentially this function goes into a theme folder (full path to a theme), looks for a folder 
+    called sections and returns a list of all the .jinja files available stripped of the extension
+    so i.e. if `&lt;theme folder&gt;/sections` had 3 files `education.jinja`, `work_experience.jinja` and
+    `volunteering_experience.jinja` this function would return [&#39;education&#39;, &#39;work_experience&#39;, &#39;volunteering_experience&#39;]
+
+    Parameters
+    ----------
+    sections : (list, optional)
+        A list of sections names, or an empty list if they need to be searched for
+
+    theme_folder : str
+        The full path to the theme folder (typically from calling locate_theme_directory() )
+
+    Returns
+    -------
+    list
+        The name(s) of the section templates that exist within the sections list without extensions
+    &#34;&#34;&#34;
+    if sections:
+        return sections
+    if not sections and os.path.exists(os.path.join(theme_folder, &#34;sections&#34;)):
+        for section in os.listdir(os.path.join(theme_folder, &#34;sections&#34;)):
+            if section.endswith(&#34;.jinja&#34;):
+                section = section.replace(&#34;.jinja&#34;, &#34;&#34;)
+                sections.append(section)
+    return sections</code></pre>
+</details>
+</dd>
+<dt id="ezcv.themes.locate_theme_directory"><code class="name flex">
+<span>def <span class="ident">locate_theme_directory</span></span>(<span>theme: str, site_context: dict) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Preprocess theme folder, and find correct full path to a theme</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>theme</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the theme to locate</dd>
+<dt><strong><code>site_context</code></strong> :&ensp;<code>dict</code></dt>
+<dd>The site context with the site configuration</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>The path to the theme directory</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>FileNotFoundError</code></dt>
+<dd>If no theme folder exists, or remote is defined</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def locate_theme_directory(theme:str, site_context:dict) -&gt; str:
+    &#34;&#34;&#34;Preprocess theme folder, and find correct full path to a theme
+
+    Parameters
+    ----------
+    theme : str
+        The name of the theme to locate
+
+    site_context : dict
+        The site context with the site configuration
+
+    Returns
+    -------
+    str
+        The path to the theme directory
+
+    Raises
+    ------
+    FileNotFoundError
+        If no theme folder exists, or remote is defined
+    &#34;&#34;&#34;
+    if os.path.exists(os.path.abspath(theme)):
+        theme_folder = os.path.abspath(theme)
+    elif os.path.exists(os.path.abspath(os.path.join(&#34;themes&#34;, theme))):
+        theme_folder = os.path.abspath(os.path.join(&#34;themes&#34;, theme))
+    elif os.path.exists(os.path.abspath(os.path.join(THEMES_FOLDER, theme))):
+        theme_folder = os.path.abspath(os.path.join(THEMES_FOLDER, theme))
+    elif theme in site_context[&#34;config&#34;][&#34;remotes&#34;]:
+        setup_remote_theme(theme, site_context[&#34;config&#34;][&#34;remotes&#34;][theme])
+        theme_folder = os.path.abspath(os.path.join(THEMES_FOLDER, theme))
+    else:
+        raise FileNotFoundError(f&#34;Theme {theme} does not exist&#34;)
+
+    return theme_folder</code></pre>
+</details>
+</dd>
+<dt id="ezcv.themes.setup_remote_theme"><code class="name flex">
+<span>def <span class="ident">setup_remote_theme</span></span>(<span>name: str, url: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>downloads a remote theme (zip file) and extracts it to the THEMES_FOLDER</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the theme (will be the folder name for the theme also)</dd>
+<dt><strong><code>url</code></strong> :&ensp;<code>str</code></dt>
+<dd>The URL to the .zip file</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def setup_remote_theme(name: str, url: str):
+    &#34;&#34;&#34;downloads a remote theme (zip file) and extracts it to the THEMES_FOLDER
+
+    Parameters
+    ----------
+    name : str
+        The name of the theme (will be the folder name for the theme also)
+
+    url : str
+        The URL to the .zip file
+    &#34;&#34;&#34;
+    theme_folder_path = os.path.join(THEMES_FOLDER, name)
+
+    if os.path.exists(theme_folder_path): # If theme folder already exists
+        return # Exit function
+
+    else: # Download remote theme
+
+        # Setting up necessary download variables
+        file_stream = requests.get(url, stream=True) # The open http request for the file
+        chunk_size = 1024 # Setting the progress bar chunk size to measure in kb
+        total_length = int(file_stream.headers.get(&#39;content-length&#39;)) # Getting file size
+
+        # Setting up the download progress bar
+        progress_bar = tqdm(total=total_length, unit=&#39;iB&#39;, unit_scale=True)
+        progress_bar.set_description(f&#34;Download progress for {name}:&#34;)
+
+        # Write the incoming data stream to a file and update progress bar as it downloads
+        with tempfile.TemporaryDirectory() as temp_dir:
+            zip_folder_path = os.path.join(temp_dir, f&#34;{name}.zip&#34;)
+            
+            with open(zip_folder_path, &#39;wb&#39;) as download_file: 
+                for chunk in file_stream.iter_content(chunk_size): 
+                    if chunk:
+                        progress_bar.update(len(chunk))
+                        download_file.write(chunk)
+            print(f&#34;file Downloaded to {zip_folder_path}&#34;)
+            progress_bar.close()
+
+            # Extract zip file to theme folder
+            with ZipFile(zip_folder_path, &#34;r&#34;) as archive:
+                    archive.extractall(theme_folder_path) # Extract to theme folder
+                    print(f&#34;Extracted theme from {zip_folder_path} to folder {theme_folder_path}&#34;)
+
+    # If theme is at THEME_FOLDER/&lt;name&gt;/&lt;name&gt; move code to THEME_FOLDER/&lt;name&gt;
+    if os.path.exists(os.path.join(theme_folder_path, name)): 
+        print(f&#34;moving {os.path.join(theme_folder_path, name)} to {theme_folder_path}&#34;)
+        for current_file in os.listdir(os.path.join(theme_folder_path, name)):
+            shutil.move(os.path.join(theme_folder_path, name, current_file), os.path.join(theme_folder_path))
+        shutil.rmtree(os.path.join(theme_folder_path, name))</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="ezcv" href="index.html">ezcv</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="ezcv.themes.get_remote_themes" href="#ezcv.themes.get_remote_themes">get_remote_themes</a></code></li>
+<li><code><a title="ezcv.themes.get_theme_section_directories" href="#ezcv.themes.get_theme_section_directories">get_theme_section_directories</a></code></li>
+<li><code><a title="ezcv.themes.locate_theme_directory" href="#ezcv.themes.locate_theme_directory">locate_theme_directory</a></code></li>
+<li><code><a title="ezcv.themes.setup_remote_theme" href="#ezcv.themes.setup_remote_theme">setup_remote_theme</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>

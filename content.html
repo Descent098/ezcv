@@ -1,0 +1,1398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>ezcv.content API documentation</title>
+<meta name="description" content="This module is for handling all the functionality around content including: …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>ezcv.content</code></h1>
+</header>
+<section id="section-intro">
+<p>This module is for handling all the functionality around content including:</p>
+<ul>
+<li>Getting the list of content directories</li>
+<li>Getting the metadata and contents of content files for sections</li>
+<li>Classes for parsing all extensions</li>
+</ul>
+<h2 id="classes">Classes</h2>
+<h2 id="content">Content</h2>
+<p>Base class for other Content types</p>
+<h2 id="markdown">Markdown</h2>
+<p>Used for parsing markdown content</p>
+<h2 id="image">Image</h2>
+<p>Used for parsing images</p>
+<h2 id="functions">Functions</h2>
+<p>get_content_directories() -&gt; List[str]:
+Gets a list of the existing content directories i.e. ["projects", "education"]</p>
+<p>get_section_content() -&gt; List[List[Union[defaultdict, str]]]:
+Takes in a section folder and gets all the content from the files using the Content subclass asigned to the file extension</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;This module is for handling all the functionality around content including:
+
+- Getting the list of content directories
+- Getting the metadata and contents of content files for sections
+- Classes for parsing all extensions
+
+Classes
+-------
+Content:
+    Base class for other Content types
+
+Markdown:
+    Used for parsing markdown content
+
+Image:
+    Used for parsing images
+
+Functions
+-------
+get_content_directories() -&gt; List[str]:
+    Gets a list of the existing content directories i.e. [&#34;projects&#34;, &#34;education&#34;]
+
+get_section_content() -&gt; List[List[Union[defaultdict, str]]]:
+    Takes in a section folder and gets all the content from the files using the Content subclass asigned to the file extension
+
+&#34;&#34;&#34;
+# Standard Lib Dependencies
+import os                                                # Used primarily in path validation
+from collections import defaultdict                      # Used to give dicts default args
+from dataclasses import dataclass, field                 # Used to improve class performance
+from typing import DefaultDict, List, Tuple, Type, Union # Used to provide accurate type hints
+
+
+# Third Party Dependencies
+import exifread            # Used to get metadata of image files
+import markdown            # Used to render and read markdown files
+from colored import fg     # Used to highlight output with colors, especially errors/warnings
+
+
+def get_content_directories() -&gt; List[str]:
+    &#34;&#34;&#34;Gets a list of the existing content directories i.e. [&#34;projects&#34;, &#34;education&#34;]
+
+    Returns
+    -------
+    List[str]:
+        The list of existing content directories i.e. [&#34;projects&#34;, &#34;education&#34;]
+    &#34;&#34;&#34;
+    result:list[str] = []
+    for current_path in os.listdir(&#34;content&#34;):
+        if os.path.isdir(os.path.join(&#34;content&#34;, current_path)):
+            result.append(os.path.join(&#34;content&#34;, current_path))
+    return result
+
+
+def get_section_content(section_content_folder: str, examples: bool = False) -&gt; List[List[Union[defaultdict, str]]]:
+    &#34;&#34;&#34;Takes in a section folder and gets all the content from the files using the Content subclass asigned to the file extension
+
+    Parameters
+    ----------
+    section_content_folder : str
+        The string representation of the path to the section folder (i.e. &#39;content/education&#39;)
+
+    examples : bool, optional
+        Whether or not to render files with example in the name, by default False
+
+    Returns
+    -------
+    List[List[Union[defaultdict, str]]]
+        A list representing each file in the section of sublists where the metadata is the first element (as a defaultdict), and the HTML is the second (as a string)
+
+
+    Examples
+    --------
+    getting the section content of the education section
+
+    ```
+    from ezcv.content import get_section_content
+
+    section_content_folder = &#39;content/education&#39;
+
+    content = get_section_content(section_content_folder)
+
+    print(content[0]) # Prints [defaultdict(&lt;function &lt;lambda&gt; at 0x000001F1B97CE040&gt;, {&#39;title&#39;: &#39;This is the title&#39;, &#39;company&#39;: &#39;This is the company&#39;}), &#39;&lt;p&gt;This is some content&lt;/p&gt;&#39;]
+    ```
+    &#34;&#34;&#34;
+    content:List[List[Union[defaultdict, str]]] = []
+    extension_handlers:DefaultDict[str, Type] = Content.get_available_extensions()
+
+    for file_name in os.listdir(section_content_folder):                   # Iterate through the section_content folder and get the content from each file
+        if not examples and file_name.startswith(&#34;example&#34;):
+            continue
+        else:
+            extension = &#34;.&#34; + file_name.lower().split(&#34;.&#34;)[-1]      # Get the file extension
+            if extension_handlers[extension]:                       # Checking if there exists a Content subclass capable of handling the file
+                extension_handler = extension_handlers[extension]() # Instantiate the proper extension
+
+                # Get the content and add it to the list
+                metadata, html = extension_handler.get_content(os.path.join(section_content_folder, file_name))
+                content.append([metadata, html])
+    return content
+
+
+@dataclass
+class Content(dict):
+    &#34;&#34;&#34;Base class for other Content types
+
+    Notes
+    -----
+    - All subclasses are assumed to have implemented:
+        - __metadata__(); Returns a defaultdict of metadata
+        - __html__(); Returns the HTML to render
+        - A list attribute called extensions, for example in markdown it would be
+            extensions:List[str] = [&#39;.md&#39;, &#39;.markdown&#39;, &#39;.mdown&#39;, &#39;.mkdn&#39;, &#39;.mkd&#39;, &#39;.mdwn&#39;]
+
+    Methods
+    -------
+    get_available_extensions() -&gt; DefaultDict[str, Type]:
+        Returns a defaultdict of available extensions and corresponding types to render them
+
+    Raises
+    ------
+    NotImplementedError
+        If any of __metadata__(), or __html__() are not implemented in subclass
+
+    Examples
+    --------
+    ### Get the list of extensions and their handlers
+    ```
+    extension_handlers = Content.get_available_extensions()
+    print(extension_handlers) &#39;&#39;&#39; defaultdict(
+        &lt;function Content.get_available_extensions.&lt;locals&gt;.&lt;lambda&gt; at 0x00000240878690D0&gt;, 
+        {
+        &#39;.md&#39;: &lt;class &#39;__main__.Markdown&#39;&gt;, 
+        &#39;.markdown&#39;: &lt;class &#39;__main__.Markdown&#39;&gt;,
+        &#39;.jpg&#39;: &lt;class &#39;__main__.Image&#39;&gt;,
+        &#39;.png&#39;: &lt;class &#39;__main__.Image&#39;&gt;
+        }
+    )&#39;&#39;&#39;
+
+    # Get an extension handler for a specific extension (in thise case .md files)
+    print(extension_handlers[&#34;.md&#34;]) # &lt;class &#39;__main__.Markdown&#39;&gt;
+    ```
+
+    ### Get content of a list of files
+    ```
+    content = [] # The list that
+    filenames = [&#39;file.md&#39;, &#39;image.jpg&#39;] # Gotten from somewhere else
+    extension_handlers = Content.get_available_extensions()
+
+    for current_file in filenames:
+        extension = &#39;.&#39; + current_file.split(&#39;.&#39;)[-1]
+        if extension_handlers[extension]:
+            extension_handler = extension_handlers[extension]()
+            metadata, html = extension_handler.get_content(current_file)
+            content.append([metadata, html])
+    ```
+    &#34;&#34;&#34;
+
+
+    def get_available_extensions() -&gt; DefaultDict[str, Type]:
+        &#34;&#34;&#34;Returns a defaultdict of extensions and corresponding child types to handle them
+
+        Returns
+        -------
+        DefaultDict[str, Type]:
+            A defaultdict with a str for the extension as a key, and the type as a value
+        &#34;&#34;&#34;
+        all_extensions:DefaultDict[str, Type] = defaultdict(lambda:False)
+        for current_class in Content.__subclasses__():
+            for extension in current_class.extensions:
+                all_extensions[extension] = current_class
+        return all_extensions
+
+
+    def __metadata__(self):
+        &#34;&#34;&#34;A function to be replaced with the specific implementation of generating metadata defauldict
+
+        Raises
+        ------
+        NotImplementedError
+            If the function is not implemented in the subclass
+        &#34;&#34;&#34;
+        raise NotImplementedError
+
+
+    def get_content(self, file_path:str):
+        &#34;&#34;&#34;Generates the metadata and HTML from a peice of content
+
+        Parameters
+        ----------
+        file_path : str
+            The path to the md file
+
+        Raises
+        ------
+        NotImplementedError
+            If the function is not implemented in the subclass
+        &#34;&#34;&#34;
+        raise NotImplementedError
+
+
+    def __html__(self, file_path:str):
+        &#34;&#34;&#34;A function to be replaced with the specific implementation of generating HTML
+
+        Parameters
+        ----------
+        file_path: (str)
+            The path for the file
+
+        Raises
+        ------
+        NotImplementedError
+            If the function is not implemented in the subclass
+        &#34;&#34;&#34;
+        raise NotImplementedError
+
+
+@dataclass
+class Markdown(Content):
+    &#34;&#34;&#34;Used for parsing markdown content
+
+    Notes
+    -----
+    - Default extensions are 
+        - [footnotes](https://python-markdown.github.io/extensions/footnotes/)
+        - [tables](https://python-markdown.github.io/extensions/tables/)
+        - [toc (Table of contents)](https://python-markdown.github.io/extensions/toc/)
+        - [abbr(abbreviations)](https://python-markdown.github.io/extensions/abbreviations/)
+        - [def_list(Definition lists)](https://python-markdown.github.io/extensions/definition_lists/)
+        - [sane_lists(Sane lists)](https://python-markdown.github.io/extensions/sane_lists/)
+        - [meta](https://python-markdown.github.io/extensions/meta)
+        - [mdx_math](https://github.com/mitya57/python-markdown-math)
+
+    Examples
+    --------
+    ```
+    from ezcv.content import Markdown
+
+    html, metadata = Markdown().get_content(&#39;file_1.md&#39;)
+    ```
+    &#34;&#34;&#34;
+    md:markdown.Markdown = markdown.Markdown(extensions=[&#39;meta&#39;, &#39;footnotes&#39;, &#39;tables&#39;, &#39;toc&#39;, &#39;abbr&#39;, &#39;def_list&#39;, &#39;sane_lists&#39;, &#34;mdx_math&#34;]) # Setup markdown parser with extensions
+    extensions:List[str] = (&#34;.md&#34;, &#34;.markdown&#34;, &#34;.mdown&#34;, &#34;.mkdn&#34;, &#34;.mkd&#34;, &#34;.mdwn&#34;)
+
+
+    def __metadata__(self) -&gt; defaultdict:
+        &#34;&#34;&#34;Gets the metadata from the YAML frontmatter of the markdown file
+
+        Notes
+        -----
+        - This class requires __html__ to be run first, or self.md to be set manually and run self.md.convert(text:str) over the text of the document
+
+        Returns
+        -------
+        defaultdict
+            Returns a defaultdict with the yaml metadata of a peice of content
+        &#34;&#34;&#34;
+
+        metadata:defaultdict = defaultdict(lambda:False)
+        for key in self.md.Meta: # Create defaultdict out of metadata
+            if type(self.md.Meta[key]) == list:
+                metadata[key] = self.md.Meta[key][0]
+            else:
+                metadata[key] = self.md.Meta[key]
+        return metadata
+
+
+    def __html__(self, file_path:str) -&gt; str:
+        &#34;&#34;&#34;Parses the markdown file and returns a string with the resulting HTML
+
+        Parameters
+        ----------
+        file_path : str
+            The path to the file to generate the HTML for
+
+        Returns
+        -------
+        str
+            The HTML rendered from the markdown file
+        &#34;&#34;&#34;
+        with open(f&#34;{file_path}&#34;, &#34;r&#34;) as mdfile: # Parse markdown file
+            text = mdfile.read()
+        html = self.md.convert(text) # Convert the markdown content text to hmtl
+        return html
+
+
+    def get_content(self, file_path: str) -&gt; Tuple[defaultdict, str]:
+        &#34;&#34;&#34;Gets the html content of a file, and the metadata of the file
+
+        Parameters
+        ----------
+        file_path : str
+            The path to the file to render
+
+        Returns
+        -------
+        str, defaultdict
+            Returns a defaultdict of the metadata first then the html content as a string
+
+        Raises
+        ------
+        FileNotFoundError
+            If the provided file path does not exist
+
+        Examples
+        --------
+        Render a file called file_1.md
+        ```
+        from ezcv.content import Markdown
+
+        metadata, html  = Markdown().get_content(&#39;file_1.md&#39;)
+        ```
+        &#34;&#34;&#34;
+        if not os.path.exists(file_path): # If file doesn&#39;t exist
+            raise FileNotFoundError(f&#34;{fg(1)} Could not find file: {file_path}{fg(15)}\n&#34;)
+        html = self.__html__(file_path)
+        metadata = self.__metadata__()
+        return metadata, html
+
+
+@dataclass
+class Image(Content):
+    &#34;&#34;&#34;Used for parsing images
+    
+    Notes
+    -----
+    - Exif data is NOT available on PNG images (it is only available of jpg and tiff)
+    - Since there are so many conditionals it is recommended to use the existing gallery stylesheet
+
+    Examples
+    --------
+    Render a file called 1.jpg
+    ```
+    from ezcv.content import Image
+
+    metadata, html = Image().get_content(&#39;1.jpg&#39;)
+    ```
+    &#34;&#34;&#34;
+    ignore_exif_data:bool = False
+    extensions:List[str] = (&#34;.jpg&#34;, &#34;.png&#34;, &#34;.jpeg&#34;, &#34;.gif&#34;, &#34;.svg&#34;, &#34;.webp&#34;, &#34;.apng&#34;, &#34;.jfif&#34;, &#34;.pjpeg&#34;, &#34;.pjp&#34;)
+    image_paths:List[str] = field(default_factory=lambda: []) # TODO: find way to implement this properly
+
+
+    def __metadata__(self, filename:str) -&gt; defaultdict:
+        &#34;&#34;&#34;Return the metadata of the file (and exif data if available)
+
+        Parameters
+        ----------
+        filename : str
+            The path to the file to get the metadata from
+
+        Returns
+        -------
+        defaultdict
+            A defaultdict of the keys with the metadata in it
+        &#34;&#34;&#34;
+        if self.ignore_exif_data:
+            return defaultdict(lambda:False)
+
+        elif filename.lower().endswith(&#34;jpg&#34;):
+            with open(filename ,&#34;rb&#34;) as f:
+                tags = exifread.process_file(f)
+            tags = defaultdict(lambda:False, tags)
+            return tags
+
+        else:
+            return defaultdict(lambda:False)
+
+
+    def __html__(self, tags:defaultdict) -&gt; str:
+        &#34;&#34;&#34;Parses the tags of the image and returns HTML for the EXIF data
+
+        Parameters
+        ----------
+        file_path : str
+            The path to the file to generate the HTML for
+
+        Returns
+        -------
+        str
+            The HTML of the EXIF data from the file
+        &#34;&#34;&#34;
+        html = &#34;&#34;
+
+        # Lens detail
+        if tags[&#39;EXIF LensModel&#39;]:
+            html += f&#34;&lt;p class=&#39;lens&#39;&gt;{tags[&#39;EXIF LensModel&#39;]}&lt;/p&gt;\n&#34;
+        
+        # Focal length
+        if tags[&#39;EXIF FocalLengthIn35mmFilm&#39;]:
+            if tags[&#39;EXIF FocalLengthIn35mmFilm&#39;] != tags[&#39;EXIF FocalLength&#39;]:
+                html += f&#34;&lt;p class=&#39;focal-length&#39;&gt;{tags[&#39;EXIF FocalLengthIn35mmFilm&#39;]}mm (full frame equivalent)&lt;/p&gt;\n&#34;
+            else:
+                html += f&#34;&lt;p class=&#39;focal-length&#39;&gt;{tags[&#39;EXIF FocalLengthIn35mmFilm&#39;]}mm&lt;/p&gt;\n&#34;
+        else:
+            if tags[&#39;EXIF FocalLength&#39;]:
+                html += f&#34;&lt;p class=&#39;focal-length&#39;&gt;{tags[&#39;EXIF FocalLength&#39;]}mm&lt;/p&gt;\n&#34;
+
+        # ISO, Shutter speed, Apperture
+        if tags[&#39;EXIF ISOSpeedRatings&#39;]:
+            html += f&#34;&lt;p class=&#39;iso&#39;&gt;ISO {tags[&#39;EXIF ISOSpeedRatings&#39;]}&lt;/p&gt;\n&#34;
+        if tags[&#39;EXIF ExposureTime&#39;]:
+            html += f&#34;&lt;p class=&#39;shutter-speed&#39;&gt;{tags[&#39;EXIF ExposureTime&#39;]} Second(s)&lt;/p&gt;\n&#34;
+        if tags[&#39;EXIF FNumber&#39;]:
+            from fractions import Fraction
+            tags[&#39;EXIF FNumber&#39;] = str(float(Fraction(str(tags[&#39;EXIF FNumber&#39;])))) # Convert aperture to str i.e. 6.3
+            html += f&#34;&lt;p class=&#39;aperture&#39;&gt;f{tags[&#39;EXIF FNumber&#39;]}&lt;/p&gt;\n&#34;
+
+        # Camera body details
+        if tags[&#39;Image Make&#39;] and tags[&#39;Image Model&#39;]:
+            html += f&#34;&lt;p class=&#39;camera-type&#39;&gt;{tags[&#39;Image Make&#39;]} {tags[&#39;Image Model&#39;]}&lt;/p&gt;\n&#34;
+        elif tags[&#39;Image Make&#39;]:
+            html += f&#34;&lt;p class=&#39;camera-type&#39;&gt;{tags[&#39;Image Make&#39;]}&lt;/p&gt;\n&#34;
+        elif tags[&#34;Image Model&#34;]:
+            html += f&#34;&lt;p class=&#39;camera-type&#39;&gt;{tags[&#39;Image Model&#39;]}&lt;/p&gt;\n&#34;
+        else:
+            ...
+        return html
+
+
+    def get_content(self, file_path: str) -&gt; Tuple[defaultdict, str]:
+        &#34;&#34;&#34;Gets the html content of a file, and the metadata/exif of the file
+
+        Parameters
+        ----------
+        file_path : str
+            The path to the file to render
+
+        Returns
+        -------
+        str, defaultdict
+            Returns the defaultdict of the metadata, and then the html of the exif data
+
+        Raises
+        ------
+        FileNotFoundError
+            If the provided file path does not exist
+
+        Examples
+        --------
+        Render a file called 1.jpg
+        ```
+        from ezcv.content import Image
+
+        metadata, html = Image().get_content(&#39;1.jpg&#39;)
+        ```
+        &#34;&#34;&#34;
+        tags = self.__metadata__(file_path)
+        html = self.__html__(tags)
+        tags[&#34;file_path&#34;] = f&#34;images/gallery/{file_path.split(os.path.sep)[-1]}&#34;
+        self.image_paths.append(file_path)
+        return tags, html</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="ezcv.content.get_content_directories"><code class="name flex">
+<span>def <span class="ident">get_content_directories</span></span>(<span>) ‑> List[str]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets a list of the existing content directories i.e. ["projects", "education"]</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>List[str]:</code></dt>
+<dd>The list of existing content directories i.e. ["projects", "education"]</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_content_directories() -&gt; List[str]:
+    &#34;&#34;&#34;Gets a list of the existing content directories i.e. [&#34;projects&#34;, &#34;education&#34;]
+
+    Returns
+    -------
+    List[str]:
+        The list of existing content directories i.e. [&#34;projects&#34;, &#34;education&#34;]
+    &#34;&#34;&#34;
+    result:list[str] = []
+    for current_path in os.listdir(&#34;content&#34;):
+        if os.path.isdir(os.path.join(&#34;content&#34;, current_path)):
+            result.append(os.path.join(&#34;content&#34;, current_path))
+    return result</code></pre>
+</details>
+</dd>
+<dt id="ezcv.content.get_section_content"><code class="name flex">
+<span>def <span class="ident">get_section_content</span></span>(<span>section_content_folder: str, examples: bool = False) ‑> List[List[Union[collections.defaultdict, str]]]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Takes in a section folder and gets all the content from the files using the Content subclass asigned to the file extension</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>section_content_folder</code></strong> :&ensp;<code>str</code></dt>
+<dd>The string representation of the path to the section folder (i.e. 'content/education')</dd>
+<dt><strong><code>examples</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Whether or not to render files with example in the name, by default False</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>List[List[Union[defaultdict, str]]]</code></dt>
+<dd>A list representing each file in the section of sublists where the metadata is the first element (as a defaultdict), and the HTML is the second (as a string)</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<p>getting the section content of the education section</p>
+<pre><code>from ezcv.content import get_section_content
+
+section_content_folder = 'content/education'
+
+content = get_section_content(section_content_folder)
+
+print(content[0]) # Prints [defaultdict(&lt;function &lt;lambda&gt; at 0x000001F1B97CE040&gt;, {'title': 'This is the title', 'company': 'This is the company'}), '&lt;p&gt;This is some content&lt;/p&gt;']
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_section_content(section_content_folder: str, examples: bool = False) -&gt; List[List[Union[defaultdict, str]]]:
+    &#34;&#34;&#34;Takes in a section folder and gets all the content from the files using the Content subclass asigned to the file extension
+
+    Parameters
+    ----------
+    section_content_folder : str
+        The string representation of the path to the section folder (i.e. &#39;content/education&#39;)
+
+    examples : bool, optional
+        Whether or not to render files with example in the name, by default False
+
+    Returns
+    -------
+    List[List[Union[defaultdict, str]]]
+        A list representing each file in the section of sublists where the metadata is the first element (as a defaultdict), and the HTML is the second (as a string)
+
+
+    Examples
+    --------
+    getting the section content of the education section
+
+    ```
+    from ezcv.content import get_section_content
+
+    section_content_folder = &#39;content/education&#39;
+
+    content = get_section_content(section_content_folder)
+
+    print(content[0]) # Prints [defaultdict(&lt;function &lt;lambda&gt; at 0x000001F1B97CE040&gt;, {&#39;title&#39;: &#39;This is the title&#39;, &#39;company&#39;: &#39;This is the company&#39;}), &#39;&lt;p&gt;This is some content&lt;/p&gt;&#39;]
+    ```
+    &#34;&#34;&#34;
+    content:List[List[Union[defaultdict, str]]] = []
+    extension_handlers:DefaultDict[str, Type] = Content.get_available_extensions()
+
+    for file_name in os.listdir(section_content_folder):                   # Iterate through the section_content folder and get the content from each file
+        if not examples and file_name.startswith(&#34;example&#34;):
+            continue
+        else:
+            extension = &#34;.&#34; + file_name.lower().split(&#34;.&#34;)[-1]      # Get the file extension
+            if extension_handlers[extension]:                       # Checking if there exists a Content subclass capable of handling the file
+                extension_handler = extension_handlers[extension]() # Instantiate the proper extension
+
+                # Get the content and add it to the list
+                metadata, html = extension_handler.get_content(os.path.join(section_content_folder, file_name))
+                content.append([metadata, html])
+    return content</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="ezcv.content.Content"><code class="flex name class">
+<span>class <span class="ident">Content</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Base class for other Content types</p>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>All subclasses are assumed to have implemented:<ul>
+<li><strong>metadata</strong>(); Returns a defaultdict of metadata</li>
+<li><strong>html</strong>(); Returns the HTML to render</li>
+<li>A list attribute called extensions, for example in markdown it would be
+extensions:List[str] = ['.md', '.markdown', '.mdown', '.mkdn', '.mkd', '.mdwn']</li>
+</ul>
+</li>
+</ul>
+<h2 id="methods">Methods</h2>
+<p>get_available_extensions() -&gt; DefaultDict[str, Type]:
+Returns a defaultdict of available extensions and corresponding types to render them</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>NotImplementedError</code></dt>
+<dd>If any of <strong>metadata</strong>(), or <strong>html</strong>() are not implemented in subclass</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<h3 id="get-the-list-of-extensions-and-their-handlers">Get the list of extensions and their handlers</h3>
+<pre><code>extension_handlers = Content.get_available_extensions()
+print(extension_handlers) ''' defaultdict(
+    &lt;function Content.get_available_extensions.&lt;locals&gt;.&lt;lambda&gt; at 0x00000240878690D0&gt;, 
+    {
+    '.md': &lt;class '__main__.Markdown'&gt;, 
+    '.markdown': &lt;class '__main__.Markdown'&gt;,
+    '.jpg': &lt;class '__main__.Image'&gt;,
+    '.png': &lt;class '__main__.Image'&gt;
+    }
+)'''
+
+# Get an extension handler for a specific extension (in thise case .md files)
+print(extension_handlers[&quot;.md&quot;]) # &lt;class '__main__.Markdown'&gt;
+</code></pre>
+<h3 id="get-content-of-a-list-of-files">Get content of a list of files</h3>
+<pre><code>content = [] # The list that
+filenames = ['file.md', 'image.jpg'] # Gotten from somewhere else
+extension_handlers = Content.get_available_extensions()
+
+for current_file in filenames:
+    extension = '.' + current_file.split('.')[-1]
+    if extension_handlers[extension]:
+        extension_handler = extension_handlers[extension]()
+        metadata, html = extension_handler.get_content(current_file)
+        content.append([metadata, html])
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Content(dict):
+    &#34;&#34;&#34;Base class for other Content types
+
+    Notes
+    -----
+    - All subclasses are assumed to have implemented:
+        - __metadata__(); Returns a defaultdict of metadata
+        - __html__(); Returns the HTML to render
+        - A list attribute called extensions, for example in markdown it would be
+            extensions:List[str] = [&#39;.md&#39;, &#39;.markdown&#39;, &#39;.mdown&#39;, &#39;.mkdn&#39;, &#39;.mkd&#39;, &#39;.mdwn&#39;]
+
+    Methods
+    -------
+    get_available_extensions() -&gt; DefaultDict[str, Type]:
+        Returns a defaultdict of available extensions and corresponding types to render them
+
+    Raises
+    ------
+    NotImplementedError
+        If any of __metadata__(), or __html__() are not implemented in subclass
+
+    Examples
+    --------
+    ### Get the list of extensions and their handlers
+    ```
+    extension_handlers = Content.get_available_extensions()
+    print(extension_handlers) &#39;&#39;&#39; defaultdict(
+        &lt;function Content.get_available_extensions.&lt;locals&gt;.&lt;lambda&gt; at 0x00000240878690D0&gt;, 
+        {
+        &#39;.md&#39;: &lt;class &#39;__main__.Markdown&#39;&gt;, 
+        &#39;.markdown&#39;: &lt;class &#39;__main__.Markdown&#39;&gt;,
+        &#39;.jpg&#39;: &lt;class &#39;__main__.Image&#39;&gt;,
+        &#39;.png&#39;: &lt;class &#39;__main__.Image&#39;&gt;
+        }
+    )&#39;&#39;&#39;
+
+    # Get an extension handler for a specific extension (in thise case .md files)
+    print(extension_handlers[&#34;.md&#34;]) # &lt;class &#39;__main__.Markdown&#39;&gt;
+    ```
+
+    ### Get content of a list of files
+    ```
+    content = [] # The list that
+    filenames = [&#39;file.md&#39;, &#39;image.jpg&#39;] # Gotten from somewhere else
+    extension_handlers = Content.get_available_extensions()
+
+    for current_file in filenames:
+        extension = &#39;.&#39; + current_file.split(&#39;.&#39;)[-1]
+        if extension_handlers[extension]:
+            extension_handler = extension_handlers[extension]()
+            metadata, html = extension_handler.get_content(current_file)
+            content.append([metadata, html])
+    ```
+    &#34;&#34;&#34;
+
+
+    def get_available_extensions() -&gt; DefaultDict[str, Type]:
+        &#34;&#34;&#34;Returns a defaultdict of extensions and corresponding child types to handle them
+
+        Returns
+        -------
+        DefaultDict[str, Type]:
+            A defaultdict with a str for the extension as a key, and the type as a value
+        &#34;&#34;&#34;
+        all_extensions:DefaultDict[str, Type] = defaultdict(lambda:False)
+        for current_class in Content.__subclasses__():
+            for extension in current_class.extensions:
+                all_extensions[extension] = current_class
+        return all_extensions
+
+
+    def __metadata__(self):
+        &#34;&#34;&#34;A function to be replaced with the specific implementation of generating metadata defauldict
+
+        Raises
+        ------
+        NotImplementedError
+            If the function is not implemented in the subclass
+        &#34;&#34;&#34;
+        raise NotImplementedError
+
+
+    def get_content(self, file_path:str):
+        &#34;&#34;&#34;Generates the metadata and HTML from a peice of content
+
+        Parameters
+        ----------
+        file_path : str
+            The path to the md file
+
+        Raises
+        ------
+        NotImplementedError
+            If the function is not implemented in the subclass
+        &#34;&#34;&#34;
+        raise NotImplementedError
+
+
+    def __html__(self, file_path:str):
+        &#34;&#34;&#34;A function to be replaced with the specific implementation of generating HTML
+
+        Parameters
+        ----------
+        file_path: (str)
+            The path for the file
+
+        Raises
+        ------
+        NotImplementedError
+            If the function is not implemented in the subclass
+        &#34;&#34;&#34;
+        raise NotImplementedError</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.dict</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="ezcv.content.Image" href="#ezcv.content.Image">Image</a></li>
+<li><a title="ezcv.content.Markdown" href="#ezcv.content.Markdown">Markdown</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="ezcv.content.Content.get_available_extensions"><code class="name flex">
+<span>def <span class="ident">get_available_extensions</span></span>(<span>) ‑> DefaultDict[str, Type]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns a defaultdict of extensions and corresponding child types to handle them</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>DefaultDict[str, Type]:</code></dt>
+<dd>A defaultdict with a str for the extension as a key, and the type as a value</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_available_extensions() -&gt; DefaultDict[str, Type]:
+    &#34;&#34;&#34;Returns a defaultdict of extensions and corresponding child types to handle them
+
+    Returns
+    -------
+    DefaultDict[str, Type]:
+        A defaultdict with a str for the extension as a key, and the type as a value
+    &#34;&#34;&#34;
+    all_extensions:DefaultDict[str, Type] = defaultdict(lambda:False)
+    for current_class in Content.__subclasses__():
+        for extension in current_class.extensions:
+            all_extensions[extension] = current_class
+    return all_extensions</code></pre>
+</details>
+</dd>
+<dt id="ezcv.content.Content.get_content"><code class="name flex">
+<span>def <span class="ident">get_content</span></span>(<span>self, file_path: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generates the metadata and HTML from a peice of content</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>file_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path to the md file</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>NotImplementedError</code></dt>
+<dd>If the function is not implemented in the subclass</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_content(self, file_path:str):
+    &#34;&#34;&#34;Generates the metadata and HTML from a peice of content
+
+    Parameters
+    ----------
+    file_path : str
+        The path to the md file
+
+    Raises
+    ------
+    NotImplementedError
+        If the function is not implemented in the subclass
+    &#34;&#34;&#34;
+    raise NotImplementedError</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="ezcv.content.Image"><code class="flex name class">
+<span>class <span class="ident">Image</span></span>
+<span>(</span><span>ignore_exif_data: bool = False, extensions: List[str] = ('.jpg', '.png', '.jpeg', '.gif', '.svg', '.webp', '.apng', '.jfif', '.pjpeg', '.pjp'), image_paths: List[str] = &lt;factory&gt;)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Used for parsing images</p>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>Exif data is NOT available on PNG images (it is only available of jpg and tiff)</li>
+<li>Since there are so many conditionals it is recommended to use the existing gallery stylesheet</li>
+</ul>
+<h2 id="examples">Examples</h2>
+<p>Render a file called 1.jpg</p>
+<pre><code>from ezcv.content import Image
+
+metadata, html = Image().get_content('1.jpg')
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Image(Content):
+    &#34;&#34;&#34;Used for parsing images
+    
+    Notes
+    -----
+    - Exif data is NOT available on PNG images (it is only available of jpg and tiff)
+    - Since there are so many conditionals it is recommended to use the existing gallery stylesheet
+
+    Examples
+    --------
+    Render a file called 1.jpg
+    ```
+    from ezcv.content import Image
+
+    metadata, html = Image().get_content(&#39;1.jpg&#39;)
+    ```
+    &#34;&#34;&#34;
+    ignore_exif_data:bool = False
+    extensions:List[str] = (&#34;.jpg&#34;, &#34;.png&#34;, &#34;.jpeg&#34;, &#34;.gif&#34;, &#34;.svg&#34;, &#34;.webp&#34;, &#34;.apng&#34;, &#34;.jfif&#34;, &#34;.pjpeg&#34;, &#34;.pjp&#34;)
+    image_paths:List[str] = field(default_factory=lambda: []) # TODO: find way to implement this properly
+
+
+    def __metadata__(self, filename:str) -&gt; defaultdict:
+        &#34;&#34;&#34;Return the metadata of the file (and exif data if available)
+
+        Parameters
+        ----------
+        filename : str
+            The path to the file to get the metadata from
+
+        Returns
+        -------
+        defaultdict
+            A defaultdict of the keys with the metadata in it
+        &#34;&#34;&#34;
+        if self.ignore_exif_data:
+            return defaultdict(lambda:False)
+
+        elif filename.lower().endswith(&#34;jpg&#34;):
+            with open(filename ,&#34;rb&#34;) as f:
+                tags = exifread.process_file(f)
+            tags = defaultdict(lambda:False, tags)
+            return tags
+
+        else:
+            return defaultdict(lambda:False)
+
+
+    def __html__(self, tags:defaultdict) -&gt; str:
+        &#34;&#34;&#34;Parses the tags of the image and returns HTML for the EXIF data
+
+        Parameters
+        ----------
+        file_path : str
+            The path to the file to generate the HTML for
+
+        Returns
+        -------
+        str
+            The HTML of the EXIF data from the file
+        &#34;&#34;&#34;
+        html = &#34;&#34;
+
+        # Lens detail
+        if tags[&#39;EXIF LensModel&#39;]:
+            html += f&#34;&lt;p class=&#39;lens&#39;&gt;{tags[&#39;EXIF LensModel&#39;]}&lt;/p&gt;\n&#34;
+        
+        # Focal length
+        if tags[&#39;EXIF FocalLengthIn35mmFilm&#39;]:
+            if tags[&#39;EXIF FocalLengthIn35mmFilm&#39;] != tags[&#39;EXIF FocalLength&#39;]:
+                html += f&#34;&lt;p class=&#39;focal-length&#39;&gt;{tags[&#39;EXIF FocalLengthIn35mmFilm&#39;]}mm (full frame equivalent)&lt;/p&gt;\n&#34;
+            else:
+                html += f&#34;&lt;p class=&#39;focal-length&#39;&gt;{tags[&#39;EXIF FocalLengthIn35mmFilm&#39;]}mm&lt;/p&gt;\n&#34;
+        else:
+            if tags[&#39;EXIF FocalLength&#39;]:
+                html += f&#34;&lt;p class=&#39;focal-length&#39;&gt;{tags[&#39;EXIF FocalLength&#39;]}mm&lt;/p&gt;\n&#34;
+
+        # ISO, Shutter speed, Apperture
+        if tags[&#39;EXIF ISOSpeedRatings&#39;]:
+            html += f&#34;&lt;p class=&#39;iso&#39;&gt;ISO {tags[&#39;EXIF ISOSpeedRatings&#39;]}&lt;/p&gt;\n&#34;
+        if tags[&#39;EXIF ExposureTime&#39;]:
+            html += f&#34;&lt;p class=&#39;shutter-speed&#39;&gt;{tags[&#39;EXIF ExposureTime&#39;]} Second(s)&lt;/p&gt;\n&#34;
+        if tags[&#39;EXIF FNumber&#39;]:
+            from fractions import Fraction
+            tags[&#39;EXIF FNumber&#39;] = str(float(Fraction(str(tags[&#39;EXIF FNumber&#39;])))) # Convert aperture to str i.e. 6.3
+            html += f&#34;&lt;p class=&#39;aperture&#39;&gt;f{tags[&#39;EXIF FNumber&#39;]}&lt;/p&gt;\n&#34;
+
+        # Camera body details
+        if tags[&#39;Image Make&#39;] and tags[&#39;Image Model&#39;]:
+            html += f&#34;&lt;p class=&#39;camera-type&#39;&gt;{tags[&#39;Image Make&#39;]} {tags[&#39;Image Model&#39;]}&lt;/p&gt;\n&#34;
+        elif tags[&#39;Image Make&#39;]:
+            html += f&#34;&lt;p class=&#39;camera-type&#39;&gt;{tags[&#39;Image Make&#39;]}&lt;/p&gt;\n&#34;
+        elif tags[&#34;Image Model&#34;]:
+            html += f&#34;&lt;p class=&#39;camera-type&#39;&gt;{tags[&#39;Image Model&#39;]}&lt;/p&gt;\n&#34;
+        else:
+            ...
+        return html
+
+
+    def get_content(self, file_path: str) -&gt; Tuple[defaultdict, str]:
+        &#34;&#34;&#34;Gets the html content of a file, and the metadata/exif of the file
+
+        Parameters
+        ----------
+        file_path : str
+            The path to the file to render
+
+        Returns
+        -------
+        str, defaultdict
+            Returns the defaultdict of the metadata, and then the html of the exif data
+
+        Raises
+        ------
+        FileNotFoundError
+            If the provided file path does not exist
+
+        Examples
+        --------
+        Render a file called 1.jpg
+        ```
+        from ezcv.content import Image
+
+        metadata, html = Image().get_content(&#39;1.jpg&#39;)
+        ```
+        &#34;&#34;&#34;
+        tags = self.__metadata__(file_path)
+        html = self.__html__(tags)
+        tags[&#34;file_path&#34;] = f&#34;images/gallery/{file_path.split(os.path.sep)[-1]}&#34;
+        self.image_paths.append(file_path)
+        return tags, html</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="ezcv.content.Content" href="#ezcv.content.Content">Content</a></li>
+<li>builtins.dict</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="ezcv.content.Image.extensions"><code class="name">var <span class="ident">extensions</span> : List[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="ezcv.content.Image.ignore_exif_data"><code class="name">var <span class="ident">ignore_exif_data</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="ezcv.content.Image.image_paths"><code class="name">var <span class="ident">image_paths</span> : List[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="ezcv.content.Image.get_content"><code class="name flex">
+<span>def <span class="ident">get_content</span></span>(<span>self, file_path: str) ‑> Tuple[collections.defaultdict, str]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets the html content of a file, and the metadata/exif of the file</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>file_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path to the file to render</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str, defaultdict</code></dt>
+<dd>Returns the defaultdict of the metadata, and then the html of the exif data</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>FileNotFoundError</code></dt>
+<dd>If the provided file path does not exist</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<p>Render a file called 1.jpg</p>
+<pre><code>from ezcv.content import Image
+
+metadata, html = Image().get_content('1.jpg')
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_content(self, file_path: str) -&gt; Tuple[defaultdict, str]:
+    &#34;&#34;&#34;Gets the html content of a file, and the metadata/exif of the file
+
+    Parameters
+    ----------
+    file_path : str
+        The path to the file to render
+
+    Returns
+    -------
+    str, defaultdict
+        Returns the defaultdict of the metadata, and then the html of the exif data
+
+    Raises
+    ------
+    FileNotFoundError
+        If the provided file path does not exist
+
+    Examples
+    --------
+    Render a file called 1.jpg
+    ```
+    from ezcv.content import Image
+
+    metadata, html = Image().get_content(&#39;1.jpg&#39;)
+    ```
+    &#34;&#34;&#34;
+    tags = self.__metadata__(file_path)
+    html = self.__html__(tags)
+    tags[&#34;file_path&#34;] = f&#34;images/gallery/{file_path.split(os.path.sep)[-1]}&#34;
+    self.image_paths.append(file_path)
+    return tags, html</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="ezcv.content.Content" href="#ezcv.content.Content">Content</a></b></code>:
+<ul class="hlist">
+<li><code><a title="ezcv.content.Content.get_available_extensions" href="#ezcv.content.Content.get_available_extensions">get_available_extensions</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="ezcv.content.Markdown"><code class="flex name class">
+<span>class <span class="ident">Markdown</span></span>
+<span>(</span><span>md: markdown.core.Markdown = &lt;markdown.core.Markdown object&gt;, extensions: List[str] = ('.md', '.markdown', '.mdown', '.mkdn', '.mkd', '.mdwn'))</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Used for parsing markdown content</p>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>Default extensions are <ul>
+<li><a href="https://python-markdown.github.io/extensions/footnotes/">footnotes</a></li>
+<li><a href="https://python-markdown.github.io/extensions/tables/">tables</a></li>
+<li><a href="https://python-markdown.github.io/extensions/toc/">toc (Table of contents)</a></li>
+<li><a href="https://python-markdown.github.io/extensions/abbreviations/">abbr(abbreviations)</a></li>
+<li><a href="https://python-markdown.github.io/extensions/definition_lists/">def_list(Definition lists)</a></li>
+<li><a href="https://python-markdown.github.io/extensions/sane_lists/">sane_lists(Sane lists)</a></li>
+<li><a href="https://python-markdown.github.io/extensions/meta">meta</a></li>
+<li><a href="https://github.com/mitya57/python-markdown-math">mdx_math</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="examples">Examples</h2>
+<pre><code>from ezcv.content import Markdown
+
+html, metadata = Markdown().get_content('file_1.md')
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Markdown(Content):
+    &#34;&#34;&#34;Used for parsing markdown content
+
+    Notes
+    -----
+    - Default extensions are 
+        - [footnotes](https://python-markdown.github.io/extensions/footnotes/)
+        - [tables](https://python-markdown.github.io/extensions/tables/)
+        - [toc (Table of contents)](https://python-markdown.github.io/extensions/toc/)
+        - [abbr(abbreviations)](https://python-markdown.github.io/extensions/abbreviations/)
+        - [def_list(Definition lists)](https://python-markdown.github.io/extensions/definition_lists/)
+        - [sane_lists(Sane lists)](https://python-markdown.github.io/extensions/sane_lists/)
+        - [meta](https://python-markdown.github.io/extensions/meta)
+        - [mdx_math](https://github.com/mitya57/python-markdown-math)
+
+    Examples
+    --------
+    ```
+    from ezcv.content import Markdown
+
+    html, metadata = Markdown().get_content(&#39;file_1.md&#39;)
+    ```
+    &#34;&#34;&#34;
+    md:markdown.Markdown = markdown.Markdown(extensions=[&#39;meta&#39;, &#39;footnotes&#39;, &#39;tables&#39;, &#39;toc&#39;, &#39;abbr&#39;, &#39;def_list&#39;, &#39;sane_lists&#39;, &#34;mdx_math&#34;]) # Setup markdown parser with extensions
+    extensions:List[str] = (&#34;.md&#34;, &#34;.markdown&#34;, &#34;.mdown&#34;, &#34;.mkdn&#34;, &#34;.mkd&#34;, &#34;.mdwn&#34;)
+
+
+    def __metadata__(self) -&gt; defaultdict:
+        &#34;&#34;&#34;Gets the metadata from the YAML frontmatter of the markdown file
+
+        Notes
+        -----
+        - This class requires __html__ to be run first, or self.md to be set manually and run self.md.convert(text:str) over the text of the document
+
+        Returns
+        -------
+        defaultdict
+            Returns a defaultdict with the yaml metadata of a peice of content
+        &#34;&#34;&#34;
+
+        metadata:defaultdict = defaultdict(lambda:False)
+        for key in self.md.Meta: # Create defaultdict out of metadata
+            if type(self.md.Meta[key]) == list:
+                metadata[key] = self.md.Meta[key][0]
+            else:
+                metadata[key] = self.md.Meta[key]
+        return metadata
+
+
+    def __html__(self, file_path:str) -&gt; str:
+        &#34;&#34;&#34;Parses the markdown file and returns a string with the resulting HTML
+
+        Parameters
+        ----------
+        file_path : str
+            The path to the file to generate the HTML for
+
+        Returns
+        -------
+        str
+            The HTML rendered from the markdown file
+        &#34;&#34;&#34;
+        with open(f&#34;{file_path}&#34;, &#34;r&#34;) as mdfile: # Parse markdown file
+            text = mdfile.read()
+        html = self.md.convert(text) # Convert the markdown content text to hmtl
+        return html
+
+
+    def get_content(self, file_path: str) -&gt; Tuple[defaultdict, str]:
+        &#34;&#34;&#34;Gets the html content of a file, and the metadata of the file
+
+        Parameters
+        ----------
+        file_path : str
+            The path to the file to render
+
+        Returns
+        -------
+        str, defaultdict
+            Returns a defaultdict of the metadata first then the html content as a string
+
+        Raises
+        ------
+        FileNotFoundError
+            If the provided file path does not exist
+
+        Examples
+        --------
+        Render a file called file_1.md
+        ```
+        from ezcv.content import Markdown
+
+        metadata, html  = Markdown().get_content(&#39;file_1.md&#39;)
+        ```
+        &#34;&#34;&#34;
+        if not os.path.exists(file_path): # If file doesn&#39;t exist
+            raise FileNotFoundError(f&#34;{fg(1)} Could not find file: {file_path}{fg(15)}\n&#34;)
+        html = self.__html__(file_path)
+        metadata = self.__metadata__()
+        return metadata, html</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="ezcv.content.Content" href="#ezcv.content.Content">Content</a></li>
+<li>builtins.dict</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="ezcv.content.Markdown.extensions"><code class="name">var <span class="ident">extensions</span> : List[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="ezcv.content.Markdown.md"><code class="name">var <span class="ident">md</span> : markdown.core.Markdown</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="ezcv.content.Markdown.get_content"><code class="name flex">
+<span>def <span class="ident">get_content</span></span>(<span>self, file_path: str) ‑> Tuple[collections.defaultdict, str]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets the html content of a file, and the metadata of the file</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>file_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path to the file to render</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str, defaultdict</code></dt>
+<dd>Returns a defaultdict of the metadata first then the html content as a string</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>FileNotFoundError</code></dt>
+<dd>If the provided file path does not exist</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<p>Render a file called file_1.md</p>
+<pre><code>from ezcv.content import Markdown
+
+metadata, html  = Markdown().get_content('file_1.md')
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_content(self, file_path: str) -&gt; Tuple[defaultdict, str]:
+    &#34;&#34;&#34;Gets the html content of a file, and the metadata of the file
+
+    Parameters
+    ----------
+    file_path : str
+        The path to the file to render
+
+    Returns
+    -------
+    str, defaultdict
+        Returns a defaultdict of the metadata first then the html content as a string
+
+    Raises
+    ------
+    FileNotFoundError
+        If the provided file path does not exist
+
+    Examples
+    --------
+    Render a file called file_1.md
+    ```
+    from ezcv.content import Markdown
+
+    metadata, html  = Markdown().get_content(&#39;file_1.md&#39;)
+    ```
+    &#34;&#34;&#34;
+    if not os.path.exists(file_path): # If file doesn&#39;t exist
+        raise FileNotFoundError(f&#34;{fg(1)} Could not find file: {file_path}{fg(15)}\n&#34;)
+    html = self.__html__(file_path)
+    metadata = self.__metadata__()
+    return metadata, html</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="ezcv.content.Content" href="#ezcv.content.Content">Content</a></b></code>:
+<ul class="hlist">
+<li><code><a title="ezcv.content.Content.get_available_extensions" href="#ezcv.content.Content.get_available_extensions">get_available_extensions</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul>
+<li><a href="#classes">Classes</a></li>
+<li><a href="#functions">Functions</a></li>
+</ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="ezcv" href="index.html">ezcv</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="ezcv.content.get_content_directories" href="#ezcv.content.get_content_directories">get_content_directories</a></code></li>
+<li><code><a title="ezcv.content.get_section_content" href="#ezcv.content.get_section_content">get_section_content</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="ezcv.content.Content" href="#ezcv.content.Content">Content</a></code></h4>
+<ul class="">
+<li><code><a title="ezcv.content.Content.get_available_extensions" href="#ezcv.content.Content.get_available_extensions">get_available_extensions</a></code></li>
+<li><code><a title="ezcv.content.Content.get_content" href="#ezcv.content.Content.get_content">get_content</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="ezcv.content.Image" href="#ezcv.content.Image">Image</a></code></h4>
+<ul class="">
+<li><code><a title="ezcv.content.Image.extensions" href="#ezcv.content.Image.extensions">extensions</a></code></li>
+<li><code><a title="ezcv.content.Image.get_content" href="#ezcv.content.Image.get_content">get_content</a></code></li>
+<li><code><a title="ezcv.content.Image.ignore_exif_data" href="#ezcv.content.Image.ignore_exif_data">ignore_exif_data</a></code></li>
+<li><code><a title="ezcv.content.Image.image_paths" href="#ezcv.content.Image.image_paths">image_paths</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="ezcv.content.Markdown" href="#ezcv.content.Markdown">Markdown</a></code></h4>
+<ul class="">
+<li><code><a title="ezcv.content.Markdown.extensions" href="#ezcv.content.Markdown.extensions">extensions</a></code></li>
+<li><code><a title="ezcv.content.Markdown.get_content" href="#ezcv.content.Markdown.get_content">get_content</a></code></li>
+<li><code><a title="ezcv.content.Markdown.md" href="#ezcv.content.Markdown.md">md</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>
