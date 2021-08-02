@@ -136,7 +136,7 @@ Usage:
     ezcv [-h] [-v] [-p]
     ezcv init [<name>] [<theme>]
     ezcv build [-d OUTPUT_DIR] [-p]
-    ezcv theme [-l] [-c] [<theme>]
+    ezcv theme [-l] [-c] [-s SECTION_NAME] [<theme>]
 
 
 Options:
@@ -146,6 +146,7 @@ Options:
 -c, --copy            copy the provided theme, or defined site theme
 -p, --preview         preview the current state of the site
 -d OUTPUT_DIR, --dir OUTPUT_DIR The folder name to export the site to
+-s SECTION_NAME, --section SECTION_NAME The section name to initialize
 ```
 
 See the [CLI Documentation](https://ezcv.readthedocs.io/en/latest/cli/) for additional details

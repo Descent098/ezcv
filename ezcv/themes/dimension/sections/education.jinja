@@ -1,8 +1,8 @@
 <h4 class="major">Education</h4>
 {% for experience in education %}
-    <h4>{{ experience[0]["institution"] }}</h4>
+    <h4>{{ experience[0]["institution"] }}  {% if experience[0]["title"] %} | {{ experience[0]["title"] }}{% endif %}</h4>
     <!-- Metadata -->
-    <p> {{ experience[0]["year_started"] }} {% if experience[0]["current"] %}- Present{% endif %}{% if experience[0]["year_ended"] %}- {{ experience[0]["year_ended"] }}{%endif%}</p>
+    <p> {{experience[0]["month_started"] | pretty_datetime(experience[0]["year_started"], experience[0]["month_ended"], experience[0]["year_ended"], experience[0]["current"])}}</p>
     <!-- Content -->
     <p>{{ experience[1] | safe}}</p>
 {% endfor %}

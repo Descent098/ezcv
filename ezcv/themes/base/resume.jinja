@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>{{ config["name"] }} | Resume</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/resume-styles.css">
+    <link rel="icon" type="image/png" href="images/favicon.png"/>
+    {% if config["ua_code"] %}
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{config['ua_code']}}"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{config["ua_code"]}}');
+        </script>
+    {% endif %}
+</head>
+
+{# Stylesheet is done inline to avoid needing seperate CSS files #}
+<style>
+#social-links {
+    font-size: 1.1em;
+    }
+
+    .project-link {
+    text-decoration: initial;
+    color: #141414;
+    }
+
+    .project-link:hover {
+    text-decoration: initial;
+    color: #929292;
+    }
+
+    .image{
+    float: left;
+    }
+
+    .image>img{
+    max-width: 200px;
+    max-height: 200px;
+    margin-right:-2px;
+    }
+
+    .project-text{
+    text-align: center;
+    vertical-align: middle;
+    }
+
+    @media print { 
+    .project-subheading, .image, .print-hidden{display: none;}
+
+    .print-columns{
+        column-count: 2;
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+    }
+    *{
+        font-size: small;
+    }
+
+    .print-column-break{
+        break-before: always;
+        -webkit-break-before: always;
+        -webkit-column-break-before: always;
+    }
+
+    .resume-name{
+        margin-top: -15px;
+    }
+    }
+
+    @media not print{
+    .print-shown{display: none;}
+    }
+</style>
+
+<body class="text-left">
+    <div style="padding-top: 5px;"></div>
+    <div>
+        <div class="container print-columns">
+            <div class="row" style="filter: hue-rotate(269deg);margin-top: 5px;">
+                <div class="col-md-6">
+                    <!-- Social links and name in header -->
+                    <h1 class="resume-name">{{ config["name"] }}</h1>
+                    <div class="d-inline-flex d-sm-inline-flex d-md-inline-flex d-lg-inline-flex flex-wrap justify-content-lg-start" id="social-links" style="filter: hue-rotate(0deg);font-size: 18px;">
+                        {% if config["social"]["github"] %}
+                        <div class="d-inline-flex" style="margin-right: 8px;"><i class="fab fa-github" style="font-size: 22px;"></i><a href="https://github.com/{{config['social']['github']}}" style="padding-left: 5px;" target="_blank">@{{config['social']['github']}}</a></div>
+                        {% endif %}
+
+                        {% if config['social']['url'] %}
+                        <div class="d-inline-flex" style="margin-right: 8px;"><i class="fas fa-globe" style="font-size: 22px;"></i><a href="{{config['social']['url']}}" style="padding-left: 5px;" target="_blank">{{config['social']['url']}}</a></div>
+                        {% endif %}
+
+                        {% if config['social']['linkedin'] %}
+                        <div class="d-inline-flex print-hidden" id="linkedin"><i class="fab fa-linkedin print-hidden" style="font-size: 22px;"></i><a href="https://linkedin.com/in/{{config['social']['linkedin']}}/" style="padding-left: 5px;" target="_blank" class="print-hidden">@{{config['social']['linkedin']}}</a></div>
+                        <div class="d-inline-flex print-shown" id="linkedin"><i class="fab fa-linkedin print-shown" style="font-size: 22px;"></i><a href="https://linkedin.com/in/{{config['social']['linkedin']}}/" style="padding-left: 5px;" target="_blank" class="print-shown">https://linkedin.com/in/{{config['social']['linkedin']}}</a></div>
+                        {% endif %}
+
+                    </div>
+                </div>
+                <!-- Contact details -->
+                {% if config['phone'] or config['address'] or config['email'] %}
+                <div class="col-md-6">
+                    <div id="contact-links" style="font-size: 17px;">
+                    {% if config['phone']%}
+                        <div style="margin-top: 6px;"><i class="fa fa-phone" style="font-size: 22px;"></i><a href="tel:{{config['phone']}}" style="padding-left: 5px;">{{config['phone']}}</a></div>
+                    {%endif%}
+                    {% if config['address']%}
+                        <!--TODO: Hook into GA API to dynamically find location based on provided address -->
+                        <div><i class="fa fa-map-marker" style="font-size: 22px;"></i><a href="#" style="padding-left: 5px;" target="_blank">{{config['address']}}</a></div>
+                    {% endif %}
+                    {% if config['email']%}
+                        <div><i class="fa fa-envelope" style="font-size: 22px;"></i><a href="mailto:{{config['email']}}" style="padding-left: 5px;">{{config['email']}}</a></div>
+                    {% endif %}
+                    </div>
+                {%endif%}
+                </div>
+                <div class="col">
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div>
+        <!-- Biography -->
+        {% if config['biography'] %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="text-center">Summary</h2>
+                    <p class="text-center">{{ config['biography']}}</p>
+                    <hr>
+                </div>
+            </div>
+        </div>
+        {%endif%}
+    </div>
+    <div class="print-columns">
+        <div class="container">
+            <div class="row">
+
+                {%if sections["work_experience"]%}
+
+                
+                    {%if sections["education"] or sections["volunteering_experience"]%}
+                <div class="col-md-6">
+                    {%else%}
+                <div class="col-md-12">
+                    {%endif%}
+                    <h2>Work Experience</h2>
+                    <hr>
+                    {%for experience in sections["work_experience"] %}
+                    <div>
+                        <div class="d-inline-flex">
+                            <h5>{{ experience[0]["role"] }}</h5><em class="d-inline-flex" style="padding-right: 10px;padding-left: 10px;">{{ experience[0]["company"] }}: {% if experience[0]["month_started"] %} {{ experience[0]["month_started"] }} {%endif%} {% if experience[0]["year_started"] %} {{ experience[0]["year_started"] }} {%endif%} {% if experience[0]["current"] %}- Present {%else%} - {% endif %} {% if experience[0]["month_ended"] %} {{ experience[0]["month_ended"] }} {%endif%} {% if experience[0]["year_ended"] %} {{ experience[0]["year_ended"] }} {%endif%}</em>
+                        </div>
+                        {{ experience[1] | safe }}
+                    </div>
+                    {%endfor%}
+                </div>
+
+                {%endif%}
+
+                {%if sections["education"] or sections["volunteering_experience"]%}
+
+                {%if sections["work_experience"]%}
+                <div class="col-md-6 print-column-break">
+                {%else%}
+                <div class="col-md-12 print-column-break">
+                {%endif%}
+
+                    {%if sections["education"] and sections["volunteering_experience"]%}
+                    <h2>Education &amp; Volunteering</h2>
+                    {%elif sections["education"]%}
+                    <h2>Education</h2>
+                    {%endif%}
+                    <hr>
+
+                    {% for experience in sections["education"] %}
+                    <div>
+                        <div class="d-inline-flex">
+                            <h5>{{ experience[0]["title"] }}</h5><em class="d-inline-flex" style="padding-right: 10px;padding-left: 10px;">{{ experience[0]["institution"] }}: {{ experience[0]["year_started"] }} {% if experience[0]["current"] %}- Present{% endif %}{% if experience[0]["year_ended"] %}- {{ experience[0]["year_ended"] }}{%endif%}</em></div>
+                        {{ experience[1] | safe}}
+                    </div>
+
+                    {%endfor%}
+
+
+
+                    {% for experience in sections["volunteering_experience"] %}
+                    <div>
+                        <div class="d-inline-flex">
+                            <h5>{{ experience[0]["role"] }}<br></h5><em class="d-inline-flex" style="padding-right: 10px;padding-left: 10px;">{{ experience[0]["company"] }}: {% if experience[0]["month_started"] %} {{ experience[0]["month_started"] }} {%endif%} {% if experience[0]["year_started"] %} {{ experience[0]["year_started"] }} {%endif%} {% if experience[0]["current"] %}- Present {%else%} - {% endif %} {% if experience[0]["month_ended"] %} {{ experience[0]["month_ended"] }} {%endif%} {% if experience[0]["year_ended"] %} {{ experience[0]["year_ended"] }} {%endif%}<br></em></div>
+                        {{ experience[1]|safe }}
+                    </div>
+                    {%endfor%}
+
+                </div>
+                {%endif%}
+            </div>
+        </div>
+    </div>
+
+
+    {% if sections["projects"] %}
+    <div>
+        <div class="container">
+            <div class="row ">
+                <div class="col-md-12">
+                    <hr>
+                    <h2 class="text-center">Projects</h2>
+                        {% if config["social"]["github"] %}
+                        <p class="text-center project-subheading">I have included a selection of my projects, more can be seen on github at <a href="https://github.com/{{config['social']['github']}}">https://github.com/{{config['social']['github']}}<br></a></p>
+                        {% endif %}
+                        <br>
+                        <br>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="container print-columns">
+            <div class="row">
+
+                {% for project in sections["projects"] %}
+                <div class="col-md-6">
+                {%if project[0]["link"] %}
+                    <a class="project-link" href="{{project[0]['link']}}" target="_blank">
+                {%else%}
+                    <a class="project-link" href="#">
+                {%endif%}
+
+                {% if project[0]["image"] %}
+                    {% if project[0]["image"].startswith("http") or project[0]["image"].startswith("images") %}  {# If image is from the internet #}
+                    <span class="image main"><img src="{{ project[0]['image'] }}" alt="{{ project[0]['title'] }}"/></span>
+                    {% else %} {# If image is a local file #}
+                    <span class="image main" ><img src="images/{{ project[0]['image'] }}" alt="{{ project[0]['title'] }}"/></span>
+                    {%endif%}
+                {% endif %}
+                        <div class="project-text">
+                            <h5>{{ project[0]['title'] }}</h5>
+                                {{project[1] | safe}}
+                                {%if project[0]["link"] %}
+                                <p class="print-shown">Project Link: {{project[0]['link']}}</p>
+                                {%endif%}
+                        </div>
+                    </a>
+                </div>
+                {%endfor%}
+
+                
+            </div>
+        </div>
+    </div>
+    {%endif%}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>

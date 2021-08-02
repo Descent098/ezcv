@@ -1,0 +1,44 @@
+<!-- Start Gallery -->
+<h2>Gallery</h2>
+<div>
+    {% for image in gallery %}
+    <h3>Image name: {{ image[0]['file_path'].split()[-1] }}</h3>
+
+    <img src="{{ image[0]['file_path'] }}" alt="{{ image[0]['file_path'].split()[-1] }}">
+    {% if not config["ignore_exif_data"] %}
+        {% if image[0]['Image Make'] or image[0]['Image Model'] %}
+        <div class="camera-metadata" style="margin-top: -35px;">
+            <p>Camera:
+            {% if image[0]['Image Make'] %} {{ image[0]['Image Make'] }} {% endif %} {% if image[0]['Image Model'] %} {{ image[0]['Image Model'] }} {% endif %}
+            </p>
+        </div>
+        {% endif %}
+
+        {% if image[0]['EXIF FocalLengthIn35mmFilm'] or image[0]['EXIF LensModel'] %}
+        <div class="lens-metadata" style="margin-top: -35px;">
+            <p>Lens: 
+            {% if image[0]['EXIF FocalLengthIn35mmFilm'] %} <br>&emsp; {{ image[0]['EXIF FocalLengthIn35mmFilm'] }}mm {% endif %}
+            {% if image[0]['EXIF LensModel'] %}<br>&emsp; {{ image[0]['EXIF LensModel'] }} {% endif %}
+            </p>
+        </div>
+        {% endif %}
+
+        {% if image[0]['EXIF ISOSpeedRatings'] or image[0]['EXIF ExposureTime'] or image[0]['EXIF FNumber'] %}
+        <div class="exposure" style="margin-top: -35px;">
+            <p>Exposure:
+            {% if image[0]['EXIF ISOSpeedRatings'] %}
+            <br>&emsp; ISO {{ image[0]['EXIF ISOSpeedRatings'] }}<br>
+            {% endif %}
+            {% if image[0]['EXIF ExposureTime'] %}
+            &emsp; {{ image[0]['EXIF ExposureTime'] }} Second(s)<br>
+            {% endif %}
+            {% if image[0]['EXIF FNumber'] %}
+            &emsp; f {{ image[0]['EXIF FNumber'] }}
+            {%endif%}
+            </p>
+        </div>
+        {% endif %}
+    {% endif %}
+{%endfor%}
+</div>
+<!--End of Gallery section-->

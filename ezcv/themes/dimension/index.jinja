@@ -10,7 +10,20 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="css/main.css" />
+		<link rel="icon" type="image/png" href="images/favicon.png"/>
 		<noscript><link rel="stylesheet" href="css/noscript.css" /></noscript>
+
+		{% if config["ua_code"] %}
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id={{config['ua_code']}}"></script>
+		<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', '{{config["ua_code"]}}');
+		</script>
+		{% endif %}
+
 {% if config["background"] %}			
 	<style>
 		#bg:after {
@@ -67,7 +80,17 @@
 								<li><a href="#projects">Projects</a></li>
 								{% endif %}
 
+								{% if config["biography"] or config["social"] or config["avatar"] %}
 								<li><a href="#about">About</a></li>
+								{%endif%}
+
+								{% if gallery_html %}
+								<li><a href="#gallery">Gallery</a></li>
+								{%endif%}
+
+								{% if config['resume'] %}
+								<li><a href="resume.html" target="_blank">Resume</a></li>
+								{%endif%}
 							</ul>
 						</nav>
 					</header>
@@ -94,6 +117,7 @@
 						<!-- End of Projects section -->
 
 						<!-- About -->
+						{% if config["biography"] or config["social"] or config["avatar"] %}
 							<article id="about">
 								<h2 class="major">About Me</h2>
 								{% if config["avatar"] %}
@@ -103,7 +127,9 @@
 									<span><img src="images/{{ config['avatar'] }}" style="display: block;margin-left: auto;margin-right: auto;width: 50%;"></span>
 									{%endif%}
 								{% endif %}
+								{% if config["biography"] %}
 								{{ config["biography"] | safe }}
+								{%endif%}
 								</br>
 								</br>
 								<ul class="icons">
@@ -139,6 +165,17 @@
 									{% endif %}
 								</ul>
 							</article>
+						{% endif %}
+
+						{% if gallery_html %}
+						<!-- Start of gallery section -->
+							<article id="gallery">
+								<h2 class="major">Gallery</h2>
+								{{ gallery_html | safe }}
+							</article>
+						<!-- End of gallery section -->
+
+						{% endif %}
 					</div>
 
 				<!-- Footer -->
@@ -157,6 +194,6 @@
 			<script src="js/breakpoints.min.js"></script>
 			<script src="js/util.js"></script>
 			<script src="js/main.js"></script>
-
+			<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 	</body>
 </html>

@@ -29,6 +29,25 @@ The module containing all cli functionality of ezcv including:
 - Generating temporary preview
 - Getting lists of themes and/or copying themes
 
+#### Content
+This module is for handling all the functionality around content including:
+
+- Getting the list of content directories
+- Getting the metadata and contents of content files for sections
+- Classes for parsing all extensions
+
+#### Filter
+
+This is a module that provides additional jinja filters to help with theme development
+
+#### Themes
+
+Contains utilities related to theme management, discovery and creation including:
+
+- Section template discovery and creation
+- Remote repo management
+- Theme discovery & updating
+
 Quickstart
 ----------
 #### Generating a site using all settings defined in "config.yml"

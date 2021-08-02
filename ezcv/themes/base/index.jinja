@@ -7,47 +7,71 @@
         <meta name="author" content="{{ config['name'] }}" /> 
         <title>{{ config["name"] }}</title>
         <!-- Favicon-->
+        <link rel="icon" type="image/png" href="images/favicon.png"/>
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+
+        {% if config["ua_code"] %}
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{config['ua_code']}}"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{config["ua_code"]}}');
+        </script>
+        {% endif %}
+        <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     </head>
     <body>
         <h1> Configuration Values </h1>
+        <h2>Full dictionary (running {% raw %} {{config | pretty_defaultdict |safe }} {% endraw %}) </h2>
+        {{ config | pretty_defaultdict |safe }}
+        <h2>Individual config variables</h2>
         <ul>
-            <li>{{ config | pprint }}</li>
             <ul>
-                <li>{{ config["name"] }}</li>
-                <li>{{ config["email"] }}</li>
-                <li>{{ config["phone"] }}</li>
-                <li>{{ config["biography"] }}</li>
-                <li>{{ config["role"] }}</li>
-                <li>{{ config["company"] }}</li>
-                <li>{{ config["address"] }}</li>
-                <li>{{ config["social"] }}
+                <li>config["name"]: {{ config["name"] }}</li>
+                <li>config["email"]: {{ config["email"] }}</li>
+                <li>config["phone"]: {{ config["phone"] }}</li>
+                <li>config["biography"]: {{ config["biography"] }}</li>
+                <li>config["role"]: {{ config["role"] }}</li>
+                <li>config["company"]: {{ config["company"] }}</li>
+                <li>config["address"]: {{ config["address"] }}</li>
+                <li>config["social"]: {{ config["social"] }}
                     <ul>
-                        <li>{{ config["social"]["github"] }}</li>
-                        <li>{{ config["social"]["twitch"] }}</li>
-                        <li>{{ config["social"]["youtube"] }}</li>
-                        <li>{{ config["social"]["instagram"] }}</li>
-                        <li>{{ config["social"]["twitter"] }}</li>
-                        <li>{{ config["social"]["snapchat"] }}</li>
-                        <li>{{ config["social"]["linkedin"] }}</li>
-                        <li>{{ config["social"]["facebook"] }}</li>
+                        <li>config["social"]["github"]: {{ config["social"]["github"] }}</li>
+                        <li>config["social"]["twitch"]: {{ config["social"]["twitch"] }}</li>
+                        <li>config["social"]["youtube"]: {{ config["social"]["youtube"] }}</li>
+                        <li>config["social"]["instagram"]: {{ config["social"]["instagram"] }}</li>
+                        <li>config["social"]["twitter"]: {{ config["social"]["twitter"] }}</li>
+                        <li>config["social"]["snapchat"]: {{ config["social"]["snapchat"] }}</li>
+                        <li>config["social"]["linkedin"]: {{ config["social"]["linkedin"] }}</li>
+                        <li>config["social"]["facebook"]: {{ config["social"]["facebook"] }}</li>
                     </ul>
                 </li>
-                <li>{{ config["examples"] }}</li>
-                <li>{{ config["resume"] }}</li>
+                <li>config["examples"]: {{ config["examples"] }}</li>
+                <li>config["theme"]: {{ config["theme"] }}</li>
+                <li>config["resume"]: {{ config["resume"] }}</li>
+                <li>config["ua_code"]: {{ config["ua_code"] }}</li>
+                <li>config["ignore_exif_data"]: {{ config["ignore_exif_data"] }}</li>
             </ul>
         </ul>
-        <h1> Sections dictionary </h1>
-        {{ sections | pprint }}
+        <h1> Sections dictionary (gallery removed because image binaries are large)</h1>
+        {% for section in sections %}
+            {% if section != "gallery" %}
+            <h2>sections['{{section}}']</h2>
+            {{ sections[section] | pprint }}
+            {%endif%}
+        {% endfor %}
         <h1> Generated section HTML </h1>
         {{ projects_html | safe }}
         {{ education_html | safe }}
         {{ work_experience_html | safe }}
         {{ volunteering_experience_html | safe }}
+        {{ gallery_html | safe }}
         <!-- Publications --> <!-- volunteering_experience_html | safe -->
     </body>
 </html>
