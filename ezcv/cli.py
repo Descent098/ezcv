@@ -249,7 +249,7 @@ def new_section(section_name:str) -> bool:
 
 def main():
     """The primary entrypoint for the ezcv cli"""
-    args = docopt(usage, version="0.2.1")
+    args = docopt(usage, version="0.2.2")
 
     if len(argv) == 1: # Print usage if no arguments are given
         print("\n", usage)

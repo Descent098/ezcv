@@ -1,5 +1,13 @@
 # Changelog
 
+## V0.2.2; August 2nd 2021
+
+Documentation bugs after release
+
+### Bug fixes
+
+- Fixed issue with mkdocs build not recognizing correct URL and image paths
+
 
 ## V0.2.1; August 2nd 2021
 

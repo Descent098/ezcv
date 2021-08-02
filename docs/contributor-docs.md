@@ -4,7 +4,7 @@ This section of the documentation is intended for people who are looking to writ
 
 ## Contribution guidelines
 
-Below are details for submitting your code to the `ezcv` codebase. If you are just looking to modify some of the themes (aside from the `base` theme and `dimension` theme), then review the [theme development](/theme-development) section instead of this page.
+Below are details for submitting your code to the `ezcv` codebase. If you are just looking to modify some of the themes (aside from the `base` theme and `dimension` theme), then review the [theme development](theme-development.md) section instead of this page.
 
 ### Code standards
 
@@ -18,7 +18,7 @@ If you are unsure if you're on the right track to submitting code feel free to p
 
 ## Themes
 
-Details about creating themes and submitting them for development can be found in the [theme development](/theme-development) section of the docs. All themes (aside from the `base` theme and `dimension` theme) have their code at [https://github.com/QU-UP/ezcv-themes](https://github.com/QU-UP/ezcv-themes).
+Details about creating themes and submitting them for development can be found in the [theme development](theme-development.md) section of the docs. All themes (aside from the `base` theme and `dimension` theme) have their code at [https://github.com/QU-UP/ezcv-themes](https://github.com/QU-UP/ezcv-themes).
 
 ## Content parsing
 
@@ -152,7 +152,7 @@ Preview generation uses the same methods and calls as site exporting, the only d
 
 ## Filters
 
-Filters are used inside templates to do... pretty much anything that python can do. They are injected into the Jinja environments and are used to do everything from capitalizing strings to rendering HTML. They are incredibly useful for times when Jinja doesn't quite do enough for your use case. `ezcv` has [several custom filters built in](/theme-development#available-custom-filters). 
+Filters are used inside templates to do... pretty much anything that python can do. They are injected into the Jinja environments and are used to do everything from capitalizing strings to rendering HTML. They are incredibly useful for times when Jinja doesn't quite do enough for your use case. `ezcv` has [several custom filters built in](theme-development.md#available-custom-filters). 
 
 There are specific sections of the jinja documentation [dedicated to filters](https://jinja.palletsprojects.com/en/3.0.x/templates/#filters), but I will explain the basics of developing them.
 

@@ -645,4 +645,4 @@ print(pretty_defaultdict(config)) # Prints config dict in pretty form
 
 ## Submitting a theme to be officially supported
 
-Currently all themes (except the base and dimension themes) are pulled from a remote repository https://github.com/QU-UP/ezcv-themes. If you want to submit a theme, then head there and [submit it](https://github.com/QU-UP/ezcv-themes/issues/new?assignees=&labels=new-theme&template=new_theme.md&title=%5BTheme%5D) and then create a pull request with the ticket submission referenced.
+Currently all themes (except the base and dimension themes) are pulled from a remote repository [https://github.com/QU-UP/ezcv-themes](https://github.com/QU-UP/ezcv-themes). If you want to submit a theme, then head there and [submit it](https://github.com/QU-UP/ezcv-themes/issues/new?assignees=&labels=new-theme&template=new_theme.md&title=%5BTheme%5D) and then create a pull request with the ticket submission referenced.

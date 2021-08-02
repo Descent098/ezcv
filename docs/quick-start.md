@@ -7,9 +7,9 @@ There are two different ways to get started:
 - Local installation
 - Remote editing
 
-If you are familiar with git, github and markdown then I would recommend starting from [Local Installation](#local-installation).
+If you are familiar with git, github and markdown and want to keep your files on your local computer then I would recommend starting from [Local Installation](#local-installation).
 
-If you are unfamiliar with any of the above then see directly below for getting started with remote/no-code editing. Remote/no-code editing combined with [drag-n-drop](/usage#drag-n-drop-upload) editing is typically the easiest method to create content.
+If you are unfamiliar with any of the above then see directly below for getting started with remote/no-code editing. Remote/no-code editing combined with [drag-n-drop](usage.md#drag-n-drop-upload) editing is typically the easiest method to create content.
 
 If you have any questions be sure to check out our [Q & A section of the discussion board](https://github.com/Descent098/ezcv/discussions/categories/q-a).
 
@@ -45,7 +45,7 @@ For any other issues/questions check out the [discussion forum](https://github.c
 
 ### Usage
 
-From here check out the [usage](/usage) page which will help you learn how to create and edit your content.
+From here check out the [usage](usage.md) page which will help you learn how to create and edit your content.
 
 ## Local Installation
 
@@ -72,10 +72,10 @@ The easiest way to get started is by running:
 
 Replacing the ```<name>``` argument with your name (use "" if you want to use your full name i.e. ```ezcv init "Kieran Wood"```). 
 
-If you already know which of the [included themes](/included-themes) you want to use you can instead run:
+If you already know which of the [included themes](included-themes.md) you want to use you can instead run:
 
 ```ezcv init <name> <theme>``` (i.e. ```ezcv init "Kieran Wood" "paradigm_shift"```).
 
-From here check out the [usage](/usage) page which will help you learn how to create and edit your content.
+From here check out the [usage](usage.md) page which will help you learn how to create and edit your content.
 
 Also a quick tip, you can use ```ezcv -p``` to quickly preview your site before pushing it to git, so you don't need to make multiple commits seeing how things look.
