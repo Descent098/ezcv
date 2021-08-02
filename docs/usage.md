@@ -1,6 +1,6 @@
 # Usage
 
-This section outlines the specifics of using ezcv. It is recommended to have already read the [quick start](/quick-start) before coming here.
+This section outlines the specifics of using ezcv. It is recommended to have already read the [quick start](quick-start.md) before coming here.
 
 ## File structure
 
@@ -134,11 +134,11 @@ For local editing the minimum you will need is some plain text editor like notep
 Once you have picked your editor you have 2 options for uploading your created markdown files:
 
 1. [Drag-n-drop](#drag-n-drop-upload); which requires nothing else be installed on your PC, and doesn't even require your other site files to be on your PC
-2. [Git](#git); which needs you to have your site setup locally with git (details in [quick start](/quick-start#local-installation))
+2. [Git](#git); which needs you to have your site setup locally with git (details in [quick start](quick-start.md#local-installation))
 
 #### Drag-n-Drop upload
 
-*This assumes you followed the [remote editing](/quick-start#remote-editing) setup*
+*This assumes you followed the [remote editing](quick-start.md#remote-editing) setup*
 
 **Steps**
 
@@ -290,7 +290,7 @@ is maintained by the W3C.
 
 Would produce:
 
-![abbr](/en/latest/img/markdown-extensions/abbr.png)
+![abbr](/en/latest/img/markdown-extensions/abbr.jpg)
 
 [More Details](https://python-markdown.github.io/extensions/abbreviations/)
 
@@ -400,7 +400,7 @@ $$
 
 Would produce:
 
-![def](/en/latest/img/markdown-extensions/math.png)
+![math](/en/latest/img/markdown-extensions/math.png)
 
 Keep in mind many latex packages are not available natively in MathJax, so depending on how niche your requirement is there may need to be some fiddling to get everything working. If you need extra packages installing, you will need to look at messing with the [mathjax configuration](https://docs.mathjax.org/en/latest/input/tex/extensions.html) in your theme. If you have questions about doing this please post in the [discussions board](https://github.com/Descent098/ezcv/discussions).
 
@@ -421,7 +421,7 @@ Here is the list of first party sections supported (check each theme to see whic
 - **Volunteering Experience**: Your current/old volunteer experience that you want to include
 - **Gallery**: Images you want to showcase (usage details can be found [here](#image-gallery))
 
-In your site you simply put the content you want to create inside ```content/<section name>```. For example to create a file about your ```education``` at ```MIT``` you would add a file called ```MIT.md``` inside ```content/education```. Assuming you used the setup steps from the [quick start](/quick-start) this section should already be included. For each section there are included example files to let you know what fields are available (these won't be included in your export unless ```examples: true``` is set in your ```config.yml``` file).
+In your site you simply put the content you want to create inside ```content/<section name>```. For example to create a file about your ```education``` at ```MIT``` you would add a file called ```MIT.md``` inside ```content/education```. Assuming you used the setup steps from the [quick start](quick-start.md) this section should already be included. For each section there are included example files to let you know what fields are available (these won't be included in your export unless ```examples: true``` is set in your ```config.yml``` file).
 
 #### Creating Files for sections
 
