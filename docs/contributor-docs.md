@@ -76,7 +76,7 @@ The `metadata` return variable is a defaultdict of the [YAML Frontmatter](https:
 
 Used in the gallery section. Details about implementation can be found in the [content.py](https://github.com/Descent098/ezcv/blob/master/ezcv/content.py).
 
-**Extensions**: jpg, .png, .jpeg, .gif, .svg, .webp, .apng, .jfif, .pjpeg, .pjp (Note only .png, .jpg and .jpeg are tested, rest are supported based on [this list of support](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img))
+**Extensions**: .jpg, .png, .jpeg, .gif, .svg, .webp, .apng, .jfif, .pjpeg, .pjp (Note only .png, .jpg and .jpeg are tested, rest are supported based on [this list of support](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img))
 
 ##### Usage
 
