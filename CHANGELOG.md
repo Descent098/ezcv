@@ -1,6 +1,6 @@
 # Changelog
 
-## V0.2.0; tbd
+## V0.2.0; August 2nd 2021
 
 The focus for this release is to add new features and themes
 
