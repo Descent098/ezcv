@@ -24,7 +24,7 @@ def get_content(*filename:str) -> str:
 
 setuptools.setup(
     name = "ezcv",
-    version = "0.2.2",
+    version = "0.3.0",
     author = "Kieran Wood",
     author_email = "kieran@canadiancoding.ca",
     description = "An easy to use personal site generator",
@@ -56,7 +56,9 @@ setuptools.setup(
     "requests",              # Used to download remote themes
     "exifread",              # Used to read exif data from images
     "python-markdown-math",  # Used to render latex math equations
-    "colored"
+    "colored",               # Used to color terminal output for emphasis
+    "pillow",                # Used to do image compression for optimized builds
+    "css-html-js-minify"     # Used to minify html, css and JS files for optimized builds
         ],
     extras_require = {
         "dev" : ["mkdocs", # Used to create HTML versions of the markdown docs in the docs directory
