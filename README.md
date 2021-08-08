@@ -135,7 +135,7 @@ If you're on github then pushing the contents to master/main will activate the p
 Usage:
     ezcv [-h] [-v] [-p]
     ezcv init [<name>] [<theme>]
-    ezcv build [-d OUTPUT_DIR] [-p]
+    ezcv build [-d OUTPUT_DIR] [-o]
     ezcv theme [-l] [-c] [-s SECTION_NAME] [<theme>]
 
 
@@ -145,6 +145,7 @@ Options:
 -l, --list            list the possible themes
 -c, --copy            copy the provided theme, or defined site theme
 -p, --preview         preview the current state of the site
+-o, --optimize        Optimize output files (takes longer to run)
 -d OUTPUT_DIR, --dir OUTPUT_DIR The folder name to export the site to
 -s SECTION_NAME, --section SECTION_NAME The section name to initialize
 ```

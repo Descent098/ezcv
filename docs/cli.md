@@ -6,7 +6,7 @@ Here is the full usage for the CLI, but see below for specifics of each command:
 Usage:
     ezcv [-h] [-v] [-p]
     ezcv init [<name>] [<theme>]
-    ezcv build [-d OUTPUT_DIR] [-p]
+    ezcv build [-d OUTPUT_DIR] [-o]
     ezcv theme [-l] [-c] [-s SECTION_NAME] [<theme>]
 
 
@@ -16,6 +16,7 @@ Options:
 -l, --list            list the possible themes
 -c, --copy            copy the provided theme, or defined site theme
 -p, --preview         preview the current state of the site
+-o, --optimize        Optimize output files (takes longer to run)
 -d OUTPUT_DIR, --dir OUTPUT_DIR The folder name to export the site to
 -s SECTION_NAME, --section SECTION_NAME The section name to initialize
 ```
@@ -53,20 +54,31 @@ ezcv -p
 The build command is used to export the site's HTML. 
 
 ```bash
-ezcv build --dir="site" -p
+ezcv build --dir="site"
 ```
 
 There are two optional flags:
 
 - The ```--dir``` flag for giving a custom name to the output directory (default is "site")
-- If you want to preview after the build (```-p```)
+- If you want to build the site and optimize the files after building (slower build times, but makes site faster) then use ``-o`` or ``--optimize``. Note this only works with themes using the [official folder structure](https://ezcv.readthedocs.io/en/latest/theme-development/#folder-layout).
 
 **Example**
 
-If you want to create a site at ```./my_site``` and preview it after building you would do:
+If you want to create a site at ```./my_site```:
 
 ```bash
-ezcv build --dir="my_site" -p
+ezcv build --dir="my_site"
+```
+
+If you want to create a site at ```./site``` that has it's files optimized you could do:
+
+```bash
+ezcv build -o
+```
+
+If you want to create a site at ```./my_site``` that has it's files optimized you could do:
+```bash
+ezcv build --dir="my_site" -o
 ```
 
 ## Theme

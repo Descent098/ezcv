@@ -55,6 +55,7 @@ theme(list_themes = True)
 import os                   # Used for path validation
 import shutil               # Used for file/folder copying and removal
 import tempfile             # Used to generate temporary folders for previews
+from glob import glob       # Used to glob filepaths (patternmatch filepaths)
 from sys import argv, exit  # Used to get length of CLI args and exit cleanly
 
 ## internal dependencies
@@ -62,13 +63,15 @@ from ezcv.core import generate_site, get_site_config
 from ezcv.themes import THEMES_FOLDER, get_remote_themes, locate_theme_directory, setup_remote_theme
 
 # Third party dependencies
-from colored import fg     # Used to highlight output with colors
-from docopt import docopt  # Used to complete argument parsing for the cli
+from colored import fg           # Used to highlight output with colors
+from docopt import docopt        # Used to complete argument parsing for the cli
+from PIL import Image            # Used to optimize and minify image files
+from css_html_js_minify import * # Used to optimize and minify html/css/js files
 
 usage = """Usage:
     ezcv [-h] [-v] [-p]
     ezcv init [<name>] [<theme>]
-    ezcv build [-d OUTPUT_DIR] [-p]
+    ezcv build [-d OUTPUT_DIR] [-o]
     ezcv theme [-l] [-c] [-s SECTION_NAME] [<theme>]
 
 
@@ -78,6 +81,7 @@ Options:
 -l, --list            list the possible themes
 -c, --copy            copy the provided theme, or defined site theme
 -p, --preview         preview the current state of the site
+-o, --optimize        Optimize output files (takes longer to run)
 -d OUTPUT_DIR, --dir OUTPUT_DIR The folder name to export the site to
 -s SECTION_NAME, --section SECTION_NAME The section name to initialize
 """
@@ -247,9 +251,52 @@ def new_section(section_name:str) -> bool:
     return True
 
 
+def optimize(directory:str = "site"):
+    """Goes through and minifies html, css, js and image files in directory
+
+    Notes
+    -----
+    - This assumes you are following the standard template layout: https://ezcv.readthedocs.io/en/latest/theme-development/#folder-layout
+    - Only image extensions supported are:
+
+        - .jpg
+        - .png
+        - .jpeg
+
+    Parameters
+    ----------
+    directory : str
+        The directory you want to minify all files from
+    """
+
+    # Minify html/css/js
+    html = glob(f'{directory}{os.sep}*.html')
+    css = glob(f'{os.path.join(os.path.join(directory, "css"))}{os.sep}*.css')
+    js = glob(f'{os.path.join(os.path.join(directory, "js"))}{os.sep}*.js')
+
+    for file in html:
+        process_single_html_file(file, overwrite=True)
+    
+    for file in css:
+        process_single_css_file(file, overwrite=True)
+    
+    for file in js:
+        process_single_js_file(file, overwrite=True)
+
+    # Find and process images
+    png = glob(f'{os.path.join(os.path.join(directory, "images"))}{os.sep}*.png')
+    jpg = glob(f'{os.path.join(os.path.join(directory, "images"))}{os.sep}*.jpg')
+    jpeg = glob(f'{os.path.join(os.path.join(directory, "images"))}{os.sep}*.jpeg')
+
+    for extension in [png, jpg, jpeg]:
+        if extension: # if list is not empty
+            for image in extension:
+                pil_object = Image.open(image)
+                pil_object.save(image, optimize=True, quality=85)
+
 def main():
     """The primary entrypoint for the ezcv cli"""
-    args = docopt(usage, version="0.2.2")
+    args = docopt(usage, version="0.3.0")
 
     if len(argv) == 1: # Print usage if no arguments are given
         print("\n", usage)
@@ -272,12 +319,12 @@ def main():
         else:
             generate_site(args["--dir"])
 
-        if args["--preview"]: # If preview flag is specified
-            preview()
-
-        if not args["--dir"] and not args["--preview"]: # No flags provided
-            print("\n", usage)
-            exit()
+        if args["--optimize"]:
+            if args["--dir"]:
+                optimize(args["--dir"])
+            else:
+                optimize()
+        exit()
 
     elif args["theme"]:
         if args["--section"]:

@@ -12,7 +12,7 @@ It is also highly recommended to include everything found in the [support for st
 
 ## Folder Layout
 
-When creating a theme this is the only officially supported file structure layout (others work but are not guarenteed to):
+When creating a theme this is the only officially supported file structure layout:
 
 **Note: I highly recommend snake casing on folder and file names to avoid path escaping bugs**
 
@@ -28,6 +28,12 @@ When creating a theme this is the only officially supported file structure layou
 |   └──📄 <section_name>.jinja
 └── 📄index.jinja
 ```
+
+Using other formats have these side effects:
+
+1. Cannot use optimize flag when building (will do nothing since it's expecting this layout)
+2. Not be guarenteed to work, and if there are issues we **will not** be patching to support your file layout
+3. Sections with highly coupled rendering, and special folder structure are likely to not work (i.e. Gallery and Blog)
 
 
 ## Base Theme
