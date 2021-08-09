@@ -251,9 +251,22 @@ More details about jinja filters can be found [here](https://ttl255.com/jinja2-t
 ### Updating existing filters
 To update existing filters head to ```ezcv.filters``` and locate the filter you want to change. Be sure to familiarize yourself with the [syntax](#filter-syntax) first.
 
-### How to add new custom filters
+### How to add ad-hoc filters (add filters without updating ezcv source code)
+
+To inject a filter into the environment for rendering you can add the method object to the `extra_filters` parameter in ```ezcv.core.generate_site()```. 
+
+For example:
+
+```python
+from ezprez.core import generate_site
+
+def multiply(n:int, m:int) -> str:
+  """Takes in two numbers and multiplies them by each other"""
+  return str(n * m)
+
+generate_site(extra_filters=[multiply])
+```
+
+### How to add new custom filters to the core codebase
 
 To add new filters you will need to add the function to ```ezcv.filters```, and then add the function object to the `filters` list local variable inside ```ezcv.filters.inject_filters()```.
-
-**THE ABILITY TO DEFINE AD-HOC CUSTOM FILTERS IS UNDER DEVELOPMENT AND WILL BE RELEASED IN VERSION 0.3.0**
-

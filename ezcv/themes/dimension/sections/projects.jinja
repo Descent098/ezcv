@@ -2,11 +2,7 @@
 <h4 class="major">{{ project[0]['title'] }}</h4>
 
 {% if project[0]["image"] %}
-    {% if project[0]["image"].startswith("http") or project[0]["image"].startswith("images") %}  {# If image is from the internet #}
-    <span class="image main"><img src="{{ project[0]['image'] }}" alt="{{ project[0]['title'] }}"/></span>
-    {% else %} {# If image is a local file #}
-    <span class="image main" ><img src="images/{{ project[0]['image'] }}" alt="{{ project[0]['title'] }}"/></span>
-    {%endif%}
+    <span class="image main" ><img src="{{ project[0]['image'] | get_image_path}}" alt="{{ project[0]['title'] }}"/></span>
 {% endif %}
 
     {{ project[1] | safe }}

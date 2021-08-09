@@ -300,6 +300,8 @@ To customize the styling for resumes you need to modify `resume.jinja`. Keep in 
 
 ## Custom Styling for gallery's
 
+*Note that using the optimized flag clears the exif data from images*
+
 Gallery images have classes for each peice of information
 
 ```html

@@ -60,7 +60,7 @@ ezcv build --dir="site"
 There are two optional flags:
 
 - The ```--dir``` flag for giving a custom name to the output directory (default is "site")
-- If you want to build the site and optimize the files after building (slower build times, but makes site faster) then use ``-o`` or ``--optimize``. Note this only works with themes using the [official folder structure](https://ezcv.readthedocs.io/en/latest/theme-development/#folder-layout).
+- If you want to build the site and optimize the files after building (slower build times, but makes site faster) then use ``-o`` or ``--optimize``. Note this only works with themes using the [official folder structure](https://ezcv.readthedocs.io/en/latest/theme-development/#folder-layout), and the image minification will also clear any exif data.
 
 **Example**
 

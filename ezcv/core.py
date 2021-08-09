@@ -40,7 +40,7 @@ import os                           # Used for path validation
 import shutil                       # Used for file/folder copying and removal
 import webbrowser                   # Used to automatically open the default system browser
 from collections import defaultdict # Used to instatiate dictionaries with default arguments on unspecified keys
-from typing import Union            # Used to add additional typehints to help with documentation and usage on functions
+from typing import Callable, Union            # Used to add additional typehints to help with documentation and usage on functions
 
 # Internal Dependencies
 from ezcv.themes import *
@@ -82,7 +82,7 @@ def get_site_config(config_file_path:str = "config.yml", remotes_file_path:str =
     return default_dict_config
 
 
-def _render_section(theme_folder:str, section_name:str, site_context:dict) -> str:
+def _render_section(theme_folder:str, section_name:str, site_context:dict, environment:jinja2.Environment) -> str:
     """Renders the particular section provided using the environment provided
 
     Parameters
@@ -96,6 +96,9 @@ def _render_section(theme_folder:str, section_name:str, site_context:dict) -> st
     site_context: (dict)
         The dictionary containing the site's context
 
+    environment : (jinja2.Environment)
+        The jinja environment pre-loaded with the themes and filters
+
     Returns
     -------
     str:
@@ -106,12 +109,6 @@ def _render_section(theme_folder:str, section_name:str, site_context:dict) -> st
     except KeyError:
         print(f"Could not find content for section '{section_name}', skipping")
         return ""
-
-    # Initialize jinja loaders
-    theme_loader = jinja2.FileSystemLoader(theme_folder)
-    environment = jinja2.Environment(loader=theme_loader, autoescape=True, trim_blocks=True) # Grab all files in theme_folder
-
-    inject_filters(environment) # Add in custom filters
 
     # If a section template exists set it to the path, else False i.e. if <theme folder>/sections/<section name>.jinja exists set it to that
     section_template_file = f"sections/{section_name}.jinja"
@@ -130,7 +127,7 @@ def _render_section(theme_folder:str, section_name:str, site_context:dict) -> st
         return ""
 
 
-def _render_page(theme_folder:str, page:str, site_context:dict) -> str:
+def _render_page(theme_folder:str, page:str, site_context:dict, environment:jinja2.Environment) -> str:
     """Renders the page provided from the specified theme
 
     Parameters
@@ -144,14 +141,14 @@ def _render_page(theme_folder:str, page:str, site_context:dict) -> str:
     site_context : (dict)
         A dictionary containing the config values, and all sections html
 
+    environment : (jinja2.Environment)
+        The jinja environment pre-loaded with the themes and filters
+
     Returns
     -------
     str:
         The rendered html of the page
     """
-    # Initialize jinja loaders
-    theme_loader = jinja2.FileSystemLoader(theme_folder)
-    environment = jinja2.Environment(loader=theme_loader, autoescape=True, trim_blocks=True) # Grab all files in theme_folder
 
     inject_filters(environment) # Add in custom filters
 
@@ -160,7 +157,7 @@ def _render_page(theme_folder:str, page:str, site_context:dict) -> str:
     return theme.render(site_context)
 
 
-def _export(site_context:dict, theme_folder:str, output_folder:str = "site", pages:list=["index.jinja"]):
+def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment, output_folder:str = "site",  pages:list=["index.jinja"] ):
     """Generates all the site html from pages specified and outputs them to the output folder
 
     Parameters
@@ -170,6 +167,9 @@ def _export(site_context:dict, theme_folder:str, output_folder:str = "site", pag
 
     theme_folder : (str)
         The absolute path to the folder for the theme to use
+
+    environment : (jinja2.Environment)
+        The jinja environment pre-loaded with the themes and filters
 
     output_folder : (str, optional)
         The folder to output the HTML files to, by default "site"
@@ -217,7 +217,7 @@ def _export(site_context:dict, theme_folder:str, output_folder:str = "site", pag
     pages_iterator.set_description_str("Generating top level pages")
     for page in pages_iterator:  # Write new pages
         try:
-            html = _render_page(theme_folder, page, site_context)
+            html = _render_page(theme_folder, page, site_context, environment)
         except jinja2.UndefinedError as e:
             print(e)
             raise ValueError("A required configuration value is missing")
@@ -228,8 +228,8 @@ def _export(site_context:dict, theme_folder:str, output_folder:str = "site", pag
         with open(f"{output_folder}{os.sep}{page}", "w+") as outfile:
             outfile.write(html)
 
-#TODO: add extra_filters to generate_site
-def generate_site(output_folder:str="site", theme:str = "dimension", sections: list = [], config_file_path="config.yml", preview:bool = False):
+
+def generate_site(output_folder:str="site", theme:str = "dimension", sections: list = [], config_file_path="config.yml", preview:bool = False, extra_filters:List[Callable] = []):
     """The primary entrypoint to generating a site
 
     Parameters
@@ -249,16 +249,23 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
     preview : (bool, optional)
         If true then the index.html will be auto opened in the system webbrowser, by default False
 
+    extra_filters : List[Callable], optional
+        An optional set of method objects containing additional filter functions you want to use
+
     Notes
     -----
     - theme options are: 
         - aerial; https://html5up.net/aerial
         - base; included theme that can be used for debugging
         - creative; https://startbootstrap.com/theme/creative
+        - cv; https://startbootstrap.com/theme/resume
         - dimension; https://html5up.net/dimension
         - ethereal; https://html5up.net/ethereal
         - freelancer; https://startbootstrap.com/theme/freelancer
+        - Grayscale; https://startbootstrap.com/theme/grayscale
         - identity; https://html5up.net/identity
+        - Lens; https://html5up.net/lens
+        - Paradigm Shift; https://html5up.net/paradigm-shift
         - read_only; https://html5up.net/read-only
         - solid_state; https://html5up.net/solid-state
         - strata; https://html5up.net/strata
@@ -267,6 +274,7 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
         - Education (education)
         - Volunteering experience (volunteering_experience)
         - Work Experience (work_experience)
+        - Gallery (gallery)
     - If sections is an empty list then the theme's section directory will be searched for themes
 
     Raises
@@ -306,6 +314,12 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
     # Find theme directory based on name, or download it if it's a remote theme
     theme_folder = locate_theme_directory(theme, site_context)
 
+    # Initialize jinja loaders
+    theme_loader = jinja2.FileSystemLoader(theme_folder)
+    environment = jinja2.Environment(loader=theme_loader, autoescape=True, trim_blocks=True) # Grab all files in theme_folder
+
+    environment = inject_filters(environment, extra_filters)
+
     # Initialize sections key in site context to empty dict
     site_context["sections"] = {}
 
@@ -331,11 +345,11 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
     sections_iterator = tqdm(sections)
     sections_iterator.set_description_str("Writing section content")
     for section in sections_iterator: 
-        html = _render_section(theme_folder, section, site_context)
+        html = _render_section(theme_folder, section, site_context, environment)
         site_context[f"{section}_html"] = html
 
     # Generate and export all the pages of a site
-    _export(site_context, theme_folder, output_folder, pages)
+    _export(site_context, theme_folder, environment, output_folder, pages)
 
     if preview:
         browser_types = ["chromium-browser", "chromium", "chrome", "google-chrome", "firefox", "mozilla", "opera", "safari"] # A list of all the types of browsers to try

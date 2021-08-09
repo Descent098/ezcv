@@ -155,6 +155,80 @@ Volunteering Experience: ❌
 Gallery: ✔️
 ```
 
+## cv
+
+Author:  [Start Bootstrap](https://startbootstrap.com)
+
+Theme page: [https://startbootstrap.com/theme/resume](https://startbootstrap.com/theme/resume)
+
+### Preview
+
+Full page preview: [https://startbootstrap.com/previews/resume](https://startbootstrap.com/previews/resume)
+
+<iframe src="https://startbootstrap.github.io/startbootstrap-resume/" width="100%" height="500px">
+</iframe>
+
+
+### Usage
+
+To use this theme in your code either initialize the project with "cv" as the theme, or set it in your ```config.yml``` file:
+
+```yaml
+... # Other configuration settings
+theme: cv
+... # Other configuration settings
+```
+
+**Notes**
+For the avatar image use a 1:1 ratio (square image), and ideally around ~500x500
+
+#### Supported config settings
+
+The following settings are supported and not supported in the ```config.yml``` file:
+
+✅: Required
+
+☑️: Optional
+
+❌: Not Supported
+
+```
+name: ✅
+background: ❌
+avatar: ☑️ (HIGHLY recommended)
+email: ☑️ (recommended)
+phone: ☑️ (recommended)
+biography: ☑️ (recommended)
+role: ☑️ (recommended)
+company: ☑️ (recommended)
+address: ☑️
+social: ☑️
+  github: ☑️
+  twitch: ☑️
+  youtube: ☑️
+  instagram: ☑️
+  twitter: ☑️
+  snapchat: ☑️
+  linkedin: ☑️
+  facebook: ☑️
+```
+
+#### Supported Sections
+
+Below are a list of the supported, and unsupported sections.
+
+✔️: Supported
+
+❌: Not Supported
+
+```yml
+Projects: ✔️
+Education: ✔️
+Work Experience: ✔️
+Volunteering Experience: ✔️
+Gallery: ❌
+```
+
 ## Dimension
 
 Author:  [HTML5Up](https://html5up.net)
@@ -735,79 +809,6 @@ Volunteering Experience: ✔️
 Gallery: ❌
 ```
 
-## cv
-
-Author:  [Start Bootstrap](https://startbootstrap.com)
-
-Theme page: [https://startbootstrap.com/theme/resume](https://startbootstrap.com/theme/resume)
-
-### Preview
-
-Full page preview: [https://startbootstrap.com/previews/resume](https://startbootstrap.com/previews/resume)
-
-<iframe src="https://startbootstrap.github.io/startbootstrap-resume/" width="100%" height="500px">
-</iframe>
-
-
-### Usage
-
-To use this theme in your code either initialize the project with "cv" as the theme, or set it in your ```config.yml``` file:
-
-```yaml
-... # Other configuration settings
-theme: cv
-... # Other configuration settings
-```
-
-**Notes**
-For the avatar image use a 1:1 ratio (square image), and ideally around ~500x500
-
-#### Supported config settings
-
-The following settings are supported and not supported in the ```config.yml``` file:
-
-✅: Required
-
-☑️: Optional
-
-❌: Not Supported
-
-```
-name: ✅
-background: ❌
-avatar: ☑️ (HIGHLY recommended)
-email: ☑️ (recommended)
-phone: ☑️ (recommended)
-biography: ☑️ (recommended)
-role: ☑️ (recommended)
-company: ☑️ (recommended)
-address: ☑️
-social: ☑️
-  github: ☑️
-  twitch: ☑️
-  youtube: ☑️
-  instagram: ☑️
-  twitter: ☑️
-  snapchat: ☑️
-  linkedin: ☑️
-  facebook: ☑️
-```
-
-#### Supported Sections
-
-Below are a list of the supported, and unsupported sections.
-
-✔️: Supported
-
-❌: Not Supported
-
-```yml
-Projects: ✔️
-Education: ✔️
-Work Experience: ✔️
-Volunteering Experience: ✔️
-Gallery: ❌
-```
 
 ## Solid State
 
