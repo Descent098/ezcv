@@ -1,5 +1,33 @@
 # Changelog
 
+## V0.3.0; TBD
+
+The focus for this release is on stability, and improved testing along with a few features.
+
+### Features
+
+- Blog posts
+- Theme Metadata
+- Caching for faster Rebuilds
+- Adding an optimized mode for builds to increase site performance
+- Added ability to create and use custom ad-hoc filters; pass a list of function objects (called `extra_filters`) to ```ezcv.generate_site()```
+- Enabled updating of themes from CLI
+- Added a test suite to ensure feature stability
+- Added ability to directly invoke ezcv through python binary after installation ```python -m ezcv```
+
+### Themes
+
+- Added [massively](https://html5up.net/massively)
+- Added ability to embed theme metadata TODO: ADD LINK TO DOCS
+- Enabled updating of themes from CLI
+
+### Bug Fixes
+
+### Documentation improvements
+
+- Added sections documenting new features
+- Rearranged included themes section to be alphabetical
+
 ## V0.2.2; August 2nd 2021
 
 Documentation bugs after release
