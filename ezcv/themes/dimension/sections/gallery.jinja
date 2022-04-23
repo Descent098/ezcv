@@ -1,7 +1,7 @@
 
 
 {% for image in gallery %}
-<span class="image main"><img src="{{ image[0]['file_path'] }}" alt="{{ image[0]['file_path'].split()[-1] }}"></span>
+<span class="image main"><img src="{{ image[0]['file_path'] }}" alt="{{ image[0]['file_path'].split()[-1] }}" loading="lazy"></span>
 
 {% if not config["ignore_exif_data"] %}
     {% if image[0]['Image Make'] or image[0]['Image Model'] %}

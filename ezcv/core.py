@@ -38,9 +38,10 @@ generate_site(output_folder="my_site", theme = "aerial", preview = True)
 # Standard Lib Dependencies
 import os                           # Used for path validation
 import shutil                       # Used for file/folder copying and removal
+import datetime                     # Used to parse dates for last-updated checks
 import webbrowser                   # Used to automatically open the default system browser
 from collections import defaultdict # Used to instatiate dictionaries with default arguments on unspecified keys
-from typing import Callable, Union            # Used to add additional typehints to help with documentation and usage on functions
+from typing import Callable, Union  # Used to add additional typehints to help with documentation and usage on functions
 
 # Internal Dependencies
 from ezcv.themes import *
@@ -360,3 +361,24 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
             except webbrowser.Error:
                 continue
         webbrowser.open(f"file:///{os.path.abspath(output_folder)}/index.html")
+
+def get_repo_last_updated(user_name:str="QU-UP", repo_name: str="ezcv-themes") -> datetime.datetime:
+    """Get the last updated date of a github repository
+
+    Parameters
+    ----------
+    user_name : str
+        The name of the user or organization that owns the repository
+
+    repo_name : str
+        The name of the repository
+
+    Returns
+    -------
+    datetime.datetime
+        A datetime object representing the last updated date of the repository
+    """
+    response = requests.get(f'https://api.github.com/repos/{user_name}/{repo_name}/branches/master')
+    date_changed = datetime.datetime.strptime(response.json()["commit"]["commit"]["author"]["date"], "%Y-%m-%dT%H:%M:%SZ")
+    return date_changed
+

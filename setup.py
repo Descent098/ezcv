@@ -1,5 +1,6 @@
 """Contains all the configuration for the package on pip"""
 import setuptools
+from ezcv import __version__
 
 def get_content(*filename:str) -> str:
     """ Gets the content of a file or files and returns
@@ -24,7 +25,7 @@ def get_content(*filename:str) -> str:
 
 setuptools.setup(
     name = "ezcv",
-    version = "0.3.0",
+    version = __version__,
     author = "Kieran Wood",
     author_email = "kieran@canadiancoding.ca",
     description = "An easy to use personal site generator",

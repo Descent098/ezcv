@@ -296,7 +296,8 @@ def optimize(directory:str = "site"):
 
 def main():
     """The primary entrypoint for the ezcv cli"""
-    args = docopt(usage, version="0.3.0")
+    from ezcv import __version__ as version
+    args = docopt(usage, version=version)
 
     if len(argv) == 1: # Print usage if no arguments are given
         print("\n", usage)

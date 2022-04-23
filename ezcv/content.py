@@ -294,7 +294,7 @@ class Markdown(Content):
 
         Returns
         -------
-        str, defaultdict
+        defaultdict, str
             Returns a defaultdict of the metadata first then the html content as a string
 
         Raises

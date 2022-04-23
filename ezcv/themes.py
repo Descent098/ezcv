@@ -8,10 +8,16 @@
 # Standard Library Dependencies 
 import os                    # Used for path validation and manipulation
 import shutil                # Used to make copying and deletion of paths easier
+import datetime
 import tempfile              # Used to generate temporary folders for downloads
 from zipfile import ZipFile  # Used to extract all directories from zip archives
+from collections import defaultdict
+
+# Internal Dependencies
+from ezcv.content import Markdown
 
 # Third Party Depenencies
+import yaml
 import requests              # Used to access remote files
 from tqdm import tqdm        # Used to generate progress bars during iteration
 
@@ -48,6 +54,12 @@ def get_theme_section_directories(theme_folder:str, sections:list = []) -> list:
             if section.endswith(".jinja"):
                 section = section.replace(".jinja", "")
                 sections.append(section)
+            # elif os.path.isdir(os.path.join(theme_folder, "sections", section)): # blog sections
+            #     blog_section = []
+            #     for blog_file in os.listdir(os.path.join(theme_folder, "sections", section)):
+            #         if blog_file.endswith(".jinja"):
+            #             blog_section.append(os.path.join(section, blog_file))
+            #     sections.append(blog_section)
     return sections
 
 
@@ -158,3 +170,170 @@ def get_remote_themes(remotes_file_path:str = os.path.join(THEMES_FOLDER, "remot
             remotes = yaml.safe_load(remotes_file)
 
     return remotes
+
+
+def get_theme_metadata(theme_folder:str) -> defaultdict:
+    """Gets the data from the metadata.yml file in the theme folder
+
+    Parameters
+    ----------
+    theme_folder : str
+        The full path to the theme folder
+
+    Returns
+    -------
+    defaultdict
+        The metadata of the theme, all keys will return false if
+
+    Examples
+    --------
+    Get the metadata of the dimensions theme
+    ```
+    from ezcv.themes import get_theme_metadata
+
+    theme_name = "dimensions"
+
+    metadata = get_theme_metadata(os.path.join(THEMES_FOLDER, theme_name))
+    ```
+    """
+
+    # Get the metadata file
+    with open(os.path.join(theme_folder, "metadata.yml"), "r") as metadata:
+        data = yaml.safe_load(metadata)
+
+    return defaultdict(lambda: False, data)
+
+
+def _generate_fields(section_content_folder:str) -> dict:
+    """Generates a dictionary of fields for a section
+
+    Parameters
+    ----------
+    section_content_folder : str
+        _description_
+
+    Notes
+    -----
+    - The field types that exist are
+        - str
+        - datetime
+        - bool
+        - int
+
+    Returns
+    -------
+    dict
+        The dictionary for the fields i.e. {'fields':{'title': 'str', 'date': 'datetime'}}
+
+    Raises
+    ------
+    ValueError
+        If the content folder does not exist or does not contain exclusively markdown files
+
+    Examples
+    --------
+    ```
+    from ezcv.themes import _generate_fields
+    
+    fields = _generate_fields(os.path.join('content', 'dimension'))
+    ```
+    """
+    fields = {}
+    # section_content_folder would be like /content/education
+    files = os.listdir(section_content_folder)
+    if not files:
+        raise ValueError(f"No files in {section_content_folder}")
+
+    if files[0].endswith("md"):
+        metadata, _ = Markdown().get_content(os.path.join(section_content_folder, files[0]))
+        for field in metadata: # Get each field type from the first markdown file
+            if type(metadata[field]) == str:
+                if len(metadata[field]) == 10 and metadata[field][4] == "-" and metadata[field][7] == "-":
+                    fields[field] = "datetime"
+                elif metadata[field].isnumeric():
+                    fields[field] = "int"
+                elif metadata[field].lower() == "true" or metadata[field].lower() == "false":
+                    fields[field] = "bool"
+                else:
+                    fields[field] = "str"
+            elif type(metadata[field]) == datetime:
+                fields[field] = "datetime"
+            else:
+                fields[field] = type(metadata[field]).__name__
+    elif files[0].endswith(".jpg") or files[0].endswith(".png"):
+        raise ValueError(f"There are no fields in image files: Directory {section_content_folder}")
+
+    return fields
+
+
+def generate_theme_metadata(theme_folder:str) -> defaultdict:
+    """Generates the metadata.yml file in the theme folder
+
+    Parameters
+    ----------
+    theme_folder : str
+        The full path to the theme folder
+
+    Notes
+    -----
+    - Will generate fields if a content folder relative to the current working directory is \
+        present it will use the first file in the directory to determine the field types
+
+    Returns
+    -------
+    defaultdict:
+        The defaultdict of the content of the themes metadata.yml file
+
+    Raises
+    ------
+    ValueError:
+        If the theme folder does not exist or does not contain a index.jinja file
+
+    Examples
+    --------
+    Generate metadata for the dimensions theme
+    ```
+    from ezcv.themes import generate_theme_metadata, THEMES_FOLDER
+
+    data_2 = generate_theme_metadata(os.path.join(THEMES_FOLDER, 'dimension'))
+    ```
+
+    Generate metadata.yml file for the dimensions theme
+    ```
+    import yaml # Requires pyyaml
+    from ezcv.themes import generate_theme_metadata, THEMES_FOLDER
+
+    data_2 = generate_theme_metadata(os.path.join(THEMES_FOLDER, 'dimension'))
+
+    with open(os.path.join(THEMES_FOLDER, 'dimension', 'metadata.yml'), 'w+') as metadata_file:
+        yaml.dump(dict(data_2), metadata_file)
+    ```
+    """    
+    if not os.path.exists(theme_folder):
+        raise ValueError(f"Theme folder {theme_folder} does not exist")
+    elif not os.path.exists(os.path.join(theme_folder, "index.jinja")):
+        raise ValueError(f"Theme folder {theme_folder} does not contain an index.jinja file")
+    elif os.path.exists(os.path.join(theme_folder, "metadata.yml")):
+        return defaultdict(lambda:False, get_theme_metadata(theme_folder))
+
+    data = defaultdict(lambda:False)
+    data["name"] = os.path.basename(theme_folder)
+    data["created"] = f"{datetime.datetime.now().year}-{datetime.datetime.now().month}-{datetime.datetime.now().day}"
+    data["updated"] = f"{datetime.datetime.now().year}-{datetime.datetime.now().month}-{datetime.datetime.now().day}"
+    data["folder"] = os.path.basename(theme_folder)
+    from ezcv import __version__ as version
+    data["ezcv_version"] = version
+    if os.path.exists(os.path.join(theme_folder, "sections")):
+        data["sections"] = {}
+        for section in os.listdir(os.path.join(theme_folder, "sections")):
+            if os.path.isdir(os.path.join(theme_folder, section)):
+                data["sections"][section] = {"type": "blog"}
+            elif section == "gallery.jinja":
+                data["sections"]["gallery"] = {"type": "gallery"}
+            else:
+                if os.path.isdir(os.path.join("content", section.replace(".jinja", ""))):
+                    data["sections"][section.replace(".jinja", "")] = {"type": "markdown", "fields": _generate_fields(os.path.join("content", section.replace(".jinja", "")))}
+                else:
+                    data["sections"][section.replace(".jinja", "")] = {"type": "markdown"}
+            # TODO: add support for gallery
+    return data
