@@ -54,12 +54,8 @@ def get_theme_section_directories(theme_folder:str, sections:list = []) -> list:
             if section.endswith(".jinja"):
                 section = section.replace(".jinja", "")
                 sections.append(section)
-            # elif os.path.isdir(os.path.join(theme_folder, "sections", section)): # blog sections
-            #     blog_section = []
-            #     for blog_file in os.listdir(os.path.join(theme_folder, "sections", section)):
-            #         if blog_file.endswith(".jinja"):
-            #             blog_section.append(os.path.join(section, blog_file))
-            #     sections.append(blog_section)
+            elif os.path.isdir(os.path.join(theme_folder, "sections", section)): # blog sections
+                sections.append(section)
     return sections
 
 
@@ -266,13 +262,16 @@ def _generate_fields(section_content_folder:str) -> dict:
     return fields
 
 
-def generate_theme_metadata(theme_folder:str) -> defaultdict:
+def generate_theme_metadata(theme_folder:str, force:bool=False) -> defaultdict:
     """Generates the metadata.yml file in the theme folder
 
     Parameters
     ----------
     theme_folder : str
         The full path to the theme folder
+
+    force : bool, optional
+        Whether to force the generation of the metadata file, by default False
 
     Notes
     -----
@@ -313,7 +312,7 @@ def generate_theme_metadata(theme_folder:str) -> defaultdict:
         raise ValueError(f"Theme folder {theme_folder} does not exist")
     elif not os.path.exists(os.path.join(theme_folder, "index.jinja")):
         raise ValueError(f"Theme folder {theme_folder} does not contain an index.jinja file")
-    elif os.path.exists(os.path.join(theme_folder, "metadata.yml")):
+    elif os.path.exists(os.path.join(theme_folder, "metadata.yml")) and not force:
         return defaultdict(lambda:False, get_theme_metadata(theme_folder))
 
     data = defaultdict(lambda:False)
@@ -326,8 +325,27 @@ def generate_theme_metadata(theme_folder:str) -> defaultdict:
     if os.path.exists(os.path.join(theme_folder, "sections")):
         data["sections"] = {}
         for section in os.listdir(os.path.join(theme_folder, "sections")):
-            if os.path.isdir(os.path.join(theme_folder, section)):
+            if os.path.isdir(os.path.join(theme_folder,"sections", section)):
                 data["sections"][section] = {"type": "blog"}
+                if os.path.isdir(os.path.join("content", section)):
+                    data["sections"][section]["fields"] = _generate_fields(os.path.join("content", section))
+                else:
+                    data["sections"][section]["fields"] = {"current": "datetime", "updated": "datetime", "title": "str"}
+                if os.path.exists(os.path.join(theme_folder, "sections", section, "single.jinja")):
+                    data["sections"][section]["single"] = True
+                else:
+                    data["sections"][section]["single"] = False
+
+                if os.path.exists(os.path.join(theme_folder, "sections", section, "overview.jinja")):
+                    data["sections"][section]["overview"] = True
+                else:
+                    data["sections"][section]["overview"] = False
+
+                if os.path.exists(os.path.join(theme_folder, "sections", section, "feed.jinja")):
+                    data["sections"][section]["feed"] = True
+                else:
+                    data["sections"][section]["feed"] = False
+
             elif section == "gallery.jinja":
                 data["sections"]["gallery"] = {"type": "gallery"}
             else:
@@ -337,3 +355,23 @@ def generate_theme_metadata(theme_folder:str) -> defaultdict:
                     data["sections"][section.replace(".jinja", "")] = {"type": "markdown"}
             # TODO: add support for gallery
     return data
+
+def get_repo_last_updated(user_name:str="QU-UP", repo_name: str="ezcv-themes") -> datetime.datetime:
+    """Get the last updated date of a github repository
+
+    Parameters
+    ----------
+    user_name : str
+        The name of the user or organization that owns the repository
+
+    repo_name : str
+        The name of the repository
+
+    Returns
+    -------
+    datetime.datetime
+        A datetime object representing the last updated date of the repository
+    """
+    response = requests.get(f'https://api.github.com/repos/{user_name}/{repo_name}/branches/master')
+    date_changed = datetime.datetime.strptime(response.json()["commit"]["commit"]["author"]["date"], "%Y-%m-%dT%H:%M:%SZ")
+    return date_changed

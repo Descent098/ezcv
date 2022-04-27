@@ -54,15 +54,17 @@ theme(list_themes = True)
 # Standard Lib Dependencies
 import os                   # Used for path validation
 import shutil               # Used for file/folder copying and removal
+import datetime
 import tempfile             # Used to generate temporary folders for previews
 from glob import glob       # Used to glob filepaths (patternmatch filepaths)
 from sys import argv, exit  # Used to get length of CLI args and exit cleanly
 
 ## internal dependencies
 from ezcv.core import generate_site, get_site_config
-from ezcv.themes import THEMES_FOLDER, get_remote_themes, locate_theme_directory, setup_remote_theme
+from ezcv.themes import THEMES_FOLDER, generate_theme_metadata, get_remote_themes, locate_theme_directory, setup_remote_theme
 
 # Third party dependencies
+import yaml
 from colored import fg           # Used to highlight output with colors
 from docopt import docopt        # Used to complete argument parsing for the cli
 from PIL import Image            # Used to optimize and minify image files
@@ -72,7 +74,7 @@ usage = """Usage:
     ezcv [-h] [-v] [-p]
     ezcv init [<name>] [<theme>]
     ezcv build [-d OUTPUT_DIR] [-o]
-    ezcv theme [-l] [-c] [-s SECTION_NAME] [<theme>]
+    ezcv theme [-l] [-c] [-m] [-s SECTION_NAME] [<theme>]
 
 
 Options:
@@ -83,6 +85,7 @@ Options:
 -p, --preview         preview the current state of the site
 -o, --optimize        Optimize output files (takes longer to run)
 -d OUTPUT_DIR, --dir OUTPUT_DIR The folder name to export the site to
+-m, --metadata        Generate metadata for the theme
 -s SECTION_NAME, --section SECTION_NAME The section name to initialize
 """
 
@@ -134,7 +137,7 @@ def preview():
         print(f"Ending preview and removing {temp_dir}")
 
 
-def theme(list_themes: bool = False, copy_theme:bool = False, theme:str = ""):
+def theme(list_themes: bool = False, copy_theme:bool = False, theme:str = "", metadata:bool = False):
     """Used to get information about the available themes and/or copy a theme folder
 
     Parameters
@@ -147,11 +150,14 @@ def theme(list_themes: bool = False, copy_theme:bool = False, theme:str = ""):
 
     theme : str, optional
         The theme to copy, by default "" (which will copy the dimension theme)
+    
+    metadata : bool, optional
+        Whether or not to generate metadata for the theme, by default False
     """
     if not theme:
         theme = "dimension"
 
-    if copy_theme:
+    if metadata:
         if os.path.exists(os.path.join(THEMES_FOLDER, theme)): # If the theme exists in the themes folder
             try: # Try to copy the theme to ./<theme>
                 shutil.copytree(os.path.join(THEMES_FOLDER, theme), theme)
@@ -159,6 +165,38 @@ def theme(list_themes: bool = False, copy_theme:bool = False, theme:str = ""):
                 shutil.rmtree(theme)
                 shutil.copytree(os.path.join(THEMES_FOLDER, theme), theme)
             print(f"Copied {os.path.join(THEMES_FOLDER, theme)} to .{os.sep}{theme}")
+            print(f"Generating/updating theme metadata for {theme}")
+            metadata_path = os.path.abspath(f".{os.sep}{theme}{os.sep}metadata.yml")
+            data = generate_theme_metadata(os.path.abspath(f".{os.sep}{theme}"), force=True)
+            if not data["created"]:
+                data["created"] = f"{datetime.datetime.now().year}-{datetime.datetime.now().month}-{datetime.datetime.now().day}"
+            if not data["ezcv_version"]:
+                data["ezcv_version"] = __version__
+            data["updated"] = f"{datetime.datetime.now().year}-{datetime.datetime.now().month}-{datetime.datetime.now().day}"
+            with open(metadata_path, "w+") as metadata_file:
+                yaml.dump(dict(data), metadata_file)
+        else: # Theme could not be found
+            print(f"Theme {theme} not found and was unable to be copied")
+
+    if copy_theme and not metadata:
+        if os.path.exists(os.path.join(THEMES_FOLDER, theme)): # If the theme exists in the themes folder
+            try: # Try to copy the theme to ./<theme>
+                shutil.copytree(os.path.join(THEMES_FOLDER, theme), theme)
+            except FileExistsError: # If a folder exists at ./<theme> remove and then re-copy
+                shutil.rmtree(theme)
+                shutil.copytree(os.path.join(THEMES_FOLDER, theme), theme)
+            print(f"Copied {os.path.join(THEMES_FOLDER, theme)} to .{os.sep}{theme}")
+            print(f"Generating/updating theme metadata for {theme}")
+            metadata_path = os.path.abspath(f".{os.sep}{theme}{os.sep}metadata.yml")
+            data = generate_theme_metadata(os.path.abspath(f".{os.sep}{theme}"))
+            if not data["created"]:
+                data["created"] = f"{datetime.datetime.now().year}-{datetime.datetime.now().month}-{datetime.datetime.now().day}"
+            if not data["ezcv_version"]:
+                data["ezcv_version"] = __version__
+            data["updated"] = f"{datetime.datetime.now().year}-{datetime.datetime.now().month}-{datetime.datetime.now().day}"
+            with open(metadata_path, "w+") as metadata_file:
+                yaml.dump(dict(data), metadata_file)
+            
         else: # Theme could not be found
             print(f"Theme {theme} not found and was unable to be copied")
 
@@ -171,7 +209,6 @@ def theme(list_themes: bool = False, copy_theme:bool = False, theme:str = ""):
 
         # Get remote themes
         print(f"\nAvailable remote themes\n{'='*23}")
-        import yaml
         with open(os.path.join(THEMES_FOLDER, "remotes.yml")) as remote_themes:
             for theme in yaml.safe_load(remote_themes):
                 print(f"  - {theme}")
@@ -208,6 +245,7 @@ def new_section(section_name:str) -> bool:
     if not config["theme"]: # Set to default theme if no theme is set
         config["theme"] = "dimension"
 
+    # TODO: update this to use the theme's metadata
 
     theme_path = locate_theme_directory(config["theme"], {"config": config})
     if os.path.exists(config["theme"]): # Theme is at cwd i.e. ./aerial
@@ -328,10 +366,11 @@ def main():
         exit()
 
     elif args["theme"]:
-        if args["--section"]:
-            created = new_section(args["--section"])
-            if not created:
-                print(f"{fg(1)}Failed to create section {args['--section']} {fg(15)}")
+        if args["--metadata"]:
+            if not args["<theme>"]:
+                args["<theme>"] = get_site_config()["theme"]
+            theme(args["--list"], args["--copy"], args["<theme>"], metadata=True)
+            exit()
         elif args["<theme>"]:
             theme(args["--list"], args["--copy"], args["<theme>"])
         elif args["--copy"]: # If copy is flagged, but no theme is provided
@@ -341,6 +380,10 @@ def main():
                 theme(args["--list"], args["--copy"], "freelancer")
         elif args["--list"]:
             theme(args["--list"])
+        if args["--section"]:
+            created = new_section(args["--section"])
+            if not created:
+                print(f"{fg(1)}Failed to create section {args['--section']} {fg(15)}")
         else: # If theme argument is called with no other flags
             print("\n", usage)
             exit()

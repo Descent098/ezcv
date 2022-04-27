@@ -7,7 +7,7 @@ Usage:
     ezcv [-h] [-v] [-p]
     ezcv init [<name>] [<theme>]
     ezcv build [-d OUTPUT_DIR] [-o]
-    ezcv theme [-l] [-c] [-s SECTION_NAME] [<theme>]
+    ezcv theme [-l] [-c] [-m] [-s SECTION_NAME] [<theme>]
 
 
 Options:
@@ -18,6 +18,7 @@ Options:
 -p, --preview         preview the current state of the site
 -o, --optimize        Optimize output files (takes longer to run)
 -d OUTPUT_DIR, --dir OUTPUT_DIR The folder name to export the site to
+-m, --metadata        Generate metadata for the theme
 -s SECTION_NAME, --section SECTION_NAME The section name to initialize
 ```
 
@@ -97,6 +98,7 @@ There are two optional flags and one positional argument:
   - Then it will check if there's a ```config.yml``` file in the current directory and copy that one
   - Then it will just default to exporting the dimension theme
 - ```-s``` Used to create a new section in a theme
+- ```-m``` used to generate metadata file (note will also copy into project folder if not already there)
 
 
 **Examples**
@@ -117,6 +119,12 @@ ezcv theme -c
 
 ```bash
 ezcv theme -c aerial
+```
+
+*Generate a `metadata.yml` file for provided theme in the ```config.yml``` file in the same directory (note copies the theme if it's not already in the project directory)*
+
+```bash
+ezcv theme -m
 ```
 
 *Create a new section called books in the current theme*

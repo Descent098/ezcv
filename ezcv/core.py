@@ -38,6 +38,7 @@ generate_site(output_folder="my_site", theme = "aerial", preview = True)
 # Standard Lib Dependencies
 import os                           # Used for path validation
 import shutil                       # Used for file/folder copying and removal
+import logging
 import datetime                     # Used to parse dates for last-updated checks
 import webbrowser                   # Used to automatically open the default system browser
 from collections import defaultdict # Used to instatiate dictionaries with default arguments on unspecified keys
@@ -69,13 +70,16 @@ def get_site_config(config_file_path:str = "config.yml", remotes_file_path:str =
     defaultdict:
         The configuration, if any key is not present it defaults to False
     """
+    logging.debug(f"[ezcv get_site_config({config_file_path}, {remotes_file_path})]: Loading config file")
     if not os.path.exists(config_file_path):
         raise FileNotFoundError(f"Config file at {config_file_path} was not found")
 
+    logging.debug(f"[ezcv get_site_config({config_file_path}, {remotes_file_path})]: Loading remotes file")
     with open(config_file_path, "r") as config_file:
         config = yaml.safe_load(config_file)
 
-    config["remotes"] = get_remote_themes()
+    logging.debug(f"[ezcv get_site_config({config_file_path}, {remotes_file_path})]: Loading remotes file")
+    config["remotes"] = get_remote_themes(remotes_file_path)
 
     # Convert config dict to defaultdict so that all empty values are False instead of giving KeyNotFoundError
     default_dict_config = defaultdict(lambda: False, config)
@@ -83,14 +87,11 @@ def get_site_config(config_file_path:str = "config.yml", remotes_file_path:str =
     return default_dict_config
 
 
-def _render_section(theme_folder:str, section_name:str, site_context:dict, environment:jinja2.Environment) -> str:
+def _render_section(section_name:str, site_context:dict, environment:jinja2.Environment, blog:bool=False) -> str:
     """Renders the particular section provided using the environment provided
 
     Parameters
     ----------
-    theme_folder : (str)
-        The absolute path to the theme
-
     section_name : (str)
         The name of the section to render i.e. projects, education, work_experience etc.
 
@@ -100,20 +101,28 @@ def _render_section(theme_folder:str, section_name:str, site_context:dict, envir
     environment : (jinja2.Environment)
         The jinja environment pre-loaded with the themes and filters
 
+    blog : (bool, optional)
+        Wheter or not the section is a blog, by default False
+
     Returns
     -------
     str:
         The rendered template of the section
     """
+    logging.debug(f"[ezcv _render_section({section_name}, {site_context}, {environment})]: Begin rendering section")
     try:
         contents = site_context["sections"][section_name]
     except KeyError:
         print(f"Could not find content for section '{section_name}', skipping")
-        return ""
+        if blog:
+            return "", "", ""
+        else:
+            return ""
 
+    logging.debug(f"[ezcv _render_section({section_name}, {site_context}, {environment})]: Rendering sections")
+    if not blog: # Rendering sections that are not blog sections
     # If a section template exists set it to the path, else False i.e. if <theme folder>/sections/<section name>.jinja exists set it to that
-    section_template_file = f"sections/{section_name}.jinja"
-    if section_template_file:
+        section_template_file = f"sections/{section_name}.jinja"
         if len(contents) > 0: # If there is any markdown content
             try:
                 theme = environment.get_template(section_template_file)
@@ -123,19 +132,22 @@ def _render_section(theme_folder:str, section_name:str, site_context:dict, envir
             return theme.render({section_name:contents, "config": site_context["config"]})
         else:
             return ""
-    else:
-        print(f"Section {section_name} template is not available")
-        return ""
+    else: # Rendering blog sections
+        overview_file = f"sections/{section_name}/overview.jinja"
+        feed_file = f"sections/{section_name}/feed.jinja"
+        single_file = f"sections/{section_name}/single.jinja"
+        if len(contents) > 0: # If there is any markdown content
+            html = environment.get_template(feed_file).render({section_name:contents, "config": site_context["config"]})
+            return single_file, overview_file, html
+        else: 
+            return "", "", ""
 
 
-def _render_page(theme_folder:str, page:str, site_context:dict, environment:jinja2.Environment) -> str:
+def _render_page(page:str, site_context:dict, environment:jinja2.Environment) -> str:
     """Renders the page provided from the specified theme
 
     Parameters
     ----------
-    theme_folder : (str)
-        The absolute path to the theme
-
     page : (str)
         The filename inside the theme folder to render i.e. 'index.jinja'
 
@@ -152,7 +164,6 @@ def _render_page(theme_folder:str, page:str, site_context:dict, environment:jinj
     """
 
     inject_filters(environment) # Add in custom filters
-
     # Render template and return contents
     theme = environment.get_template(page)
     return theme.render(site_context)
@@ -216,18 +227,57 @@ def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment,
     print("\nGenerating output html from theme")
     pages_iterator = tqdm(pages)
     pages_iterator.set_description_str("Generating top level pages")
+    print(f"{pages=}")
     for page in pages_iterator:  # Write new pages
-        try:
-            html = _render_page(theme_folder, page, site_context, environment)
-        except jinja2.UndefinedError as e:
-            print(e)
-            raise ValueError("A required configuration value is missing")
-        if page.endswith(".jinja"):
-            page = f"{page[:-6:]}.html"
-        pages_iterator.set_description_str(f"Writing {page}")
-        pages_iterator.refresh()
-        with open(f"{output_folder}{os.sep}{page}", "w+") as outfile:
-            outfile.write(html)
+        if type(page) == str: # Standard markdown sections
+            try:
+                html = _render_page(page, site_context, environment)
+            except jinja2.UndefinedError as e:
+                print(e)
+                raise ValueError("A required configuration value is missing")
+            if page.endswith(".jinja"):
+                page = f"{page[:-6:]}.html"
+            pages_iterator.set_description_str(f"Writing {page}")
+            pages_iterator.refresh()
+            with open(f"{output_folder}{os.sep}{page}", "w+") as outfile:
+                outfile.write(html)
+        elif type(page) == list: # Blog sections
+            if len(page) == 2: # overview pages
+                logging.debug(f"[ezcv _export()]: Rendering {page[0]} overview page")
+                try:
+                    html = _render_page(page[1], site_context, environment)
+                except jinja2.UndefinedError as e:
+                    print(e)
+                    raise ValueError("A required configuration value is missing")
+                if page[1].endswith(".jinja"):
+                    page = f"{page[0]}.html"
+                pages_iterator.set_description_str(f"Writing {page}")
+                pages_iterator.refresh()
+                with open(f"{output_folder}{os.sep}{page}", "w+") as outfile:
+                    outfile.write(html)
+            elif len(page) == 3: # Single pages
+                logging.debug(f"[ezcv _export()]: Rendering {page[0]} single pages")
+                template_file = page[1]
+                for content_file in page[2]:
+                    if content_file[0]["title"]:
+                        title = content_file[0]["title"]
+                    else:
+                        title = content_file[2].replace('.md', '')
+                    if title == "index":
+                        raise ValueError("The title of a blog post cannot be 'index'")
+                    print(f"[ezcv _export()]: Rendering {title}")
+                    try:
+                        single_page_context = {"config": site_context["config"], "content": [content_file[0], content_file[1]]}
+                        html = _render_page(template_file, single_page_context, environment)
+                    except jinja2.UndefinedError as e:
+                        print(e)
+                        raise ValueError("A required configuration value is missing")
+                    if template_file.endswith(".jinja"):
+                        page = f"{title}.html"
+                    pages_iterator.set_description_str(f"Writing {page}")
+                    pages_iterator.refresh()
+                    with open(f"{output_folder}{os.sep}{page}", "w+") as outfile:
+                        outfile.write(html)
 
 
 def generate_site(output_folder:str="site", theme:str = "dimension", sections: list = [], config_file_path="config.yml", preview:bool = False, extra_filters:List[Callable] = []):
@@ -303,82 +353,94 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
     pages = [] # Filled with a list of all the pages to render
 
     # The data passed to render all pages
+    logging.debug("[ezcv] Initializing site context with config file")
     site_context:dict[str, Union[list, defaultdict, dict]] = {"config": get_site_config(config_file_path)}
 
+    logging.debug("[ezcv] Getting ignore_exif_data config value")
     if site_context["config"]["ignore_exif_data"]:
         Image.ignore_exif_data = True
 
     # If no theme argument, and a theme is defined in the site config file
+    logging.debug("[ezcv] Getting theme config value")
     if site_context["config"]["theme"] and theme == "dimension": 
+        logging.debug(f"Using theme from site config file: {site_context['config']['theme']}")
         theme = site_context["config"]["theme"]
 
     # Find theme directory based on name, or download it if it's a remote theme
+    logging.debug("[ezcv] Getting theme directory")
     theme_folder = locate_theme_directory(theme, site_context)
+    logging.info(f"[ezcv] theme directory: {theme_folder}" )
 
     # Initialize jinja loaders
+    logging.debug("[ezcv] Initializing jinja2 loaders")
     theme_loader = jinja2.FileSystemLoader(theme_folder)
     environment = jinja2.Environment(loader=theme_loader, autoescape=True, trim_blocks=True) # Grab all files in theme_folder
 
+    logging.debug("[ezcv] Injecting extra jinja filters into environment (if available)")
     environment = inject_filters(environment, extra_filters)
 
     # Initialize sections key in site context to empty dict
     site_context["sections"] = {}
 
     # Get a list of the section names, and section theme directories
-    sections = get_theme_section_directories(theme_folder, sections)
+    logging.debug("[ezcv] Getting info about sections content")
+    sections = get_theme_section_directories(theme_folder, sections) # TODO: Add support for blog sections
     sections_content_dirs = get_content_directories()
+    logging.info(f"[ezcv] Found sections: {sections}\n[ezcv] Found section content directories: {sections_content_dirs}" )
 
-    # Go through all section content files to get content (i.e. ./sections/education/*.md) 
+    # Go through all section content files to get content (i.e. ./sections/education/*.md)
+    logging.debug("[ezcv] Getting content for each section")
     for section in sections_content_dirs: 
-        # Get content to store in site_context["sections"][section]
-        site_context["sections"][section.split(os.sep)[-1]] = get_section_content(section, site_context["config"]["examples"])
+        if not section.split(os.sep)[-1] == "blog": #TODO: make parametric
+            # Get content to store in site_context["sections"][section]
+            site_context["sections"][section.split(os.sep)[-1]] = get_section_content(section, site_context["config"]["examples"])
+        else:
+            # Get content to store in site_context["sections"][section]
+            site_context["sections"][section.split(os.sep)[-1]] = get_section_content(section, site_context["config"]["examples"], blog=True)
 
     # Get a list of all the top level pages in the theme folder and add them to the pages list
+    logging.debug("[ezcv] Getting list of top-level files (.jinja and .html)")
     for top_level_file in os.listdir(theme_folder):
         if top_level_file == "resume.jinja" and not site_context["config"]["resume"]: # Ignore resume.jinja if resume config var is False
             continue
-
+        # TODO: add support for blog overview files
         if top_level_file.endswith(".jinja") or top_level_file.endswith(".html"):
             pages.append(top_level_file)
     
     # Go through each section, render the html and add it to the site context
     print("\nGenerating content from sections")
+    logging.debug("[ezcv] Generating html from section content")
     sections_iterator = tqdm(sections)
     sections_iterator.set_description_str("Writing section content")
-    for section in sections_iterator: 
-        html = _render_section(theme_folder, section, site_context, environment)
-        site_context[f"{section}_html"] = html
+    print(sections) # TODO REMOVE
+    for section in sections_iterator:
+        if section == "blog": #TODO: Make parametric based on setup
+            single_page, overview_page, feed_html = _render_section(section, site_context, environment, blog=True)
+            if single_page or overview_page or feed_html:
+                site_context[f"{section}_html"] = feed_html
+                pages.append([section, overview_page])
+                pages.append([section, single_page, site_context["sections"][section]])
+        else:
+            html = _render_section(section, site_context, environment)
+            site_context[f"{section}_html"] = html
 
     # Generate and export all the pages of a site
+    logging.debug("[ezcv] Generating html from pages")
     _export(site_context, theme_folder, environment, output_folder, pages)
 
+    del(site_context["sections"]["gallery"])
+    del(site_context["gallery_html"])
+    # print(f"\n\n\n\n\n{site_context=}") # TODO: remove
+
     if preview:
-        browser_types = ["chromium-browser", "chromium", "chrome", "google-chrome", "firefox", "mozilla", "opera", "safari"] # A list of all the types of browsers to try
+        logging.debug("[ezcv] Preview specified")
+        browser_types = ["chromium-browser", "chromium", "chrome", "google-chrome",
+    "firefox", "mozilla", "opera", "safari"] # A list of all the types of browsers to try
         for browser_name in browser_types:
             try:
                 webbrowser.get(browser_name) # Search for browser
+                logging.debug(f"[ezcv] Found browser {browser_name}")
                 break # Browser has been found
             except webbrowser.Error:
                 continue
         webbrowser.open(f"file:///{os.path.abspath(output_folder)}/index.html")
-
-def get_repo_last_updated(user_name:str="QU-UP", repo_name: str="ezcv-themes") -> datetime.datetime:
-    """Get the last updated date of a github repository
-
-    Parameters
-    ----------
-    user_name : str
-        The name of the user or organization that owns the repository
-
-    repo_name : str
-        The name of the repository
-
-    Returns
-    -------
-    datetime.datetime
-        A datetime object representing the last updated date of the repository
-    """
-    response = requests.get(f'https://api.github.com/repos/{user_name}/{repo_name}/branches/master')
-    date_changed = datetime.datetime.strptime(response.json()["commit"]["commit"]["author"]["date"], "%Y-%m-%dT%H:%M:%SZ")
-    return date_changed
-

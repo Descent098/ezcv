@@ -18,6 +18,11 @@ sections: # Optional, only if sections are available
       current: bool
   gallery:
     type: gallery
+  blog:
+    type: blog
+    overview: true
+    single: true
+    feed: true
   projects:
     type: markdown
     fields:

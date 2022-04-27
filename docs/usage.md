@@ -406,6 +406,12 @@ Keep in mind many latex packages are not available natively in MathJax, so depen
 
 [More details](https://github.com/mitya57/python-markdown-math)
 
+### Blog Content
+
+Blog markdown sections differ from standard markdown sections in how they show up. Generally they have 3 peices of metadata you need
+- Title: the title of the post
+- Created: a datestring of the day (i.e. for april 26th 2022 it would be `2022-04-26`)
+- Updated: a datestring of the day the post was last updated (i.e. for april 26th 2022 it would be `2022-04-26`)
 
 ## Sections
 
@@ -420,6 +426,7 @@ Here is the list of first party sections supported (check each theme to see whic
 - **Work Experience**: Any current/old work experience that you want to include
 - **Volunteering Experience**: Your current/old volunteer experience that you want to include
 - **Gallery**: Images you want to showcase (usage details can be found [here](#image-gallery))
+- **Blog**: Markdown files used for a blog-like content
 
 In your site you simply put the content you want to create inside ```content/<section name>```. For example to create a file about your ```education``` at ```MIT``` you would add a file called ```MIT.md``` inside ```content/education```. Assuming you used the setup steps from the [quick start](quick-start.md) this section should already be included. For each section there are included example files to let you know what fields are available (these won't be included in your export unless ```examples: true``` is set in your ```config.yml``` file).
 

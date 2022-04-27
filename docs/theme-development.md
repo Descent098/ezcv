@@ -26,6 +26,11 @@ When creating a theme this is the only officially supported file structure layou
 |   └──📄 <file_name>.<extension>
 ├── 📁sections/
 |   └──📄 <section_name>.jinja
+|   └──📁<blog section>
+|       ├──📄 overview.jinja
+|       ├──📄 feed.jinja
+|       └──📄 single.jinja
+├── 📝metadata.yml
 └── 📄index.jinja
 ```
 
@@ -62,6 +67,10 @@ ezcv -c
 ```
 
 You will now have a folder in your working directory with a copy of the theme you are using that you can begin modifying.
+
+## Metadata file
+
+.................
 
 ## Config Variable
 
@@ -160,33 +169,19 @@ So to iterate through each of the peices of content you could do:
 {% endif %}
 ```
 
-### Developing sections templates
+### Developing Sections templates
 
-In any theme using the typical [file folder layout](#folder-layout) you just simply add your files in the ```/sections``` folder. I recommend using the ```.jinja``` extension, but ```.html``` will also work. 
+In any theme using the typical [file folder layout](#folder-layout) there are 3 types of sections:
 
-For example to create a section template for ```projects``` you would have:
+1. [Markdown sections](#markdown-sections-theme-development); Standard markdown content that doesn't need to have each file rendered to a new page
+2. [Gallery sections](#custom-styling-for-gallerys); Image galleries
+3. [Blog sections](#blog-sections-theme-development); Sections that need access to a feed, and for each markdown file to be rendered in a template
 
-```
-📁<theme_name>/
-├── 📁sections/
-└──  └──📄 projects.jinja
-```
-
-Then put your section template inside ```projects.jinja```.
-
-### Sections HTML
-
-On top of the actual sections being included in the sections dictionary if you have sections templates for doing component-based rendering you can access them using ```<section>_html```. So for example if you have a theme called ```base``` with a ```projects``` section in ```/base/sections/projects.jinja``` then to access the rendered html in your top-level pages you can use:
-
-```jinja2
-{{ projects_html | safe }}
-```
-
-### Creating custom sections
+#### Creating custom sections
 
 ezcv supports adding in custom sections without need to change the codebase. To do so, simply add in the section template to ```/sections``` in your theme, then add a folder with the same name inside ```/content``` in the site's directory. Inside the section template the content will be available under the section name. 
 
-For example if you created a custom section called ```foo``` then in your theme folder you would put:
+For example if you created a custom markdown section called ```foo``` then in your theme folder you would put:
 
 ```
 📁<theme_name>/
@@ -219,6 +214,102 @@ and you can access the content of all the files in ```/content/foo``` in ```foo.
 {{ bar[1] | safe }}
 
 {% endfor %}
+```
+
+#### Markdown sections theme development
+
+For markdown sections you just simply add your files in the ```/sections``` folder. I recommend using the ```.jinja``` extension, but ```.html``` will also work.
+
+For example to create a section template for ```projects``` you would have:
+
+```
+📁<theme_name>/
+├── 📁sections/
+└──  └──📄 projects.jinja
+```
+
+Then put your section template inside ```projects.jinja```.
+
+#### Blog sections theme development
+
+Blog sections do have a different folder layout, for blog sections there are 3 files:
+
+- `overview.jinja`; This file will end up rendering out as `<section name>.html` and is meant to be a landing page
+- `feed.jinja`; This file is what gets rendered to `<section name>_html`, see [Sections HTML](#sections-html) for details
+- `single.jinja`; This file is what will be rendered for **each peice of content**, so for example each blog post would be rendered as a page with the `title` or filename without the extension used (i.e. a file with `title: example` would be rendered to `example.html` and a file with no title called `lorem.md` would be rendered to `lorem.html`)
+
+*The only required file is `feed.jinja`*
+
+For example the layout for a blog section called `blog`, with a content file called `example.md` would be:
+
+```
+📁<theme_name>/
+├── 📁sections/
+|   └──📁blog
+|       ├──📄 overview.jinja
+|       ├──📄 feed.jinja
+|       └──📄 single.jinja
+```
+
+and would result in:
+
+- `blog_html` being available in all templates rendered from `feed.jinja`
+- a page called `blog.html` rendered from `overview.jinja`
+- a page called `example.html` rendered from `example.md` using `single.jinja`
+
+Within `single.jinja` (if used) there is a seperate context passed with the following info:
+
+```yml
+
+{'config': 
+  {... # This is where the config variables will be
+  }, 
+  'content': [
+     {
+       'title': 'Post Title', 
+       'created': '2022-04-26', 
+       'updated': '2022-04-26'
+      }, 
+     '<p>This is the post content</p>'
+     ]}
+```
+
+So you will **only have access to the current post**, and variables can be accessed using:
+
+```jinja
+{{ content[0]["title"] }} <!-- content[0] is the metadata -->
+{{ content[1] | safe }} <!-- This is the content of the post -->
+
+```
+
+
+#### Gallery sections theme development
+
+Currently there is only support for 1 gallery section, and it must be created using a `gallery.jinja` file in the `sections/` folder:
+
+```
+📁<theme_name>/
+├── 📁sections/
+|   └──📄 gallery.jinja
+```
+
+The most basic setup for iterating through those images would be:
+
+```jinja
+{% for image in gallery %}
+  <img src="{{ image[0]['file_path'] }}" alt="{{ image[0]['file_path'].split()[-1] }}" loading="lazy">
+{% endfor %}
+```
+
+For details on adding EXIF data see [here](#custom-styling-for-gallerys)
+
+
+### Sections HTML
+
+On top of the actual sections being included in the sections dictionary if you have sections templates for doing component-based rendering you can access them using ```<section>_html```. So for example if you have a theme called ```base``` with a ```projects``` section in ```/base/sections/projects.jinja``` then to access the rendered html in your top-level pages you can use:
+
+```jinja2
+{{ projects_html | safe }}
 ```
 
 ### Accessing configuration variables in section templates

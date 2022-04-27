@@ -26,6 +26,7 @@ get_section_content() -> List[List[Union[defaultdict, str]]]:
 """
 # Standard Lib Dependencies
 import os                                                # Used primarily in path validation
+import datetime
 from collections import defaultdict                      # Used to give dicts default args
 from dataclasses import dataclass, field                 # Used to improve class performance
 from typing import DefaultDict, List, Tuple, Type, Union # Used to provide accurate type hints
@@ -52,7 +53,7 @@ def get_content_directories() -> List[str]:
     return result
 
 
-def get_section_content(section_content_folder: str, examples: bool = False) -> List[List[Union[defaultdict, str]]]:
+def get_section_content(section_content_folder: str, examples: bool = False, blog:bool = False) -> List[List[Union[defaultdict, str]]]:
     """Takes in a section folder and gets all the content from the files using the Content subclass asigned to the file extension
 
     Parameters
@@ -62,6 +63,9 @@ def get_section_content(section_content_folder: str, examples: bool = False) -> 
 
     examples : bool, optional
         Whether or not to render files with example in the name, by default False
+    
+    blog : bool, optional
+        Whether or not the current section is a blog section, by default False
 
     Returns
     -------
@@ -95,8 +99,20 @@ def get_section_content(section_content_folder: str, examples: bool = False) -> 
                 extension_handler = extension_handlers[extension]() # Instantiate the proper extension
 
                 # Get the content and add it to the list
-                metadata, html = extension_handler.get_content(os.path.join(section_content_folder, file_name))
-                content.append([metadata, html])
+                if not blog:
+                    metadata, html = extension_handler.get_content(os.path.join(section_content_folder, file_name))
+                    content.append([metadata, html])
+                else:
+                    print(f"{file_name} is a blog") # TODO: Remove
+                    metadata, html = extension_handler.get_content(os.path.join(section_content_folder, file_name))
+                    # TODO: Add data if not there
+                    if not metadata["created"]:
+                        metadata["created"] = datetime.datetime.now().strftime("%Y-%m-%d")
+                    if not metadata["updated"]:
+                        metadata["updated"] = datetime.datetime.now().strftime("%Y-%m-%d")
+                    
+
+                    content.append([metadata, html, file_name])
     return content
 
 
