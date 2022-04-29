@@ -24,7 +24,7 @@ from tqdm import tqdm        # Used to generate progress bars during iteration
 THEMES_FOLDER = os.path.join(os.path.dirname(__file__), "themes")
 
 #TODO: Add a way to update themes from CLI, will require theme metadata to implement
-def get_theme_section_directories(theme_folder:str, sections:list = []) -> list:
+def get_theme_section_directories(theme_folder:str, sections:list = [], preview:bool=False) -> list:
     """Gets a list of the available sections for a theme
 
     Explanation
@@ -42,21 +42,38 @@ def get_theme_section_directories(theme_folder:str, sections:list = []) -> list:
     theme_folder : str
         The full path to the theme folder (typically from calling locate_theme_directory() )
 
+    preview : bool, optional
+        Whether or not the caller is in preview mode (ignore existing sections), by default False
+
     Returns
     -------
     list
         The name(s) of the section templates that exist within the sections list without extensions
     """
-    if sections:
+    if preview:
+        sections = []
+        if os.path.exists(os.path.join(theme_folder, "sections")):
+            for section in os.listdir(os.path.join(theme_folder, "sections")):
+                if section.endswith(".jinja"):
+                    section = section.replace(".jinja", "")
+                    sections.append(section)
+                elif os.path.isdir(os.path.join(theme_folder, "sections", section)): # blog sections
+                    sections.append(section)
+            return sections
+        else:
+            return []
+    elif sections and not preview:
         return sections
-    if not sections and os.path.exists(os.path.join(theme_folder, "sections")):
+    elif os.path.exists(os.path.join(theme_folder, "sections")):
         for section in os.listdir(os.path.join(theme_folder, "sections")):
             if section.endswith(".jinja"):
                 section = section.replace(".jinja", "")
                 sections.append(section)
             elif os.path.isdir(os.path.join(theme_folder, "sections", section)): # blog sections
                 sections.append(section)
-    return sections
+        return sections
+    else:
+        return []
 
 
 def setup_remote_theme(name: str, url: str):

@@ -48,7 +48,7 @@ To preview your site simply go to the root (where ```config.yml``` is) and run:
 ezcv -p
 ```
 
-**Note that preview is also available in the build command**
+*Note that your browser Cache may cause some issues when switching themes, please hard refresh (usually ctrl + r)*
 
 ## Build
 

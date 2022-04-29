@@ -55,7 +55,7 @@ import jinja2                       # used as middlewear for generating template
 from tqdm import tqdm               # Used to generate progress bars during iteration
 
 # The global list of currently supported first party sections
-SECTIONS_LIST = ["projects", "education", "work_experience", "volunteering_experience", "gallery"]
+SECTIONS_LIST = ["projects", "education", "work_experience", "volunteering_experience", "gallery", "blog"]
 
 def get_site_config(config_file_path:str = "config.yml", remotes_file_path:str = os.path.join(THEMES_FOLDER, "remotes.yml")) -> defaultdict:
     """Gets the site config from provided file path and returns defaultdict of values
@@ -136,11 +136,22 @@ def _render_section(section_name:str, site_context:dict, environment:jinja2.Envi
         overview_file = f"sections/{section_name}/overview.jinja"
         feed_file = f"sections/{section_name}/feed.jinja"
         single_file = f"sections/{section_name}/single.jinja"
-        if len(contents) > 0: # If there is any markdown content
-            html = environment.get_template(feed_file).render({section_name:contents, "config": site_context["config"]})
-            return single_file, overview_file, html
-        else: 
-            return "", "", ""
+        theme_folder = environment.loader.searchpath[0]
+        overview_file_path = os.path.join(theme_folder, overview_file)
+        feed_file_path = os.path.join(theme_folder, feed_file)
+        single_file_path = os.path.join(theme_folder, single_file)
+        if not overview_file_path:
+            overview_file = ""
+        if not feed_file_path:
+            html = ""
+        elif feed_file_path:
+            if len(contents) > 0: # If there is any markdown content
+                html = environment.get_template(feed_file).render({section_name:contents, "config": site_context["config"]})
+            else:
+                html = ""
+        if not single_file_path:
+            single_file = ""
+        return single_file, overview_file, html
 
 
 def _render_page(page:str, site_context:dict, environment:jinja2.Environment) -> str:
@@ -162,7 +173,7 @@ def _render_page(page:str, site_context:dict, environment:jinja2.Environment) ->
     str:
         The rendered html of the page
     """
-
+    logging.debug(f"[ezcv _render_page({page}, {site_context}, {environment})]: Begin rendering page")
     inject_filters(environment) # Add in custom filters
     # Render template and return contents
     theme = environment.get_template(page)
@@ -227,7 +238,6 @@ def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment,
     print("\nGenerating output html from theme")
     pages_iterator = tqdm(pages)
     pages_iterator.set_description_str("Generating top level pages")
-    print(f"{pages=}")
     for page in pages_iterator:  # Write new pages
         if type(page) == str: # Standard markdown sections
             try:
@@ -278,6 +288,9 @@ def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment,
                     pages_iterator.refresh()
                     with open(f"{output_folder}{os.sep}{page}", "w+") as outfile:
                         outfile.write(html)
+    logging.debug("Cleaning up metadata.yml")
+    if os.path.exists(os.path.join(output_folder, "metadata.yml")):
+        os.remove(os.path.join(output_folder, "metadata.yml")) # Remove metadata file
 
 
 def generate_site(output_folder:str="site", theme:str = "dimension", sections: list = [], config_file_path="config.yml", preview:bool = False, extra_filters:List[Callable] = []):
@@ -298,7 +311,7 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
         The path to the site's config yaml file, by default "config.yml"
 
     preview : (bool, optional)
-        If true then the index.html will be auto opened in the system webbrowser, by default False
+        Changes generation to work for the autoreload server, by default False
 
     extra_filters : List[Callable], optional
         An optional set of method objects containing additional filter functions you want to use
@@ -384,7 +397,7 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
 
     # Get a list of the section names, and section theme directories
     logging.debug("[ezcv] Getting info about sections content")
-    sections = get_theme_section_directories(theme_folder, sections) # TODO: Add support for blog sections
+    sections = get_theme_section_directories(theme_folder, sections, preview) # TODO: Add support for blog sections
     sections_content_dirs = get_content_directories()
     logging.info(f"[ezcv] Found sections: {sections}\n[ezcv] Found section content directories: {sections_content_dirs}" )
 
@@ -412,7 +425,6 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
     logging.debug("[ezcv] Generating html from section content")
     sections_iterator = tqdm(sections)
     sections_iterator.set_description_str("Writing section content")
-    print(sections) # TODO REMOVE
     for section in sections_iterator:
         if section == "blog": #TODO: Make parametric based on setup
             single_page, overview_page, feed_html = _render_section(section, site_context, environment, blog=True)
@@ -427,20 +439,3 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
     # Generate and export all the pages of a site
     logging.debug("[ezcv] Generating html from pages")
     _export(site_context, theme_folder, environment, output_folder, pages)
-
-    del(site_context["sections"]["gallery"])
-    del(site_context["gallery_html"])
-    # print(f"\n\n\n\n\n{site_context=}") # TODO: remove
-
-    if preview:
-        logging.debug("[ezcv] Preview specified")
-        browser_types = ["chromium-browser", "chromium", "chrome", "google-chrome",
-    "firefox", "mozilla", "opera", "safari"] # A list of all the types of browsers to try
-        for browser_name in browser_types:
-            try:
-                webbrowser.get(browser_name) # Search for browser
-                logging.debug(f"[ezcv] Found browser {browser_name}")
-                break # Browser has been found
-            except webbrowser.Error:
-                continue
-        webbrowser.open(f"file:///{os.path.abspath(output_folder)}/index.html")

@@ -45,6 +45,8 @@ To preview your content use:
 
 ```ezcv -p```
 
+*Note that your browser Cache may cause some issues when switching themes, please hard refresh (usually ctrl + r)*
+
 If you're on github then pushing the contents to master/main will activate the publish workflow and automatically publish the site to ```<username>.github.io```.
 
 
@@ -405,6 +407,12 @@ Would produce:
 Keep in mind many latex packages are not available natively in MathJax, so depending on how niche your requirement is there may need to be some fiddling to get everything working. If you need extra packages installing, you will need to look at messing with the [mathjax configuration](https://docs.mathjax.org/en/latest/input/tex/extensions.html) in your theme. If you have questions about doing this please post in the [discussions board](https://github.com/Descent098/ezcv/discussions).
 
 [More details](https://github.com/mitya57/python-markdown-math)
+
+#### Mermaid (graphs/diagrams)
+
+**Note this integration is HIGHLY LIMITED**
+
+
 
 ### Blog Content
 

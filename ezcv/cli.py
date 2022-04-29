@@ -55,13 +55,13 @@ theme(list_themes = True)
 import os                   # Used for path validation
 import shutil               # Used for file/folder copying and removal
 import datetime
-import tempfile             # Used to generate temporary folders for previews
 from glob import glob       # Used to glob filepaths (patternmatch filepaths)
 from sys import argv, exit  # Used to get length of CLI args and exit cleanly
 
 ## internal dependencies
 from ezcv.core import generate_site, get_site_config
 from ezcv.themes import THEMES_FOLDER, generate_theme_metadata, get_remote_themes, locate_theme_directory, setup_remote_theme
+from ezcv.autoreload import start_server
 
 # Third party dependencies
 import yaml
@@ -72,7 +72,7 @@ from css_html_js_minify import * # Used to optimize and minify html/css/js files
 
 usage = """Usage:
     ezcv [-h] [-v] [-p]
-    ezcv init [<name>] [<theme>]
+    ezcv init [<name>] [<theme>] [-f]
     ezcv build [-d OUTPUT_DIR] [-o]
     ezcv theme [-l] [-c] [-m] [-s SECTION_NAME] [<theme>]
 
@@ -84,12 +84,13 @@ Options:
 -c, --copy            copy the provided theme, or defined site theme
 -p, --preview         preview the current state of the site
 -o, --optimize        Optimize output files (takes longer to run)
+-f, --flask           Generate Flask routes and requirements.txt
 -d OUTPUT_DIR, --dir OUTPUT_DIR The folder name to export the site to
 -m, --metadata        Generate metadata for the theme
 -s SECTION_NAME, --section SECTION_NAME The section name to initialize
 """
 
-def init(theme="dimension", name="John Doe"):
+def init(theme="dimension", name="John Doe", flask:bool = False):
     """Initializes an ezcv site
 
     Parameters
@@ -118,23 +119,15 @@ def init(theme="dimension", name="John Doe"):
             setup_remote_theme(theme, remote_themes[theme])   # Download theme 
             os.chdir(original_directory)                      # Navigate back to original cwd
 
+    if not flask:
+        os.remove(os.path.join(name, "routes.py"))
+        os.remove(os.path.join(name, "requirements.txt"))
     print(f"Site generated and is available at {os.path.abspath(name)}")
 
 
 def preview():
     """Creates a temporary folder of the site's files and then previews it in browser"""
-    with tempfile.TemporaryDirectory() as temp_dir:
-        generate_site(temp_dir, preview=True)
-        try:
-            input("Press enter when done previewing")
-        except EOFError:
-            print(f"\nKeyboard interupt detected, ending preview and removing {temp_dir}")
-            return
-        except KeyboardInterrupt:
-            print(f"\nKeyboard interupt detected, ending preview and removing {temp_dir}")
-            return
-
-        print(f"Ending preview and removing {temp_dir}")
+    start_server()
 
 
 def theme(list_themes: bool = False, copy_theme:bool = False, theme:str = "", metadata:bool = False):
@@ -346,11 +339,11 @@ def main():
 
     elif args["init"]:
         if args["<theme>"] and args["<name>"]: # Both a theme and name are specified
-            init(args["<theme>"], args["<name>"])
+            init(args["<theme>"], args["<name>"], flask=args["--flask"])
         elif args["<name>"]: # Only a name is specified
-            init(name = args["<name>"])
+            init(name = args["<name>"], flask=args["--flask"])
         else: # No values are specified
-            init()
+            init(flask=args["--flask"])
 
     elif args["build"]:
         if not args["--dir"]:

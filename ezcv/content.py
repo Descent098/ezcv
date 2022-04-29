@@ -103,7 +103,6 @@ def get_section_content(section_content_folder: str, examples: bool = False, blo
                     metadata, html = extension_handler.get_content(os.path.join(section_content_folder, file_name))
                     content.append([metadata, html])
                 else:
-                    print(f"{file_name} is a blog") # TODO: Remove
                     metadata, html = extension_handler.get_content(os.path.join(section_content_folder, file_name))
                     # TODO: Add data if not there
                     if not metadata["created"]:
@@ -246,6 +245,7 @@ class Markdown(Content):
         - [sane_lists(Sane lists)](https://python-markdown.github.io/extensions/sane_lists/)
         - [meta](https://python-markdown.github.io/extensions/meta)
         - [mdx_math](https://github.com/mitya57/python-markdown-math)
+        - [mermaid](https://github.com/oruelle/md_mermaid)
 
     Examples
     --------
@@ -255,7 +255,7 @@ class Markdown(Content):
     html, metadata = Markdown().get_content('file_1.md')
     ```
     """
-    md:markdown.Markdown = markdown.Markdown(extensions=['meta', 'footnotes', 'tables', 'toc', 'abbr', 'def_list', 'sane_lists', "mdx_math"]) # Setup markdown parser with extensions
+    md:markdown.Markdown = markdown.Markdown(extensions=['meta', 'footnotes', 'tables', 'toc', 'abbr', 'def_list', 'sane_lists', "mdx_math", "md_mermaid"]) # Setup markdown parser with extensions
     extensions:List[str] = (".md", ".markdown", ".mdown", ".mkdn", ".mkd", ".mdwn")
 
 
