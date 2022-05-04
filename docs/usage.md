@@ -69,7 +69,7 @@ Each site will have a ```config.yml``` file, this file is in the [YAML format](h
 | **address** | Your physical address | The full text of your address |
 | **social** | Social media links | github, twitch, youtube, instagram, twitter, snapchat, linkedin, facebook |
 | **examples** | Whether to include content files that have "example" at the start of the filename | true or false |
-| **theme** | The name of the theme to use | the name of any included theme i.e. dimension |
+| **theme** | The name of the theme to use, you can also use a URL to a zip folder | the name of any included theme i.e. dimension |
 | **ua_code** | The UA code provided to you by Google Analytics | Any code in the format UA-000000-0 (the 0's can be any number) |
 | **resume** | Whether or not to generate the resume page | Either true or false (false by default) |
 | **ignore_exif_data** | Whether to use exif data for gallery images | Either true or false (false by default) |

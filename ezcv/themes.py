@@ -126,6 +126,15 @@ def setup_remote_theme(name: str, url: str):
         for current_file in os.listdir(os.path.join(theme_folder_path, name)):
             shutil.move(os.path.join(theme_folder_path, name, current_file), os.path.join(theme_folder_path))
         shutil.rmtree(os.path.join(theme_folder_path, name))
+    elif len(os.listdir(theme_folder_path)) == 1: # If only one file in theme folder
+        print(f"moving {os.listdir(theme_folder_path)[0]} to {theme_folder_path}")
+        theme_files = os.listdir(os.path.join(theme_folder_path, os.path.join(os.listdir(theme_folder_path)[0])))
+        theme_files_folder = os.path.join(theme_folder_path, os.listdir(theme_folder_path)[0])
+        print(f"Checking {theme_files=} and {theme_files_folder=}")
+        if os.path.isdir(theme_files_folder): # If it's a folder
+            for current_file in theme_files:
+                print(f"moving {os.path.join(theme_files_folder, current_file)} to {os.path.join(theme_folder_path, current_file)}")
+                shutil.move(os.path.join(theme_files_folder, current_file), os.path.join(theme_folder_path, current_file))
 
 
 def locate_theme_directory(theme:str, site_context:dict) -> str:
@@ -158,6 +167,11 @@ def locate_theme_directory(theme:str, site_context:dict) -> str:
     elif theme in site_context["config"]["remotes"]:
         setup_remote_theme(theme, site_context["config"]["remotes"][theme])
         theme_folder = os.path.abspath(os.path.join(THEMES_FOLDER, theme))
+    elif theme.startswith("http"):
+        theme_name = theme.split("/")[-1].replace(".zip", "")
+        print(f"Downloading theme {theme_name} from {theme} to {os.path.join(THEMES_FOLDER, theme_name)}")
+        setup_remote_theme(theme_name, theme)
+        theme_folder = os.path.abspath(os.path.join(THEMES_FOLDER, theme_name))
     else:
         raise FileNotFoundError(f"Theme {theme} does not exist")
 
