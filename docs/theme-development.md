@@ -68,9 +68,6 @@ ezcv -c
 
 You will now have a folder in your working directory with a copy of the theme you are using that you can begin modifying.
 
-## Metadata file
-
-.................
 
 ## Config Variable
 
@@ -741,6 +738,214 @@ config = get_site_config()
 
 print(pretty_defaultdict(config)) # Prints config dict in pretty form
 ```
+
+## Metadata file
+
+As of ezcv version 0.3.0 there is a specification for theme metadata. This specification is meant to provide information about a theme at a glance including details about the theme such as which version of ezcv it's designed for and when it was created to specific usage information like which sections and fields within those sections are available. Below is an example of a truncated version of the `metadata.yml` file in the dimension theme:
+
+```yml
+name: dimension
+ezcv_version: "0.3.0"
+created: 2022-04-22
+updated: 2022-04-22
+folder: dimension # Optional, only needed if folder is different than name field
+acquisition_method: Source # Optional, in this case it denotes the theme was included with ezcv
+sections: # Optional, only if sections are available
+  education:
+    type: markdown
+    fields: # Optional, only if fields exist
+      title: str
+      institution:
+        required: true
+        type: str
+      month_started: str
+      year_started: str
+      month_ended: str
+      year_ended: str
+      current: bool
+  gallery:
+    type: gallery
+  blog:
+    type: blog
+    overview: true
+    single: true
+    feed: true
+  projects:
+    type: markdown
+    fields:
+      title:
+        required: true
+        type: str
+      image: image
+      link: str
+  ... # More info below
+```
+
+By default a `metadata.yml` file like this will be generated if a theme is missing one automatically. Additionally all first party themes will ship with these files present.
+
+### Generating theme metadata
+
+The easiest way to generate theme metadata is to use the tool built into the cli. Inside a project folder that has the theme set in the `config.yml` you can run `ezcv theme -m`, this will bring the theme into the project folder (if not already there) and generate a `metadata.yml` file for you.
+
+Please note that the `fields` key will generate based on the metadata of the first **alphabetical** file in a content folder. So for example if this was the metadata for the first file alphabetically in `/content/education` and the theme had a file in `/sections/education.jinja`:
+
+```markdown
+---
+institution: UBC
+title: MSc Science Computer Science
+year_started: 2014
+year_ended: 2016
+month_started: october
+month_ended: october
+current: true
+---
+```
+
+then the resulting `metadata.yml` file would have:
+
+```yml
+sections:
+  education:
+    type: markdown
+    fields:
+      title: str
+      institution: str
+      month_started: str
+      year_started: int
+      month_ended: str
+      year_ended: int
+      current: bool
+```
+
+**Note that no fields are set to required**
+
+### Top-level theme metadata
+
+- Theme Name: str
+- Date Created: Datetime string
+- Date Updated: Datetime string
+- Acquisition Method: literal [source, first party, third party]
+  - This indicates how the theme was gotten 
+    - Source = Included with ezcv (base, dimension)
+    - First Party = From Qu-up/ezcv-themes
+    - Third Party = Anywhere else
+        - Would include URL or path where it was attained from 
+- Sections (see below)
+
+*See [type indicators](#type-indicators-for-field) for any types you are unsure of.*
+
+#### Sections metadata
+
+You can include metadata for the themes included sections. If a theme has no sections you can omit this key completely. There are currently 3 defined section types.
+
+##### Gallery Sections metadata
+
+For image galleries you only need to specify the `type` parameter as `gallery`
+
+```yml
+sections:
+  gallery:
+    type: gallery
+```
+
+*only currently available for sections called `gallery.jinja`*
+
+##### Markdown Sections metadata
+
+For standard markdown sections that only have a feed you only need to specify the `type` parameter as `markdown`
+
+```yml
+sections:
+  projects:
+    type: markdown
+    ... # more info
+```
+
+##### Blog Sections metadata
+
+For blog markdown sections there are a few bits of configuration. First set the type to `blog`:
+
+```yml
+sections:
+  blog:
+    type: blog
+    ... # more info
+```
+
+From there you can set variables for each type of template file that's available (i.e. `overview.jinja`, `single.jinja`, `feed.jinja`):
+
+```yml
+sections:
+  blog:
+    type: blog
+    overview: true
+    single: true
+    feed: true
+  ... # more info
+```
+
+
+##### Fields
+
+Within each section you can include fields to denote which metadata can be provided for each markdown file.
+
+###### Type indicators for field
+
+- bool: Boolean values (True or False)
+- str: string values (plain text)
+- datetime: datetime string (string in the format of YYYY-MM-DD)
+- literal: literal (a set of strings see below for details)
+- int: an integer (number)
+- float: a floating point number (decimal number)
+
+You can define literals to state strings that must be one of a set number of options, for example if a field **only** be the strings "literal1" or "literal2" you can use a list format to denote this:
+
+```python
+sections:
+  section:
+    field:
+      field_name: 
+        - literal1
+        - literal2
+```
+
+So for example if you have the choice between the literals ["sophomore", "junior", "senior"] for the field `level` in the `education` section it would be:
+
+```yml
+... # More stuff
+sections:
+    education:
+        ... # More stuff
+       fields
+            level:
+              - sophmore
+              - junior
+              - senior
+... # More stuff
+```
+
+*Note that currently literals are not enforced, but down the road a flag will be added to make them enforceable*
+
+###### Required Fields
+
+If a field is required you can denote it by adding a `required: true` key-value pair to the field, otherwise it is assumed to be optional. For example:
+
+```yml
+... # More stuff
+sections:
+    section_name:
+       folder_name: str
+       fields:
+          field_name: 
+            type: str
+            required: true
+    section_name2:
+       folder_name: str
+       fields:
+          field_name: type
+... # More stuff
+```
+
 
 ## Submitting a theme to be officially supported
 

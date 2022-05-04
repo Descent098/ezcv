@@ -111,7 +111,6 @@ def init(theme="dimension", name="John Doe", flask:bool = False):
 
     if theme != "dimension":
         # Check if theme is remote theme, and download it if it is
-        
         remote_themes = get_remote_themes()
         if remote_themes.get(theme, False):
             original_directory = os.path.abspath(os.getcwd()) # Store CWD
@@ -119,9 +118,15 @@ def init(theme="dimension", name="John Doe", flask:bool = False):
             setup_remote_theme(theme, remote_themes[theme])   # Download theme 
             os.chdir(original_directory)                      # Navigate back to original cwd
 
-    if not flask:
+    if flask:
+        os.remove(os.path.join(name, "standard-README.md"))
+        os.rename(os.path.join(name, "flask-README.md"), os.path.join(name, "README.md"))
+    else:
         os.remove(os.path.join(name, "routes.py"))
         os.remove(os.path.join(name, "requirements.txt"))
+        os.remove(os.path.join(name, "flask-README.md"))
+        os.rename(os.path.join(name, "standard-README.md"), os.path.join(name, "README.md"))
+
     print(f"Site generated and is available at {os.path.abspath(name)}")
 
 

@@ -13,8 +13,7 @@
 		<link rel="icon" type="image/png" href="images/favicon.png"/>
 		<noscript><link rel="stylesheet" href="css/noscript.css" /></noscript>
 		<!-- Mermaid-->
-		<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
-		<script src="https://unpkg.com/mermaid@8.1.0/dist/mermaid.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.0.1/mermaid.min.js" integrity="sha512-epOjc4LHlbK/a3+OjKdQMnoVZ5u6JYkw7AboRUqUV4dLULCLdcf4wt5TXuSYjpBJF+odA830p3rXbBniex33Bg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 		<script>mermaid.initialize({startOnLoad:true});</script>
         <!-- Highlight JS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlightjs-themes@1.0.0/monokai_sublime.css">
@@ -93,6 +92,10 @@
 
 								{% if gallery_html %}
 								<li><a href="#gallery">Gallery</a></li>
+								{%endif%}
+
+								{% if blog_html %}
+								<li><a href="/blog">Blog</a></li>
 								{%endif%}
 
 								{% if config['resume'] %}

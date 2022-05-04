@@ -163,4 +163,6 @@ See the [CLI Documentation](https://ezcv.readthedocs.io/en/latest/cli/) for addi
 
 [Template repository for bootstrapping projects](https://github.com/qu-up/ezcv)
 
+[Template repository for ezcv integrated with flask](https://github.com/QU-UP/flask-ezcv)
+
 See documentation for [included themes](https://ezcv.readthedocs.io/en/latest/included-themes/) for examples of each of the included themes

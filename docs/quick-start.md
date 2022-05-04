@@ -76,6 +76,16 @@ If you already know which of the [included themes](included-themes.md) you want 
 
 ```ezcv init <name> <theme>``` (i.e. ```ezcv init "Kieran Wood" "paradigm_shift"```).
 
+If you prefer you can also initialize using the github [template repository](https://github.com/QU-UP/ezcv) which sets up a project with all of the fields filled in if you prefer that.
+
 From here check out the [usage](usage.md) page which will help you learn how to create and edit your content.
 
 Also a quick tip, you can use ```ezcv -p``` to quickly preview your site before pushing it to git, so you don't need to make multiple commits seeing how things look.
+
+### Initialize with Flask
+
+There is also the option to initialize a project using [Flask]() as an http server. You can do this by adding a `-f` to the command above (```ezcv init <name> <theme> -f```).
+
+You can also initialize it using the available [Template repo for flask integration](https://github.com/QU-UP/flask-ezcv)
+
+For existing projects you can also add this flask integration by copying the code from [here](https://github.com/QU-UP/flask-ezcv/blob/main/routes.py) and putting it into a new file called `routes.py` then installing flask (`pip install flask`) and running `python routes.py`

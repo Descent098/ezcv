@@ -45,7 +45,7 @@ To preview your content use:
 
 ```ezcv -p```
 
-*Note that your browser Cache may cause some issues when switching themes, please hard refresh (usually ctrl + r)*
+*Note that your browser Cache may cause some issues when switching themes, please hard refresh (usually ctrl + r) Additionally **DO NOT** proxy the port for this preview, it is not designed to be a production-ready http server*
 
 If you're on github then pushing the contents to master/main will activate the publish workflow and automatically publish the site to ```<username>.github.io```.
 
