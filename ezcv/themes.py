@@ -8,6 +8,7 @@
 # Standard Library Dependencies 
 import os                    # Used for path validation and manipulation
 import shutil                # Used to make copying and deletion of paths easier
+import logging
 import datetime
 import tempfile              # Used to generate temporary folders for downloads
 from zipfile import ZipFile  # Used to extract all directories from zip archives
@@ -50,27 +51,33 @@ def get_theme_section_directories(theme_folder:str, sections:list = [], preview:
     list
         The name(s) of the section templates that exist within the sections list without extensions
     """
+    logging.debug(f"[ezcv get_theme_section_directories({theme_folder=}, {sections=}, {preview=})] Getting sections for theme {theme_folder}")
     if preview:
+        logging.debug(f"[ezcv get_theme_section_directories()] Preview mode specified generating sections list from scrath")
         sections = []
-        if os.path.exists(os.path.join(theme_folder, "sections")):
+        if os.path.exists(os.path.join(theme_folder, "sections")): # Regenerating sections list to avoid global state bugs
             for section in os.listdir(os.path.join(theme_folder, "sections")):
                 if section.endswith(".jinja"):
                     section = section.replace(".jinja", "")
                     sections.append(section)
                 elif os.path.isdir(os.path.join(theme_folder, "sections", section)): # blog sections
                     sections.append(section)
+            logging.debug(f"[ezcv get_theme_section_directories()] Sections list generated: {sections=}")
             return sections
         else:
             return []
     elif sections and not preview:
+        logging.debug(f"[ezcv get_theme_section_directories()] Sections list provided, returning: {sections=}")
         return sections
     elif os.path.exists(os.path.join(theme_folder, "sections")):
+        logging.debug(f"[ezcv get_theme_section_directories()] No sections list provided, generating from theme folder")
         for section in os.listdir(os.path.join(theme_folder, "sections")):
             if section.endswith(".jinja"):
                 section = section.replace(".jinja", "")
                 sections.append(section)
             elif os.path.isdir(os.path.join(theme_folder, "sections", section)): # blog sections
                 sections.append(section)
+        logging.debug(f"[ezcv get_theme_section_directories()] Sections list generated, returning: {sections=}")
         return sections
     else:
         return []
@@ -87,13 +94,15 @@ def setup_remote_theme(name: str, url: str):
     url : str
         The URL to the .zip file
     """
+    logging.debug(f"[ezcv setup_remote_theme()] Downloading {name=} from {url=}")
     theme_folder_path = os.path.join(THEMES_FOLDER, name)
 
     if os.path.exists(theme_folder_path): # If theme folder already exists
+        logging.debug(f"[ezcv setup_remote_theme()] Theme alread exists")
         return # Exit function
 
     else: # Download remote theme
-
+        logging.debug(f"[ezcv setup_remote_theme()] Downloading theme from {url=}")
         # Setting up necessary download variables
         file_stream = requests.get(url, stream=True) # The open http request for the file
         chunk_size = 1024 # Setting the progress bar chunk size to measure in kb
@@ -116,17 +125,20 @@ def setup_remote_theme(name: str, url: str):
             progress_bar.close()
 
             # Extract zip file to theme folder
+            logging.debug(f"[ezcv setup_remote_theme()] Extracting theme from {zip_folder_path}")
             with ZipFile(zip_folder_path, "r") as archive:
                     archive.extractall(theme_folder_path) # Extract to theme folder
                     print(f"Extracted theme from {zip_folder_path} to folder {theme_folder_path}")
 
     # If theme is at THEME_FOLDER/<name>/<name> move code to THEME_FOLDER/<name>
-    if os.path.exists(os.path.join(theme_folder_path, name)): 
+    if os.path.exists(os.path.join(theme_folder_path, name)):
+        logging.debug(f"[ezcv setup_remote_theme()] Moving theme from {theme_folder_path}/{name} to {theme_folder_path}")
         print(f"moving {os.path.join(theme_folder_path, name)} to {theme_folder_path}")
         for current_file in os.listdir(os.path.join(theme_folder_path, name)):
             shutil.move(os.path.join(theme_folder_path, name, current_file), os.path.join(theme_folder_path))
         shutil.rmtree(os.path.join(theme_folder_path, name))
     elif len(os.listdir(theme_folder_path)) == 1: # If only one file in theme folder
+        logging.debug(f"[ezcv setup_remote_theme()] Moving theme from {os.listdir(theme_folder_path[0])} directory to {theme_folder_path}")
         print(f"moving {os.listdir(theme_folder_path)[0]} to {theme_folder_path}")
         theme_files = os.listdir(os.path.join(theme_folder_path, os.path.join(os.listdir(theme_folder_path)[0])))
         theme_files_folder = os.path.join(theme_folder_path, os.listdir(theme_folder_path)[0])
@@ -158,23 +170,29 @@ def locate_theme_directory(theme:str, site_context:dict) -> str:
     FileNotFoundError
         If no theme folder exists, or remote is defined
     """
+    logging.debug(f"[ezcv locate_theme_directory()] Locate theme directory for {theme=}")
     if os.path.exists(os.path.abspath(theme)):
+        logging.debug(f"[ezcv locate_theme_directory()] Theme found at {os.path.abspath(theme)}")
         theme_folder = os.path.abspath(theme)
     elif os.path.exists(os.path.abspath(os.path.join("themes", theme))):
+        logging.debug(f"[ezcv locate_theme_directory()] Theme found in dedicated theme folder {os.path.abspath(os.path.join('themes', theme))}")
         theme_folder = os.path.abspath(os.path.join("themes", theme))
     elif os.path.exists(os.path.abspath(os.path.join(THEMES_FOLDER, theme))):
+        logging.debug(f"[ezcv locate_theme_directory()] Theme found in ezcv source theme folder {os.path.abspath(os.path.join(THEMES_FOLDER, theme))}")
         theme_folder = os.path.abspath(os.path.join(THEMES_FOLDER, theme))
     elif theme in site_context["config"]["remotes"]:
+        logging.debug(f"[ezcv locate_theme_directory()] Theme found in remotes {site_context['config']['remotes'][theme]}")
         setup_remote_theme(theme, site_context["config"]["remotes"][theme])
         theme_folder = os.path.abspath(os.path.join(THEMES_FOLDER, theme))
     elif theme.startswith("http"):
+        logging.debug(f"[ezcv locate_theme_directory()] Theme is remote URL {theme_name}")
         theme_name = theme.split("/")[-1].replace(".zip", "")
         print(f"Downloading theme {theme_name} from {theme} to {os.path.join(THEMES_FOLDER, theme_name)}")
         setup_remote_theme(theme_name, theme)
         theme_folder = os.path.abspath(os.path.join(THEMES_FOLDER, theme_name))
     else:
         raise FileNotFoundError(f"Theme {theme} does not exist")
-
+    logging.debug(f"[ezcv locate_theme_directory()] Theme folder is {theme_folder}")
     return theme_folder
 
 
@@ -191,11 +209,12 @@ def get_remote_themes(remotes_file_path:str = os.path.join(THEMES_FOLDER, "remot
     dict
         A key-value pair of name to url of themes
     """
+    logging.debug(f"[ezcv get_remote_themes()] Getting remote themes list from {remotes_file_path=}")
     import yaml
     if os.path.exists(remotes_file_path):
         with open(remotes_file_path, "r") as remotes_file:
             remotes = yaml.safe_load(remotes_file)
-
+    logging.debug(f"[ezcv get_remote_themes()] Returning remotes {remotes=}")
     return remotes
 
 
@@ -223,11 +242,11 @@ def get_theme_metadata(theme_folder:str) -> defaultdict:
     metadata = get_theme_metadata(os.path.join(THEMES_FOLDER, theme_name))
     ```
     """
-
+    logging.debug(f"[ezcv get_theme_metadata()] Getting metadata for {theme_folder=}")
     # Get the metadata file
     with open(os.path.join(theme_folder, "metadata.yml"), "r") as metadata:
         data = yaml.safe_load(metadata)
-
+    logging.debug(f"[ezcv get_theme_metadata()] Returning metadata {data=}")
     return defaultdict(lambda: False, data)
 
 
@@ -265,6 +284,7 @@ def _generate_fields(section_content_folder:str) -> dict:
     fields = _generate_fields(os.path.join('content', 'dimension'))
     ```
     """
+    logging.debug(f"[ezcv _generate_fields()] Generating fields for {section_content_folder=}")
     fields = {}
     # section_content_folder would be like /content/education
     files = os.listdir(section_content_folder)
@@ -272,6 +292,7 @@ def _generate_fields(section_content_folder:str) -> dict:
         raise ValueError(f"No files in {section_content_folder}")
 
     if files[0].endswith("md"):
+        logging.debug(f"[ezcv _generate_fields()] Found markdown files in {section_content_folder=}")
         metadata, _ = Markdown().get_content(os.path.join(section_content_folder, files[0]))
         for field in metadata: # Get each field type from the first markdown file
             if type(metadata[field]) == str:
@@ -338,7 +359,8 @@ def generate_theme_metadata(theme_folder:str, force:bool=False) -> defaultdict:
     with open(os.path.join(THEMES_FOLDER, 'dimension', 'metadata.yml'), 'w+') as metadata_file:
         yaml.dump(dict(data_2), metadata_file)
     ```
-    """    
+    """
+    logging.debug(f"[ezcv generate_theme_metadata()] Generating metadata for {theme_folder=}")
     if not os.path.exists(theme_folder):
         raise ValueError(f"Theme folder {theme_folder} does not exist")
     elif not os.path.exists(os.path.join(theme_folder, "index.jinja")):
@@ -357,6 +379,7 @@ def generate_theme_metadata(theme_folder:str, force:bool=False) -> defaultdict:
         data["sections"] = {}
         for section in os.listdir(os.path.join(theme_folder, "sections")):
             if os.path.isdir(os.path.join(theme_folder,"sections", section)):
+                logging.debug(f"[ezcv generate_theme_metadata()] Generating metadata for blog-like section: {section=}")
                 data["sections"][section] = {"type": "blog"}
                 if os.path.isdir(os.path.join("content", section)):
                     data["sections"][section]["fields"] = _generate_fields(os.path.join("content", section))
@@ -378,8 +401,10 @@ def generate_theme_metadata(theme_folder:str, force:bool=False) -> defaultdict:
                     data["sections"][section]["feed"] = False
 
             elif section == "gallery.jinja":
+                logging.debug(f"[ezcv generate_theme_metadata()] Generating metadata for gallery section: {section=}")
                 data["sections"]["gallery"] = {"type": "gallery"}
             else:
+                logging.debug(f"[ezcv generate_theme_metadata()] Generating metadata for markdown section: {section=}")
                 if os.path.isdir(os.path.join("content", section.replace(".jinja", ""))):
                     data["sections"][section.replace(".jinja", "")] = {"type": "markdown", "fields": _generate_fields(os.path.join("content", section.replace(".jinja", "")))}
                 else:
@@ -403,6 +428,7 @@ def get_repo_last_updated(user_name:str="QU-UP", repo_name: str="ezcv-themes") -
     datetime.datetime
         A datetime object representing the last updated date of the repository
     """
+    logging.debug(f"[ezcv get_repo_last_updated()] Getting last updated date for https://github.com{user_name}/{repo_name}")
     response = requests.get(f'https://api.github.com/repos/{user_name}/{repo_name}/branches/master')
     date_changed = datetime.datetime.strptime(response.json()["commit"]["commit"]["author"]["date"], "%Y-%m-%dT%H:%M:%SZ")
     return date_changed

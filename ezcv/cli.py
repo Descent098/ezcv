@@ -54,6 +54,7 @@ theme(list_themes = True)
 # Standard Lib Dependencies
 import os                   # Used for path validation
 import shutil               # Used for file/folder copying and removal
+import logging
 import datetime
 from glob import glob       # Used to glob filepaths (patternmatch filepaths)
 from sys import argv, exit  # Used to get length of CLI args and exit cleanly
@@ -101,15 +102,20 @@ def init(theme="dimension", name="John Doe", flask:bool = False):
     name : (str, optional)
         The name to use in the config, by default "John Doe"
     """
+    logging.debug(f"[ezcv cli.init()] Initializing site with theme {theme} and name {name}")
     print(f"Generating site at {os.path.abspath(name)}")
 
+    logging.debug(f"[ezcv cli.init()] Copying example site from {os.path.join(os.path.dirname(__file__), 'example_site')} to {os.path.abspath(name)}")
     shutil.copytree(os.path.join(os.path.dirname(__file__), "example_site"), os.path.abspath(name))
 
     # Generate initial config.yml file
+    logging.debug(f"[ezcv cli.init()] generating config file")
     with open(os.path.join(name, "config.yml"), "w+") as config_file:
         config_file.write(f"# See https://ezcv.readthedocs.io for documentation\nname: {name}\ntheme: {theme}\nresume: false")
 
     if theme != "dimension":
+        logging.debug(f"[ezcv cli.init()] Not using dimension theme, copying theme {theme}")
+
         # Check if theme is remote theme, and download it if it is
         remote_themes = get_remote_themes()
         if remote_themes.get(theme, False):
@@ -119,9 +125,11 @@ def init(theme="dimension", name="John Doe", flask:bool = False):
             os.chdir(original_directory)                      # Navigate back to original cwd
 
     if flask:
+        logging.debug(f"[ezcv cli.init()] Finalizing Flask setup")
         os.remove(os.path.join(name, "standard-README.md"))
         os.rename(os.path.join(name, "flask-README.md"), os.path.join(name, "README.md"))
     else:
+        logging.debug(f"[ezcv cli.init()] Finalizing Standard setup")
         os.remove(os.path.join(name, "routes.py"))
         os.remove(os.path.join(name, "requirements.txt"))
         os.remove(os.path.join(name, "flask-README.md"))
@@ -132,6 +140,7 @@ def init(theme="dimension", name="John Doe", flask:bool = False):
 
 def preview():
     """Creates a temporary folder of the site's files and then previews it in browser"""
+    logging.debug(f"[ezcv cli.preview()] Generating temporary site preview")
     start_server()
 
 
@@ -152,18 +161,22 @@ def theme(list_themes: bool = False, copy_theme:bool = False, theme:str = "", me
     metadata : bool, optional
         Whether or not to generate metadata for the theme, by default False
     """
+    logging.debug(f"[ezcv cli.theme({list_themes=}, {copy_theme=}, {theme=}, {metadata=})] Calling theme command")
     if not theme:
+        logging.debug(f"[ezcv cli.theme()] No theme provided, using dimension theme")
         theme = "dimension"
 
     if metadata:
         if os.path.exists(os.path.join(THEMES_FOLDER, theme)): # If the theme exists in the themes folder
             try: # Try to copy the theme to ./<theme>
+                logging.debug(f"[ezcv cli.theme()] Copying theme {theme} to ./{theme}")
                 shutil.copytree(os.path.join(THEMES_FOLDER, theme), theme)
             except FileExistsError: # If a folder exists at ./<theme> remove and then re-copy
                 shutil.rmtree(theme)
                 shutil.copytree(os.path.join(THEMES_FOLDER, theme), theme)
             print(f"Copied {os.path.join(THEMES_FOLDER, theme)} to .{os.sep}{theme}")
             print(f"Generating/updating theme metadata for {theme}")
+            logging.debug(f"[ezcv cli.theme()] Metadata specified, generating metadata file")
             metadata_path = os.path.abspath(f".{os.sep}{theme}{os.sep}metadata.yml")
             data = generate_theme_metadata(os.path.abspath(f".{os.sep}{theme}"), force=True)
             if not data["created"]:
@@ -179,6 +192,7 @@ def theme(list_themes: bool = False, copy_theme:bool = False, theme:str = "", me
     if copy_theme and not metadata:
         if os.path.exists(os.path.join(THEMES_FOLDER, theme)): # If the theme exists in the themes folder
             try: # Try to copy the theme to ./<theme>
+                logging.debug(f"[ezcv cli.theme()] Copying theme {theme} to ./{theme}")
                 shutil.copytree(os.path.join(THEMES_FOLDER, theme), theme)
             except FileExistsError: # If a folder exists at ./<theme> remove and then re-copy
                 shutil.rmtree(theme)
@@ -200,12 +214,14 @@ def theme(list_themes: bool = False, copy_theme:bool = False, theme:str = "", me
 
     if list_themes:
         # Get local themes
+        logging.debug(f"[ezcv cli.theme()] Listing local themes")
         print(f"\nAvailable local themes\n{'='*22}")
         for theme in os.listdir(THEMES_FOLDER):
             if not theme == "remotes.yml":
                 print(f"  - {theme}")
 
         # Get remote themes
+        logging.debug(f"[ezcv cli.theme()] Getting remote themes")
         print(f"\nAvailable remote themes\n{'='*23}")
         with open(os.path.join(THEMES_FOLDER, "remotes.yml")) as remote_themes:
             for theme in yaml.safe_load(remote_themes):
@@ -231,6 +247,7 @@ def new_section(section_name:str) -> bool:
     bool
         True if the creation was successful and False if it failed early
     """    
+    logging.debug(f"[ezcv cli.new_section({section_name=})] Creating a new section")
     if os.path.exists("config.yml"):
         config_path = "config.yml"
     elif os.path.exists("../config.yml") :
@@ -239,12 +256,13 @@ def new_section(section_name:str) -> bool:
         print(f"{fg(1)}You are not in a project root folder, please run from folder with config.yml{fg(15)}\n")
         return False
 
+    logging.debug(f"[ezcv cli.new_section()] Getting site config")
     config = get_site_config(config_file_path=config_path)
     if not config["theme"]: # Set to default theme if no theme is set
         config["theme"] = "dimension"
 
     # TODO: update this to use the theme's metadata
-
+    logging.debug(f"[ezcv cli.new_section()] Getting theme metadata")
     theme_path = locate_theme_directory(config["theme"], {"config": config})
     if os.path.exists(config["theme"]): # Theme is at cwd i.e. ./aerial
         theme_path = config["theme"]
@@ -256,6 +274,7 @@ def new_section(section_name:str) -> bool:
         print(f"{fg(1)}Could not find theme at any of the possible locations\n\t{config['theme']}\n\t{os.path.join('..', config['theme'])}\n\t{os.path.join(THEMES_FOLDER, config['theme'])} {fg(15)}\n")
         return False
 
+    logging.debug(f"[ezcv cli.new_section()] Getting content directory")
     if os.path.exists("content"):
         content_path = "content"
     elif os.getcwd().split(os.sep)[-1] == "content": # Inside the current content folder
@@ -273,7 +292,9 @@ def new_section(section_name:str) -> bool:
     # Begin creating content folder and theme file
     if not os.path.exists(os.path.join(content_path, section_name)): # If the content folder doesn't already exist
         if not os.path.exists(os.path.join(theme_path, "sections", f"{section_name}.jinja")) and not os.path.exists(os.path.join(theme_path, "sections", f"{section_name}.html")): # If jinja theme doesn't already exist
+            logging.debug(f"[ezcv cli.new_section()] Creating section folder")
             os.mkdir(os.path.join(content_path, section_name))
+            logging.debug(f"[ezcv cli.new_section()] Creating section theme file")
             with open(os.path.join(theme_path, "sections", f"{section_name}.jinja"), 'w+') as section_file:
                 section_file.write(default_section_page_templte)
         else: # Theme file already existed
@@ -304,19 +325,22 @@ def optimize(directory:str = "site"):
     directory : str
         The directory you want to minify all files from
     """
-
+    logging.debug(f"[ezcv cli.optimize({directory=})] Optimizing files")
     # Minify html/css/js
     html = glob(f'{directory}{os.sep}*.html')
     css = glob(f'{os.path.join(os.path.join(directory, "css"))}{os.sep}*.css')
     js = glob(f'{os.path.join(os.path.join(directory, "js"))}{os.sep}*.js')
 
     for file in html:
+        logging.debug(f"[ezcv cli.optimize()] Processing html file: {file}")
         process_single_html_file(file, overwrite=True)
     
     for file in css:
+        logging.debug(f"[ezcv cli.optimize()] Processing css file: {file}")
         process_single_css_file(file, overwrite=True)
     
     for file in js:
+        logging.debug(f"[ezcv cli.optimize()] Processing js file: {file}")
         process_single_js_file(file, overwrite=True)
 
     # Find and process images
@@ -327,6 +351,7 @@ def optimize(directory:str = "site"):
     for extension in [png, jpg, jpeg]:
         if extension: # if list is not empty
             for image in extension:
+                logging.debug(f"[ezcv cli.optimize()] Processing image file: {image}")
                 pil_object = Image.open(image)
                 pil_object.save(image, optimize=True, quality=85)
 
@@ -334,6 +359,7 @@ def main():
     """The primary entrypoint for the ezcv cli"""
     from ezcv import __version__ as version
     args = docopt(usage, version=version)
+    logging.debug(f"[ezcv cli.main()] Arguments: {args}")
 
     if len(argv) == 1: # Print usage if no arguments are given
         print("\n", usage)

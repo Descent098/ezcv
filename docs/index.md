@@ -52,3 +52,11 @@ Here are some additional resources to help you get started generating content
 - [Free open source images](https://unsplash.com/)
 - [Online Vector graphics creation system](https://vectr.com/)
 - [Online photo editor](https://pixlr.com/x/)
+
+## Acknowledgements
+
+A big thank you to the providers for themes that are used heavily throughout the project.
+
+[Start Bootstrap](https://startbootstrap.com/)
+
+[HTML5UP](https://html5up.net/)

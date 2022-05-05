@@ -950,3 +950,13 @@ sections:
 ## Submitting a theme to be officially supported
 
 Currently all themes (except the base and dimension themes) are pulled from a remote repository [https://github.com/QU-UP/ezcv-themes](https://github.com/QU-UP/ezcv-themes). If you want to submit a theme, then head there and [submit it](https://github.com/QU-UP/ezcv-themes/issues/new?assignees=&labels=new-theme&template=new_theme.md&title=%5BTheme%5D) and then create a pull request with the ticket submission referenced.
+
+## Acknowledgements & Licenses
+
+A big thank you to the providers for themes that are used heavily throughout the project. Keep in mind any attributions made in the code are **required to keep in the code**.
+
+[Start Bootstrap](https://startbootstrap.com/)
+
+[HTML5UP](https://html5up.net/)
+
+If you want to use an attribution free version of HTML5UP themes checkout [pixelarity](https://pixelarity.com/)

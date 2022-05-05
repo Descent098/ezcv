@@ -26,6 +26,7 @@ get_section_content() -> List[List[Union[defaultdict, str]]]:
 """
 # Standard Lib Dependencies
 import os                                                # Used primarily in path validation
+import logging
 import datetime
 from collections import defaultdict                      # Used to give dicts default args
 from dataclasses import dataclass, field                 # Used to improve class performance
@@ -46,10 +47,13 @@ def get_content_directories() -> List[str]:
     List[str]:
         The list of existing content directories i.e. ["projects", "education"]
     """
+    logging.debug("[ezcv get_content_directories()] Getting content directories")
     result:list[str] = []
     for current_path in os.listdir("content"):
         if os.path.isdir(os.path.join("content", current_path)):
             result.append(os.path.join("content", current_path))
+
+    logging.debug(f"[ezcv get_content_directories()] result {result}")
     return result
 
 
@@ -87,13 +91,15 @@ def get_section_content(section_content_folder: str, examples: bool = False, blo
     print(content[0]) # Prints [defaultdict(<function <lambda> at 0x000001F1B97CE040>, {'title': 'This is the title', 'company': 'This is the company'}), '<p>This is some content</p>']
     ```
     """
+    logging.debug(f"[ezcv get_section_content({section_content_folder=}, {examples=}, {blog=})] Getting section content for {section_content_folder}")
     content:List[List[Union[defaultdict, str]]] = []
     extension_handlers:DefaultDict[str, Type] = Content.get_available_extensions()
-
+    logging.debug(f"[ezcv get_section_content()] Beggining file iteration")
     for file_name in os.listdir(section_content_folder):                   # Iterate through the section_content folder and get the content from each file
         if not examples and file_name.startswith("example"):
             continue
         else:
+            logging.debug(f"[ezcv get_section_content()] Getting content for {file_name}")
             extension = "." + file_name.lower().split(".")[-1]      # Get the file extension
             if extension_handlers[extension]:                       # Checking if there exists a Content subclass capable of handling the file
                 extension_handler = extension_handlers[extension]() # Instantiate the proper extension
@@ -112,6 +118,7 @@ def get_section_content(section_content_folder: str, examples: bool = False, blo
                     
 
                     content.append([metadata, html, file_name])
+    logging.debug(f"[ezcv get_section_content()] Returning section content {content=}")
     return content
 
 
@@ -180,10 +187,13 @@ class Content(dict):
         DefaultDict[str, Type]:
             A defaultdict with a str for the extension as a key, and the type as a value
         """
+        logging.debug("[ezcv Content.get_available_extensions()] Getting available extensions")
         all_extensions:DefaultDict[str, Type] = defaultdict(lambda:False)
         for current_class in Content.__subclasses__():
             for extension in current_class.extensions:
                 all_extensions[extension] = current_class
+
+        logging.debug(f"[ezcv Content.get_available_extensions()] Found extensions {all_extensions=}")
         return all_extensions
 
 
@@ -271,13 +281,14 @@ class Markdown(Content):
         defaultdict
             Returns a defaultdict with the yaml metadata of a peice of content
         """
-
+        logging.debug("[ezcv Markdown.__metadata__()] Getting metadata")
         metadata:defaultdict = defaultdict(lambda:False)
         for key in self.md.Meta: # Create defaultdict out of metadata
             if type(self.md.Meta[key]) == list:
                 metadata[key] = self.md.Meta[key][0]
             else:
                 metadata[key] = self.md.Meta[key]
+        logging.debug(f"[ezcv Markdown.__metadata__()] Returning metadata {metadata=}")
         return metadata
 
 
@@ -294,9 +305,11 @@ class Markdown(Content):
         str
             The HTML rendered from the markdown file
         """
+        logging.debug(f"[ezcv Markdown.__html__()] Getting HTML for {file_path=}")
         with open(f"{file_path}", "r") as mdfile: # Parse markdown file
             text = mdfile.read()
         html = self.md.convert(text) # Convert the markdown content text to hmtl
+        logging.debug(f"[ezcv Markdown.__html__()] Returning HTML for {file_path=}")
         return html
 
 
@@ -327,10 +340,12 @@ class Markdown(Content):
         metadata, html  = Markdown().get_content('file_1.md')
         ```
         """
+        logging.debug(f"[ezcv Markdown.get_content()] Getting content for {file_path=}")
         if not os.path.exists(file_path): # If file doesn't exist
             raise FileNotFoundError(f"{fg(1)} Could not find file: {file_path}{fg(15)}\n")
         html = self.__html__(file_path)
         metadata = self.__metadata__()
+        logging.debug(f"[ezcv Markdown.get_content()] Returning content for {file_path=}")
         return metadata, html
 
 
@@ -370,6 +385,7 @@ class Image(Content):
         defaultdict
             A defaultdict of the keys with the metadata in it
         """
+        logging.debug(f"[ezcv Image.__metadata__()] Getting metadata for {filename=}")
         if self.ignore_exif_data:
             return defaultdict(lambda:False)
 
@@ -377,9 +393,12 @@ class Image(Content):
             with open(filename ,"rb") as f:
                 tags = exifread.process_file(f)
             tags = defaultdict(lambda:False, tags)
+            logging.debug(f"[ezcv Image.__metadata__()] Returning EXIF Tags for {filename=} {tags=}")
+
             return tags
 
         else:
+            logging.debug(f"[ezcv Image.__metadata__()] No EXIF Tags for {filename=}")
             return defaultdict(lambda:False)
 
 
@@ -396,6 +415,7 @@ class Image(Content):
         str
             The HTML of the EXIF data from the file
         """
+        logging.debug(f"[ezcv Image.__html__({tags=})] Getting HTML for {self.image_paths=}")
         html = ""
 
         # Lens detail
@@ -461,6 +481,7 @@ class Image(Content):
         metadata, html = Image().get_content('1.jpg')
         ```
         """
+        logging.debug(f"[ezcv Image.get_content()] Getting content for {file_path=}")
         tags = self.__metadata__(file_path)
         html = self.__html__(tags)
         tags["file_path"] = f"images/gallery/{file_path.split(os.path.sep)[-1]}"

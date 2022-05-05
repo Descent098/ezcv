@@ -8,25 +8,41 @@ The focus for this release is on stability, and improved testing along with a fe
 
 - Blog posts
 - Theme Metadata
-- Caching for faster Rebuilds
 - Adding an optimized mode for builds to increase site performance
 - Added ability to create and use custom ad-hoc filters; pass a list of function objects (called `extra_filters`) to ```ezcv.generate_site()```
 - Enabled updating of themes from CLI
 - Added a test suite to ensure feature stability
 - Added ability to directly invoke ezcv through python binary after installation ```python -m ezcv```
+- Added ability to specify a remote URl for `config.yml` theme variable
+- Added continuous previewing to `ezcv -p`
+- Added option to initialize with flask `ezcv init -f`
+- Added `python -m ezcv` invocation
+- Added logging to files so attached loggers can get details for troubleshooting (logging.info and logging.debug are recommended settings)
 
 ### Themes
 
 - Added [massively](https://html5up.net/massively)
-- Added ability to embed theme metadata TODO: ADD LINK TO DOCS
+- Added ability to embed theme metadata
 - Enabled updating of themes from CLI
+- Added blog section to existing themes
+  - dimension
+  - grayscale
+  - solid_state
+  - read_only
 
 ### Bug Fixes
+
+- Added missing `highlightjs` to all themes for code blocks
+- Fixed bugs with preview loading in included themes docs
 
 ### Documentation improvements
 
 - Added sections documenting new features
 - Rearranged included themes section to be alphabetical
+- Added section outlining sequence diagram for site generation
+- Added additional walkthrough videos for getting started
+- Added additional resources to help generating content
+- Added notice thanking theme providers
 
 ## V0.2.2; August 2nd 2021
 

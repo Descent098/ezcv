@@ -2,6 +2,16 @@
 
 Below is the documentation for the configuration and usage of all included themes.
 
+## Acknowledgements & Licenses
+
+A big thank you to the providers for themes that are used heavily throughout the project. Keep in mind any attributions made in the code are **required to keep in the code**.
+
+[Start Bootstrap](https://startbootstrap.com/)
+
+[HTML5UP](https://html5up.net/)
+
+If you want to use an attribution free version of HTML5UP themes checkout [pixelarity](https://pixelarity.com/)
+
 ## Aerial
 
 Author:  [HTML5Up](https://html5up.net/)

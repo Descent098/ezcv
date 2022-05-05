@@ -273,6 +273,20 @@ To add new filters you will need to add the function to ```ezcv.filters```, and 
 
 ## Extra documentation
 
+### Logging
+
+There is logging available for debugging simply use a setup like this:
+
+
+```python
+import logging
+
+logger = logging.getLogger()
+
+logger.setLevel(logging.DEBUG)
+
+... # Run whichever function you're testing
+```
 
 ### Sequence diagram of generating a site
 

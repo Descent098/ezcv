@@ -125,6 +125,7 @@ def _render_section(section_name:str, site_context:dict, environment:jinja2.Envi
         section_template_file = f"sections/{section_name}.jinja"
         if len(contents) > 0: # If there is any markdown content
             try:
+                logging.debug("[ezcv _render_section()] Found markdown section")
                 theme = environment.get_template(section_template_file)
             except jinja2.TemplateNotFound: # If current section is not supported
                 print(f"Section {section_name} template is not available")
@@ -133,6 +134,7 @@ def _render_section(section_name:str, site_context:dict, environment:jinja2.Envi
         else:
             return ""
     else: # Rendering blog sections
+        logging.debug("[ezcv _render_section()] Found blog section")
         overview_file = f"sections/{section_name}/overview.jinja"
         feed_file = f"sections/{section_name}/feed.jinja"
         single_file = f"sections/{section_name}/single.jinja"
@@ -141,15 +143,19 @@ def _render_section(section_name:str, site_context:dict, environment:jinja2.Envi
         feed_file_path = os.path.join(theme_folder, feed_file)
         single_file_path = os.path.join(theme_folder, single_file)
         if not overview_file_path:
+            logging.debug("[ezcv _render_section()] No overview template file found")
             overview_file = ""
         if not feed_file_path:
+            logging.debug("[ezcv _render_section()] No feed template file found")
             html = ""
         elif feed_file_path:
             if len(contents) > 0: # If there is any markdown content
+                logging.debug("[ezcv _render_section()] Rendering feed file")
                 html = environment.get_template(feed_file).render({section_name:contents, "config": site_context["config"]})
             else:
                 html = ""
         if not single_file_path:
+            logging.debug("[ezcv _render_section()] No single template file found")
             single_file = ""
         return single_file, overview_file, html
 
@@ -275,7 +281,6 @@ def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment,
                         title = content_file[2].replace('.md', '')
                     if title == "index":
                         raise ValueError("The title of a blog post cannot be 'index'")
-                    print(f"[ezcv _export()]: Rendering {title}")
                     try:
                         single_page_context = {"config": site_context["config"], "content": [content_file[0], content_file[1]]}
                         html = _render_page(template_file, single_page_context, environment)

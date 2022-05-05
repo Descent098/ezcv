@@ -21,6 +21,7 @@ pretty_defaultdict() -> str:
     Returns a prettyprinted form of a defaultdict
 """
 # Standard library dependencies
+import logging
 from pprint import pformat                     # Used to help pretty print dictionaries
 from inspect import stack, currentframe        # Used to get error messages from jinja templates
 from typing import Callable, DefaultDict, List # Used to typehint accurately for inline documentation
@@ -46,9 +47,11 @@ def inject_filters(env:jinja2.Environment, extra_filters:List[Callable] = []) ->
     jinja2.Environment
         The input environment with the filters injected
     """
+    logging.debug(f"[ezcv inject_filters()]: Beggining to inject filters")
     filters = [split_to_sublists, get_image_path, get_filename_without_extension, pretty_datetime, pretty_defaultdict]
 
     if extra_filters:
+        logging.debug(f"[ezcv inject_filters()]: Extra filters found")
         for filter in extra_filters:
             filters.append(filter)
 
@@ -115,6 +118,7 @@ def split_to_sublists(initial_list:list, n:int, strict:bool=True) -> List[list]:
         ... # Do stuff with each sublist
     ```
     """
+    logging.debug(f"[ezcv split_to_sublists({initial_list}, {n}, {strict})]: Beggining filter function")
     if strict:
         if not len(initial_list) % n == 0:
             raise ValueError(f"\033[;31m Provided list was not of correct size: \n\tList: {initial_list}\n\tSegment size {n} \033[0m")
@@ -166,6 +170,7 @@ def get_image_path(path:str) -> str:
         print(get_image_path(project[0]['image'])) # Prints https://example.com/img/image.jpg which is a usable path
     ```
     """
+    logging.debug(f"[ezcv get_image_path({path})]: Beggining to find image path")
     try:
         if path.startswith("http"):
             return path
@@ -220,6 +225,7 @@ def get_filename_without_extension(path:str) -> str:
         print(get_filename_without_extension(project[0]['image'])) # Prints "John Doe"
     ```
     """
+    logging.debug(f"[ezcv get_filename_without_extension({path})]: Beggining to find filename without path")
     return str(path.split("/")[-1].split(".")[0])
 
 def pretty_datetime(month_started:str, year_started:str, month_ended:str, year_ended:str, current:bool) -> str:
@@ -273,7 +279,7 @@ def pretty_datetime(month_started:str, year_started:str, month_ended:str, year_e
     print(pretty_datetime(month_started, year_started, month_ended, year_ended, current)) # October 2013 - December 2017
     ```
     """
-
+    logging.debug(f"[ezcv pretty_datetime({month_started}, {year_started}, {month_ended}, {year_ended}, {current}))]: Pretty printing datetime")
     
     if month_started or year_started:
         if month_started and year_started:
@@ -298,7 +304,7 @@ def pretty_datetime(month_started:str, year_started:str, month_ended:str, year_e
             end = f"{year_ended}"
     else:
         end = ""
-
+    logging.debug(f"[ezcv pretty_datetime({month_started}, {year_started}, {month_ended}, {year_ended}, {current}))]: result = {beginning}{sep}{end}")
     return f"{beginning}{sep}{end}"
 
 
@@ -338,4 +344,6 @@ def pretty_defaultdict(ugly_dict:DefaultDict) -> str:
     print(pretty_defaultdict(config)) # Prints config dict in pretty form
     ```
     """
+    logging.debug(f'[ezcv pretty_defaultdict({ugly_dict})]: result = {pformat(dict(ugly_dict)).replace("\n", "<br>").replace("{", "{<br>").replace("}", "<br>    }")}')
+
     return pformat(dict(ugly_dict)).replace("\n", "<br>").replace("{", "{<br>").replace("}", "<br>    }")
