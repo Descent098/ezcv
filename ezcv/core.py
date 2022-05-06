@@ -244,6 +244,7 @@ def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment,
     print("\nGenerating output html from theme")
     pages_iterator = tqdm(pages)
     pages_iterator.set_description_str("Generating top level pages")
+    templates_list = environment.list_templates()
     for page in pages_iterator:  # Write new pages
         if type(page) == str: # Standard markdown sections
             try:
@@ -260,6 +261,9 @@ def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment,
         elif type(page) == list: # Blog sections
             if len(page) == 2: # overview pages
                 logging.debug(f"[ezcv _export()]: Rendering {page[0]} overview page")
+                if not "overview.jinja" in templates_list:
+                    print("[ezcv _export()]: No overview template found")
+                    continue
                 try:
                     html = _render_page(page[1], site_context, environment)
                 except jinja2.UndefinedError as e:
@@ -273,6 +277,9 @@ def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment,
                     outfile.write(html)
             elif len(page) == 3: # Single pages
                 logging.debug(f"[ezcv _export()]: Rendering {page[0]} single pages")
+                if not "single.jinja" in templates_list:
+                    print("[ezcv _export()]: No single blog post template found")
+                    continue
                 template_file = page[1]
                 for content_file in page[2]:
                     if content_file[0]["title"]:

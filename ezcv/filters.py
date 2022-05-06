@@ -344,6 +344,6 @@ def pretty_defaultdict(ugly_dict:DefaultDict) -> str:
     print(pretty_defaultdict(config)) # Prints config dict in pretty form
     ```
     """
-    logging.debug(f'[ezcv pretty_defaultdict({ugly_dict})]: result = {pformat(dict(ugly_dict)).replace("\n", "<br>").replace("{", "{<br>").replace("}", "<br>    }")}')
+    logging.debug(f'[ezcv pretty_defaultdict({ugly_dict})]: Pretty printing defaultdict')
 
     return pformat(dict(ugly_dict)).replace("\n", "<br>").replace("{", "{<br>").replace("}", "<br>    }")

@@ -10,7 +10,6 @@ The focus for this release is on stability, and improved testing along with a fe
 - Theme Metadata
 - Adding an optimized mode for builds to increase site performance
 - Added ability to create and use custom ad-hoc filters; pass a list of function objects (called `extra_filters`) to ```ezcv.generate_site()```
-- Enabled updating of themes from CLI
 - Added a test suite to ensure feature stability
 - Added ability to directly invoke ezcv through python binary after installation ```python -m ezcv```
 - Added ability to specify a remote URl for `config.yml` theme variable
@@ -23,7 +22,6 @@ The focus for this release is on stability, and improved testing along with a fe
 
 - Added [massively](https://html5up.net/massively)
 - Added ability to embed theme metadata
-- Enabled updating of themes from CLI
 - Added blog section to existing themes
   - dimension
   - grayscale
