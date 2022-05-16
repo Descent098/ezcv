@@ -1,5 +1,13 @@
 # Changelog
 
+## V0.3.2; May 16th 2022
+
+More minor fixes
+
+### Bug Fixes
+
+- Included missing `flask` dependency
+
 ## V0.3.1; May 16th 2022
 
 Minor fixes related to release
