@@ -824,12 +824,6 @@ sections:
 - Theme Name: str
 - Date Created: Datetime string
 - Date Updated: Datetime string
-- Acquisition Method: literal [source, first party, third party] *not currently implemented
-  - This indicates how the theme was gotten 
-    - Source = Included with ezcv (base, dimension)
-    - First Party = From Qu-up/ezcv-themes
-    - Third Party = Anywhere else
-        - Would include URL or path where it was attained from 
 - Sections (see below)
 
 *See [type indicators](#type-indicators-for-field) for any types you are unsure of.*

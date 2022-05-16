@@ -261,7 +261,7 @@ def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment,
         elif type(page) == list: # Blog sections
             if len(page) == 2: # overview pages
                 logging.debug(f"[ezcv _export()]: Rendering {page[0]} overview page")
-                if not "overview.jinja" in templates_list:
+                if not "sections/blog/overview.jinja" in templates_list:
                     print("[ezcv _export()]: No overview template found")
                     continue
                 try:
@@ -277,7 +277,7 @@ def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment,
                     outfile.write(html)
             elif len(page) == 3: # Single pages
                 logging.debug(f"[ezcv _export()]: Rendering {page[0]} single pages")
-                if not "single.jinja" in templates_list:
+                if not "sections/blog/single.jinja" in templates_list:
                     print("[ezcv _export()]: No single blog post template found")
                     continue
                 template_file = page[1]

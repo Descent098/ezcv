@@ -417,6 +417,7 @@ Keep in mind many latex packages are not available natively in MathJax, so depen
 ### Blog Content
 
 Blog markdown sections differ from standard markdown sections in how they show up. Generally they have 3 peices of metadata you need
+
 - Title: the title of the post
 - Created: a datestring of the day (i.e. for april 26th 2022 it would be `2022-04-26`)
 - Updated: a datestring of the day the post was last updated (i.e. for april 26th 2022 it would be `2022-04-26`)
