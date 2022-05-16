@@ -6,8 +6,8 @@ Here is the full usage for the CLI, but see below for specifics of each command:
 Usage:
     ezcv [-h] [-v] [-p]
     ezcv init [<name>] [<theme>]
-    ezcv build [-d OUTPUT_DIR] [-p]
-    ezcv theme [-l] [-c] [-s SECTION_NAME] [<theme>]
+    ezcv build [-d OUTPUT_DIR] [-o]
+    ezcv theme [-l] [-c] [-m] [-s SECTION_NAME] [<theme>]
 
 
 Options:
@@ -16,7 +16,9 @@ Options:
 -l, --list            list the possible themes
 -c, --copy            copy the provided theme, or defined site theme
 -p, --preview         preview the current state of the site
+-o, --optimize        Optimize output files (takes longer to run)
 -d OUTPUT_DIR, --dir OUTPUT_DIR The folder name to export the site to
+-m, --metadata        Generate metadata for the theme
 -s SECTION_NAME, --section SECTION_NAME The section name to initialize
 ```
 
@@ -46,27 +48,38 @@ To preview your site simply go to the root (where ```config.yml``` is) and run:
 ezcv -p
 ```
 
-**Note that preview is also available in the build command**
+*Note that your browser Cache may cause some issues when switching themes, please hard refresh (usually ctrl + r). Additionally **DO NOT** proxy the port for this preview, it is not designed to be a production-ready http server*
 
 ## Build
 
 The build command is used to export the site's HTML. 
 
 ```bash
-ezcv build --dir="site" -p
+ezcv build --dir="site"
 ```
 
 There are two optional flags:
 
 - The ```--dir``` flag for giving a custom name to the output directory (default is "site")
-- If you want to preview after the build (```-p```)
+- If you want to build the site and optimize the files after building (slower build times, but makes site faster) then use ``-o`` or ``--optimize``. Note this only works with themes using the [official folder structure](https://ezcv.readthedocs.io/en/latest/theme-development/#folder-layout), and the image minification will also clear any exif data.
 
 **Example**
 
-If you want to create a site at ```./my_site``` and preview it after building you would do:
+If you want to create a site at ```./my_site```:
 
 ```bash
-ezcv build --dir="my_site" -p
+ezcv build --dir="my_site"
+```
+
+If you want to create a site at ```./site``` that has it's files optimized you could do:
+
+```bash
+ezcv build -o
+```
+
+If you want to create a site at ```./my_site``` that has it's files optimized you could do:
+```bash
+ezcv build --dir="my_site" -o
 ```
 
 ## Theme
@@ -85,6 +98,7 @@ There are two optional flags and one positional argument:
   - Then it will check if there's a ```config.yml``` file in the current directory and copy that one
   - Then it will just default to exporting the dimension theme
 - ```-s``` Used to create a new section in a theme
+- ```-m``` used to generate metadata file (note will also copy into project folder if not already there)
 
 
 **Examples**
@@ -105,6 +119,12 @@ ezcv theme -c
 
 ```bash
 ezcv theme -c aerial
+```
+
+*Generate a `metadata.yml` file for provided theme in the ```config.yml``` file in the same directory (note copies the theme if it's not already in the project directory)*
+
+```bash
+ezcv theme -m
 ```
 
 *Create a new section called books in the current theme*

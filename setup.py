@@ -1,5 +1,6 @@
 """Contains all the configuration for the package on pip"""
 import setuptools
+from ezcv import __version__
 
 def get_content(*filename:str) -> str:
     """ Gets the content of a file or files and returns
@@ -24,7 +25,7 @@ def get_content(*filename:str) -> str:
 
 setuptools.setup(
     name = "ezcv",
-    version = "0.2.2",
+    version = __version__,
     author = "Kieran Wood",
     author_email = "kieran@canadiancoding.ca",
     description = "An easy to use personal site generator",
@@ -56,11 +57,15 @@ setuptools.setup(
     "requests",              # Used to download remote themes
     "exifread",              # Used to read exif data from images
     "python-markdown-math",  # Used to render latex math equations
-    "colored"
+    "colored",               # Used to color terminal output for emphasis
+    "pillow",                # Used to do image compression for optimized builds
+    "css-html-js-minify",    # Used to minify html, css and JS files for optimized builds
+    "md-mermaid",            # Used to render mermaid graphs in markdown
         ],
     extras_require = {
         "dev" : ["mkdocs", # Used to create HTML versions of the markdown docs in the docs directory
-                "pdoc3"], # Used to create development docs
+                "pdoc3",   # Used to create development docs
+                ], 
 
     },
     classifiers = [

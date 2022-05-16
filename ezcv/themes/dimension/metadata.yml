@@ -1,0 +1,61 @@
+name: dimension
+ezcv_version: "0.3.0"
+created: 2022-04-22
+updated: 2022-04-22
+folder: dimension # Optional, only needed if folder is different than name field
+sections: # Optional, only if sections are available
+  education:
+    type: markdown
+    fields: # Optional, only if fields exist
+      title: str
+      institution:
+        required: true
+        type: str
+      month_started: str
+      year_started: str
+      month_ended: str
+      year_ended: str
+      current: bool
+  gallery:
+    type: gallery
+  blog:
+    type: blog
+    overview: true
+    single: true
+    feed: true
+  projects:
+    type: markdown
+    fields:
+      title:
+        required: true
+        type: str
+      image: image
+      link: str
+  volunteering_experience:
+    type: markdown
+    fields:
+      role:
+        required: true
+        type: str
+      company:
+        required: true
+        type: str
+      month_started: str
+      year_started: str
+      month_ended: str
+      year_ended: str
+      current: bool
+  work_experience:
+    type: markdown
+    fields:
+      role:
+        required: true
+        type: str
+      company:
+        required: true
+        type: str
+      month_started: str
+      year_started: str
+      month_ended: str
+      year_ended: str
+      current: bool

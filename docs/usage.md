@@ -45,6 +45,8 @@ To preview your content use:
 
 ```ezcv -p```
 
+*Note that your browser Cache may cause some issues when switching themes, please hard refresh (usually ctrl + r) Additionally **DO NOT** proxy the port for this preview, it is not designed to be a production-ready http server*
+
 If you're on github then pushing the contents to master/main will activate the publish workflow and automatically publish the site to ```<username>.github.io```.
 
 
@@ -67,7 +69,7 @@ Each site will have a ```config.yml``` file, this file is in the [YAML format](h
 | **address** | Your physical address | The full text of your address |
 | **social** | Social media links | github, twitch, youtube, instagram, twitter, snapchat, linkedin, facebook |
 | **examples** | Whether to include content files that have "example" at the start of the filename | true or false |
-| **theme** | The name of the theme to use | the name of any included theme i.e. dimension |
+| **theme** | The name of the theme to use, you can also use a URL to a zip folder | the name of any included theme i.e. dimension |
 | **ua_code** | The UA code provided to you by Google Analytics | Any code in the format UA-000000-0 (the 0's can be any number) |
 | **resume** | Whether or not to generate the resume page | Either true or false (false by default) |
 | **ignore_exif_data** | Whether to use exif data for gallery images | Either true or false (false by default) |
@@ -406,6 +408,19 @@ Keep in mind many latex packages are not available natively in MathJax, so depen
 
 [More details](https://github.com/mitya57/python-markdown-math)
 
+#### Mermaid (graphs/diagrams)
+
+**Note this integration is HIGHLY LIMITED**
+
+
+
+### Blog Content
+
+Blog markdown sections differ from standard markdown sections in how they show up. Generally they have 3 peices of metadata you need
+
+- Title: the title of the post
+- Created: a datestring of the day (i.e. for april 26th 2022 it would be `2022-04-26`)
+- Updated: a datestring of the day the post was last updated (i.e. for april 26th 2022 it would be `2022-04-26`)
 
 ## Sections
 
@@ -420,6 +435,7 @@ Here is the list of first party sections supported (check each theme to see whic
 - **Work Experience**: Any current/old work experience that you want to include
 - **Volunteering Experience**: Your current/old volunteer experience that you want to include
 - **Gallery**: Images you want to showcase (usage details can be found [here](#image-gallery))
+- **Blog**: Markdown files used for a blog-like content
 
 In your site you simply put the content you want to create inside ```content/<section name>```. For example to create a file about your ```education``` at ```MIT``` you would add a file called ```MIT.md``` inside ```content/education```. Assuming you used the setup steps from the [quick start](quick-start.md) this section should already be included. For each section there are included example files to let you know what fields are available (these won't be included in your export unless ```examples: true``` is set in your ```config.yml``` file).
 

@@ -13,7 +13,12 @@
         <!-- Google fonts-->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
-
+        <link rel="stylesheet" href="https://cdn.rawgit.com/knsv/mermaid/0.5.6/dist/mermaid.css">
+        <!-- Highlight JS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlightjs-themes@1.0.0/monokai_sublime.css">
+		<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+        <script src="https://unpkg.com/mermaid@8.1.0/dist/mermaid.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
         {% if config["ua_code"] %}
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id={{config['ua_code']}}"></script>
@@ -28,7 +33,7 @@
     </head>
     <body>
         <h1> Configuration Values </h1>
-        <h2>Full dictionary (running {% raw %} {{config | pretty_defaultdict |safe }} {% endraw %}) </h2>
+        <h2>Full dictionary </h2>
         {{ config | pretty_defaultdict |safe }}
         <h2>Individual config variables</h2>
         <ul>
@@ -72,6 +77,7 @@
         {{ work_experience_html | safe }}
         {{ volunteering_experience_html | safe }}
         {{ gallery_html | safe }}
+        {{ blog_html | safe }}
         <!-- Publications --> <!-- volunteering_experience_html | safe -->
     </body>
 </html>

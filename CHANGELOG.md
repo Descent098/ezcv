@@ -1,5 +1,44 @@
 # Changelog
 
+## V0.3.0; May 16th 2022
+
+The focus for this release is on adding blog support, QoL features and making ezcv a more well rounded static site builder. There will be a few items released in `0.3.1` that were meant for `0.3.0`, but due to the need for `python -m ezcv` in order for github pipelines to work this release is going out now.
+
+### Features
+
+- Blog posts
+- Theme Metadata
+- Adding an optimized mode for builds to increase site performance
+- Added ability to create and use custom ad-hoc filters; pass a list of function objects (called `extra_filters`) to ```ezcv.generate_site()```
+- Added ability to directly invoke ezcv through python binary after installation ```python -m ezcv```
+- Added ability to specify a remote URl for `config.yml` theme variable
+- Added continuous previewing to `ezcv -p`
+- Added option to initialize with flask `ezcv init -f`
+- Added `python -m ezcv` invocation
+- Added logging to files so attached loggers can get details for troubleshooting (logging.info and logging.debug are recommended settings)
+
+### Themes
+
+- Added ability to embed theme metadata
+- Added blog section to existing themes
+  - dimension
+  - grayscale
+  - solid_state
+  - read_only
+
+### Bug Fixes
+
+- Added missing `highlightjs` to all themes for code blocks
+- Fixed bugs with preview loading in included themes docs
+
+### Documentation improvements
+
+- Added sections documenting new features
+- Rearranged included themes section to be alphabetical
+- Added section outlining sequence diagram for site generation
+- Added additional resources to help generating content
+- Added notice thanking theme providers
+
 ## V0.2.2; August 2nd 2021
 
 Documentation bugs after release

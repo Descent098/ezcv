@@ -12,7 +12,11 @@
 		<link rel="stylesheet" href="css/main.css" />
 		<link rel="icon" type="image/png" href="images/favicon.png"/>
 		<noscript><link rel="stylesheet" href="css/noscript.css" /></noscript>
-
+		<!-- Mermaid-->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.0.1/mermaid.min.js" integrity="sha512-epOjc4LHlbK/a3+OjKdQMnoVZ5u6JYkw7AboRUqUV4dLULCLdcf4wt5TXuSYjpBJF+odA830p3rXbBniex33Bg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script>mermaid.initialize({startOnLoad:true});</script>
+        <!-- Highlight JS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlightjs-themes@1.0.0/monokai_sublime.css">
 		{% if config["ua_code"] %}
 		<!-- Global site tag (gtag.js) - Google Analytics -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id={{config['ua_code']}}"></script>
@@ -86,6 +90,10 @@
 
 								{% if gallery_html %}
 								<li><a href="#gallery">Gallery</a></li>
+								{%endif%}
+
+								{% if blog_html %}
+								<li><a href="/blog">Blog</a></li>
 								{%endif%}
 
 								{% if config['resume'] %}

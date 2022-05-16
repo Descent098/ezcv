@@ -135,8 +135,8 @@ If you're on github then pushing the contents to master/main will activate the p
 Usage:
     ezcv [-h] [-v] [-p]
     ezcv init [<name>] [<theme>]
-    ezcv build [-d OUTPUT_DIR] [-p]
-    ezcv theme [-l] [-c] [-s SECTION_NAME] [<theme>]
+    ezcv build [-d OUTPUT_DIR] [-o]
+    ezcv theme [-l] [-c] [-m] [-s SECTION_NAME] [<theme>]
 
 
 Options:
@@ -145,7 +145,9 @@ Options:
 -l, --list            list the possible themes
 -c, --copy            copy the provided theme, or defined site theme
 -p, --preview         preview the current state of the site
+-o, --optimize        Optimize output files (takes longer to run)
 -d OUTPUT_DIR, --dir OUTPUT_DIR The folder name to export the site to
+-m, --metadata        Generate metadata for the theme
 -s SECTION_NAME, --section SECTION_NAME The section name to initialize
 ```
 
@@ -160,5 +162,7 @@ See the [CLI Documentation](https://ezcv.readthedocs.io/en/latest/cli/) for addi
 ## Examples and resources
 
 [Template repository for bootstrapping projects](https://github.com/qu-up/ezcv)
+
+[Template repository for ezcv integrated with flask](https://github.com/QU-UP/flask-ezcv)
 
 See documentation for [included themes](https://ezcv.readthedocs.io/en/latest/included-themes/) for examples of each of the included themes

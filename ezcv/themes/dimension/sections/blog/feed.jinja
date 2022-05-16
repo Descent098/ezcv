@@ -1,0 +1,10 @@
+<a class="btn btn-info" style="color: #f0f0f0;background-color: #2f3237;border-color: #42454c;" href="/" target="_blank">Back to the main page</a>
+{% for post in blog %}
+    <div class="card" style="background-color: rgba(27, 31, 34, 0.85);color: #f0f0f0 !important;">
+            <div class="card-body">
+                    <h4 class="card-title">{{ post[0]["title"] }}</h4>
+                    <h6 class="text-muted card-subtitle mb-2">Created: {{ post[0]["created"] }} <br>Updated: {{ post[0]["updated"] }}</h6>
+                    <a class="border rounded button btn-info post-link" href="/{{ post[0]['title'] }}">See post</a>
+            </div>
+    </div>
+{% endfor %}

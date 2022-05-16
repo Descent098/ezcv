@@ -251,9 +251,69 @@ More details about jinja filters can be found [here](https://ttl255.com/jinja2-t
 ### Updating existing filters
 To update existing filters head to ```ezcv.filters``` and locate the filter you want to change. Be sure to familiarize yourself with the [syntax](#filter-syntax) first.
 
-### How to add new custom filters
+### How to add ad-hoc filters (add filters without updating ezcv source code)
+
+To inject a filter into the environment for rendering you can add the method object to the `extra_filters` parameter in ```ezcv.core.generate_site()```. 
+
+For example:
+
+```python
+from ezprez.core import generate_site
+
+def multiply(n:int, m:int) -> str:
+  """Takes in two numbers and multiplies them by each other"""
+  return str(n * m)
+
+generate_site(extra_filters=[multiply])
+```
+
+### How to add new custom filters to the core codebase
 
 To add new filters you will need to add the function to ```ezcv.filters```, and then add the function object to the `filters` list local variable inside ```ezcv.filters.inject_filters()```.
 
-**THE ABILITY TO DEFINE AD-HOC CUSTOM FILTERS IS UNDER DEVELOPMENT AND WILL BE RELEASED IN VERSION 0.3.0**
+## Extra documentation
+
+### Logging
+
+There is logging available for debugging simply use a setup like this:
+
+
+```python
+import logging
+
+logger = logging.getLogger()
+
+logger.setLevel(logging.DEBUG)
+
+... # Run whichever function you're testing
+```
+
+### Sequence diagram of generating a site
+
+<img src="/en/latest/img/generate_site_sequence.svg" width="100%" height="600px">
+
+<details>
+<summary>Mermaid source </summary>
+~~~mermaid
+sequenceDiagram
+    core.generate_site()->>+core.get_site_config(): Getting site_context["config"]
+    core.get_site_config()->>+core.generate_site(): 
+    core.generate_site()->>+themes.locate_theme_directory(): Get the path for the theme
+    themes.locate_theme_directory()->>+core.generate_site(): 
+    core.generate_site()->>+filters.inject_filters(): inject custom filters into the jinja environment
+    filters.inject_filters()->>+core.generate_site(): 
+    core.generate_site()->>+themes.get_theme_section_directories(): Get a list of sections that have templates in the theme i.e. ['education', 'work_experience'] etc.
+    themes.get_theme_section_directories()->>+core.generate_site(): 
+    core.generate_site()->>+themes.get_content_directories(): Get a list of sections that have content folders in the project path i.e. ['education', 'work_experience'] etc.
+    themes.get_content_directories()->>+core.generate_site(): 
+    core.generate_site()->>+core.generate_site(): Determine pages to render in the top_level_file list
+    core.generate_site()->>+core._render_section(): Render a section provided (i.e. education)
+    core._render_section()->>+core._render_page(): Get html and metadata of markdown sections
+    core._render_page()->>+core._render_section(): 
+    core._render_section()->>+core.generate_site(): 
+    core.generate_site()->>+core._export(): Generate output files and folders (also renders gallery and blog sections)
+    core._export()->>+core.generate_site(): 
+~~~
+</details>
+<br>
 

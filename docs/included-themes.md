@@ -2,6 +2,16 @@
 
 Below is the documentation for the configuration and usage of all included themes.
 
+## Acknowledgements & Licenses
+
+A big thank you to the providers for themes that are used heavily throughout the project. Keep in mind any attributions made in the code are **required to keep in the code**.
+
+[Start Bootstrap](https://startbootstrap.com/)
+
+[HTML5UP](https://html5up.net/)
+
+If you want to use an attribution free version of HTML5UP themes checkout [pixelarity](https://pixelarity.com/)
+
 ## Aerial
 
 Author:  [HTML5Up](https://html5up.net/)
@@ -10,8 +20,8 @@ Author:  [HTML5Up](https://html5up.net/)
 
 Full page preview: [https://html5up.net/aerial](https://html5up.net/aerial)
 
-<iframe src="https://html5up.net/uploads/demos/aerial/" width="100%" height="500px">
-</iframe>
+<img src="/en/latest/img/theme-previews/aerial.png" width="100%" height="500px">
+
 
 
 ### Usage
@@ -80,6 +90,7 @@ Education: ❌
 Work Experience: ❌
 Volunteering Experience: ❌
 Gallery: ❌
+Blog: ❌
 ```
 
 ## Creative
@@ -153,6 +164,82 @@ Education: ❌
 Work Experience: ❌
 Volunteering Experience: ❌
 Gallery: ✔️
+Blog: ❌
+```
+
+## cv
+
+Author:  [Start Bootstrap](https://startbootstrap.com)
+
+Theme page: [https://startbootstrap.com/theme/resume](https://startbootstrap.com/theme/resume)
+
+### Preview
+
+Full page preview: [https://startbootstrap.com/previews/resume](https://startbootstrap.com/previews/resume)
+
+<iframe src="https://startbootstrap.github.io/startbootstrap-resume/" width="100%" height="500px">
+</iframe>
+
+
+### Usage
+
+To use this theme in your code either initialize the project with "cv" as the theme, or set it in your ```config.yml``` file:
+
+```yaml
+... # Other configuration settings
+theme: cv
+... # Other configuration settings
+```
+
+**Notes**
+For the avatar image use a 1:1 ratio (square image), and ideally around ~500x500
+
+#### Supported config settings
+
+The following settings are supported and not supported in the ```config.yml``` file:
+
+✅: Required
+
+☑️: Optional
+
+❌: Not Supported
+
+```
+name: ✅
+background: ❌
+avatar: ☑️ (HIGHLY recommended)
+email: ☑️ (recommended)
+phone: ☑️ (recommended)
+biography: ☑️ (recommended)
+role: ☑️ (recommended)
+company: ☑️ (recommended)
+address: ☑️
+social: ☑️
+  github: ☑️
+  twitch: ☑️
+  youtube: ☑️
+  instagram: ☑️
+  twitter: ☑️
+  snapchat: ☑️
+  linkedin: ☑️
+  facebook: ☑️
+```
+
+#### Supported Sections
+
+Below are a list of the supported, and unsupported sections.
+
+✔️: Supported
+
+❌: Not Supported
+
+```yml
+Projects: ✔️
+Education: ✔️
+Work Experience: ✔️
+Volunteering Experience: ✔️
+Gallery: ❌
+Blog: ❌
 ```
 
 ## Dimension
@@ -163,8 +250,8 @@ Author:  [HTML5Up](https://html5up.net)
 
 Full page preview: [https://html5up.net/dimension](https://html5up.net/dimension)
 
-<iframe src="https://html5up.net/uploads/demos/dimension/" width="100%" height="500px">
-</iframe>
+<img src="/en/latest/img/theme-previews/dimension.jpg" width="100%" height="500px">
+
 
 ### Usage
 
@@ -220,6 +307,7 @@ Education: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️
 Gallery: ✔️
+Blog: ✔️
 ```
 
 ## Ethereal
@@ -230,8 +318,8 @@ Author:  [HTML5Up](https://html5up.net)
 
 Full page preview: [https://html5up.net/ethereal](https://html5up.net/ethereal)
 
-<iframe src="https://html5up.net/uploads/demos/ethereal/" width="100%" height="500px">
-</iframe>
+<img src="/en/latest/img/theme-previews/ethereal.jpg" width="100%" height="500px">
+
 
 ### Usage
 
@@ -293,6 +381,7 @@ Education: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️
 Gallery: ✔️
+Blog: ❌
 ```
 
 ## Freelancer
@@ -363,6 +452,7 @@ Education: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️
 Gallery: ❌
+Blog: ❌
 ```
 
 ## Grayscale
@@ -437,6 +527,7 @@ Education: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️
 Gallery: ❌
+Blog: ✔️
 ```
 
 ## Identity
@@ -447,8 +538,8 @@ Author:  [HTML5Up](https://html5up.net/)
 
 Full page preview: [https://html5up.net/identity](https://html5up.net/identity)
 
-<iframe src="https://html5up.net/uploads/demos/identity/" width="100%" height="500px">
-</iframe>
+<img src="/en/latest/img/theme-previews/identity.png" width="100%" height="500px">
+
 
 
 ### Usage
@@ -505,6 +596,7 @@ Education: ❌
 Work Experience: ❌
 Volunteering Experience: ❌
 Gallery: ❌
+Blog: ❌
 ```
 
 ## Lens
@@ -515,8 +607,8 @@ Author:  [HTML5Up](https://html5up.net)
 
 Full page preview: [https://html5up.net/lens](https://html5up.net/lens)
 
-<iframe src="https://html5up.net/uploads/demos/lens/" width="100%" height="500px">
-</iframe>
+<img src="/en/latest/img/theme-previews/lens.jpg" width="100%" height="500px">
+
 
 
 ### Usage
@@ -574,6 +666,7 @@ Education: ❌
 Work Experience: ❌
 Volunteering Experience: ❌
 Gallery: ✔️
+Blog: ❌
 ```
 
 ## Paradigm Shift
@@ -584,8 +677,8 @@ Author:  [HTML5Up](https://html5up.net/)
 
 Full page preview: [https://html5up.net/paradigm-shift](https://html5up.net/paradigm-shift)
 
-<iframe src="https://html5up.net/uploads/demos/paradigm-shift/" width="100%" height="500px">
-</iframe>
+<img src="/en/latest/img/theme-previews/paradigm_shift.png" width="100%" height="500px">
+
 
 
 
@@ -662,6 +755,7 @@ Education: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️
 Gallery: ✔️
+Blog: ❌
 ```
 
 ## Read Only
@@ -672,8 +766,8 @@ Author:  [HTML5Up](https://html5up.net/)
 
 Full page preview: [https://html5up.net/read-only](https://html5up.net/read-only)
 
-<iframe src="https://html5up.net/uploads/demos/read-only/" width="100%" height="500px">
-</iframe>
+<img src="/en/latest/img/theme-previews/read_only.png" width="100%" height="500px">
+
 
 ### Usage
 
@@ -733,81 +827,9 @@ Education: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️
 Gallery: ❌
+Blog: ✔️
 ```
 
-## cv
-
-Author:  [Start Bootstrap](https://startbootstrap.com)
-
-Theme page: [https://startbootstrap.com/theme/resume](https://startbootstrap.com/theme/resume)
-
-### Preview
-
-Full page preview: [https://startbootstrap.com/previews/resume](https://startbootstrap.com/previews/resume)
-
-<iframe src="https://startbootstrap.github.io/startbootstrap-resume/" width="100%" height="500px">
-</iframe>
-
-
-### Usage
-
-To use this theme in your code either initialize the project with "cv" as the theme, or set it in your ```config.yml``` file:
-
-```yaml
-... # Other configuration settings
-theme: cv
-... # Other configuration settings
-```
-
-**Notes**
-For the avatar image use a 1:1 ratio (square image), and ideally around ~500x500
-
-#### Supported config settings
-
-The following settings are supported and not supported in the ```config.yml``` file:
-
-✅: Required
-
-☑️: Optional
-
-❌: Not Supported
-
-```
-name: ✅
-background: ❌
-avatar: ☑️ (HIGHLY recommended)
-email: ☑️ (recommended)
-phone: ☑️ (recommended)
-biography: ☑️ (recommended)
-role: ☑️ (recommended)
-company: ☑️ (recommended)
-address: ☑️
-social: ☑️
-  github: ☑️
-  twitch: ☑️
-  youtube: ☑️
-  instagram: ☑️
-  twitter: ☑️
-  snapchat: ☑️
-  linkedin: ☑️
-  facebook: ☑️
-```
-
-#### Supported Sections
-
-Below are a list of the supported, and unsupported sections.
-
-✔️: Supported
-
-❌: Not Supported
-
-```yml
-Projects: ✔️
-Education: ✔️
-Work Experience: ✔️
-Volunteering Experience: ✔️
-Gallery: ❌
-```
 
 ## Solid State
 
@@ -817,8 +839,8 @@ Author:  [HTML5Up](https://html5up.net/)
 
 Full page preview: [https://html5up.net/solid-state](https://html5up.net/solid-state)
 
-<iframe src="https://html5up.net/uploads/demos/solid-state/" width="100%" height="500px">
-</iframe>
+<img src="/en/latest/img/theme-previews/solid_state.png" width="100%" height="500px">
+
 
 ### Usage
 
@@ -878,6 +900,7 @@ Education: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️
 Gallery: ❌
+Blog: ✔️
 ```
 
 ## Strata
@@ -888,8 +911,7 @@ Author:  [HTML5Up](https://html5up.net)
 
 Full page preview: [https://html5up.net/strata](https://html5up.net/strata)
 
-<iframe src="https://html5up.net/uploads/demos/strata/" width="100%" height="500px">
-</iframe>
+<img src="/en/latest/img/theme-previews/strata.png" width="100%" height="500px">
 
 ### Usage
 
@@ -945,4 +967,5 @@ Education: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️
 Gallery: ✔️
+Blog: ❌
 ```

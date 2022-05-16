@@ -1,0 +1,13 @@
+<!-- Start Blog -->
+<h2>Blog</h2>
+<div>
+    {% for post in blog %}
+        <h4> {{ post[0]["title"] }}</h4>
+        <!-- Metadata -->
+        <p>Created: {{ post[0]["created"] }}</p>
+        <p>updated:{{ post[0]["updated"] }}</p>
+        <!-- Content -->
+        <p>{{ post[1] | safe}}</p>
+    {% endfor %}
+</div>
+<!-- End Blog -->
