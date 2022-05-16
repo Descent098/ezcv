@@ -52,6 +52,9 @@ Here are some additional resources to help you get started generating content
 - [Free open source images](https://unsplash.com/)
 - [Online Vector graphics creation system](https://vectr.com/)
 - [Online photo editor](https://pixlr.com/x/)
+- Additional places to find html templates to work from:
+  - [Theme Wagon](https://themewagon.com/)
+  - [Theme Fisher](https://themefisher.com/)
 
 ## Acknowledgements
 
