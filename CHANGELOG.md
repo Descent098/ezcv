@@ -1,5 +1,18 @@
 # Changelog
 
+## V0.3.1; May 16th 2022
+
+Minor fixes related to release
+
+### Bug Fixes
+
+- Fixed broken previews on documentation site
+- Included missing `livereload` dependency
+
+### Documentation improvements
+
+- Added additional theme provider suggestions
+
 ## V0.3.0; May 16th 2022
 
 The focus for this release is on adding blog support, QoL features and making ezcv a more well rounded static site builder. There will be a few items released in `0.3.1` that were meant for `0.3.0`, but due to the need for `python -m ezcv` in order for github pipelines to work this release is going out now.
