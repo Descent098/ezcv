@@ -1,6 +1,26 @@
-"""_summary_
+"""This file controls the live reloading when the -p flag is used
 
+Functions
+---------
+start_server():
+    Starts the live reload server and serves preview files
 
+Examples
+--------
+Starting server from project root directory
+```
+from ezcv.autoreload import start_server
+
+start_server() # Run while in project directory
+```
+
+Starting server from remote directory
+```
+from ezcv.autoreload import start_server
+
+project_path = './path/to/project'
+start_server(project_path)
+```
 """
 
 # Internal dependencies (should ship with python)
@@ -30,7 +50,7 @@ def open_in_browser():
 
 
 def start_server(project_folder: str="."):
-    """Preview entrypoint
+    """Preview entrypoint that serves ezcv files from project folder and watches for changes
 
     Parameters
     ----------
@@ -85,5 +105,4 @@ def start_server(project_folder: str="."):
         server.serve(port=PORT)                                                         # Start the server
 
 if __name__ == '__main__':
-    output_dir = 'site' # The folder you want to export your site to in this case /site
-    start_server(output_folder=output_dir) 
+    start_server() 

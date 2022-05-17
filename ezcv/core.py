@@ -39,8 +39,6 @@ generate_site(output_folder="my_site", theme = "aerial", preview = True)
 import os                           # Used for path validation
 import shutil                       # Used for file/folder copying and removal
 import logging
-import datetime                     # Used to parse dates for last-updated checks
-import webbrowser                   # Used to automatically open the default system browser
 from collections import defaultdict # Used to instatiate dictionaries with default arguments on unspecified keys
 from typing import Callable, Union  # Used to add additional typehints to help with documentation and usage on functions
 
@@ -186,7 +184,7 @@ def _render_page(page:str, site_context:dict, environment:jinja2.Environment) ->
     return theme.render(site_context)
 
 
-def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment, output_folder:str = "site",  pages:list=["index.jinja"] ):
+def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment, output_folder:str = "site",  pages:list=None ):
     """Generates all the site html from pages specified and outputs them to the output folder
 
     Parameters
@@ -204,13 +202,15 @@ def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment,
         The folder to output the HTML files to, by default "site"
 
     pages : (list, optional)
-        The list of pages to use, by default ["index.jinja"]
+        The list of pages to use, by default None which gets set to ["index.jinja"]
 
     Raises
     ------
     FileNotFoundError
         If the provided theme folder does not exist
     """
+    if pages is None:
+        pages = ["index.jinja"]
     if not os.path.exists(theme_folder): # Error out if provided theme folder does not exist
         raise FileNotFoundError(f"The provided theme folder does not exist: {theme_folder}")
 
@@ -305,7 +305,7 @@ def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment,
         os.remove(os.path.join(output_folder, "metadata.yml")) # Remove metadata file
 
 
-def generate_site(output_folder:str="site", theme:str = "dimension", sections: list = [], config_file_path="config.yml", preview:bool = False, extra_filters:List[Callable] = []):
+def generate_site(output_folder:str="site", theme:str = "dimension", sections: list = None, config_file_path="config.yml", preview:bool = False, extra_filters:List[Callable] = None):
     """The primary entrypoint to generating a site
 
     Parameters
@@ -374,6 +374,10 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
     generate_site(output_folder="my_site", sections=["projects"])
     ```
     """
+    if sections is None:
+        sections = []
+    if extra_filters is None:
+        extra_filters = []
     print(f"Exporting site to {output_folder}")
     pages = [] # Filled with a list of all the pages to render
 

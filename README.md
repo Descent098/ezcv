@@ -1,4 +1,5 @@
-![ezcv logo](https://raw.githubusercontent.com/Descent098/ezcv/master/.github/logo.png)
+![ezcv logo](https://raw.githubusercontent.com/Descent098/ezcv/master/.github/logo.png) 
+[![Downloads](https://pepy.tech/badge/ezcv)](https://pepy.tech/project/ezcv)
 
 # ezcv
 

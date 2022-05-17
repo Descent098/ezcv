@@ -31,7 +31,7 @@ from typing import Callable, DefaultDict, List # Used to typehint accurately for
 import jinja2           # Used mostly to typehint and allow for autocompletion in the file
 
 
-def inject_filters(env:jinja2.Environment, extra_filters:List[Callable] = []) -> jinja2.Environment:
+def inject_filters(env:jinja2.Environment, extra_filters:List[Callable] = None) -> jinja2.Environment:
     """Takes in a jinja environment and injects the filters from this module + functions fom the extra_filters parameter
 
     Parameters
@@ -47,16 +47,18 @@ def inject_filters(env:jinja2.Environment, extra_filters:List[Callable] = []) ->
     jinja2.Environment
         The input environment with the filters injected
     """
-    logging.debug(f"[ezcv inject_filters()]: Beggining to inject filters")
+    if extra_filters is None:
+        extra_filters = []
+    logging.debug("[ezcv inject_filters()]: Beggining to inject filters")
     filters = [split_to_sublists, get_image_path, get_filename_without_extension, pretty_datetime, pretty_defaultdict]
 
     if extra_filters:
-        logging.debug(f"[ezcv inject_filters()]: Extra filters found")
-        for filter in extra_filters:
-            filters.append(filter)
+        logging.debug("[ezcv inject_filters()]: Extra filters found")
+        for current_filter in extra_filters:
+            filters.append(current_filter)
 
-    for filter in filters:
-        env.filters[filter.__name__] = filter
+    for current_filter in filters:
+        env.filters[current_filter.__name__] = current_filter
 
     return env
 
@@ -119,8 +121,7 @@ def split_to_sublists(initial_list:list, n:int, strict:bool=True) -> List[list]:
     ```
     """
     logging.debug(f"[ezcv split_to_sublists({initial_list}, {n}, {strict})]: Beggining filter function")
-    if strict:
-        if not len(initial_list) % n == 0:
+    if strict and not len(initial_list) % n == 0:
             raise ValueError(f"\033[;31m Provided list was not of correct size: \n\tList: {initial_list}\n\tSegment size {n} \033[0m")
 
     result = []
