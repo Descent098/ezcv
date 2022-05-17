@@ -1,5 +1,5 @@
 ![ezcv logo](https://raw.githubusercontent.com/Descent098/ezcv/master/.github/logo.png) 
-[![Downloads](https://pepy.tech/badge/ezcv)](https://pepy.tech/project/ezcv)
+[![Downloads](https://pepy.tech/badge/ezcv)](https://pepy.tech/project/ezcv) [![DeepSource](https://deepsource.io/gh/Descent098/ezcv.svg/?label=active+issues&show_trend=true&token=Yg9KssXSgrClbYRYM3OMJhbI)](https://deepsource.io/gh/Descent098/ezcv/?ref=repository-badge)
 
 # ezcv
 
