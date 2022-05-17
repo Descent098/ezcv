@@ -8,10 +8,6 @@ exclude_patterns = [
 ]
 
 [[analyzers]]
-name = "javascript"
-enabled = true
-
-[[analyzers]]
 name = "python"
 enabled = true
 
