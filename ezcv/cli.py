@@ -52,6 +52,7 @@ theme(list_themes = True)
 """
 
 # Standard Lib Dependencies
+from collections import defaultdict
 import os                   # Used for path validation
 import shutil               # Used for file/folder copying and removal
 import logging
@@ -60,6 +61,7 @@ from glob import glob       # Used to glob filepaths (patternmatch filepaths)
 from sys import argv, exit  # Used to get length of CLI args and exit cleanly
 
 ## internal dependencies
+from ezcv import __version__ as version
 from ezcv.core import generate_site, get_site_config
 from ezcv.themes import THEMES_FOLDER, generate_theme_metadata, get_remote_themes, locate_theme_directory, setup_remote_theme
 from ezcv.autoreload import start_server
@@ -73,9 +75,10 @@ from css_html_js_minify import * # Used to optimize and minify html/css/js files
 
 usage = """Usage:
     ezcv [-h] [-v] [-p]
-    ezcv init [<name>] [<theme>] [-f]
     ezcv build [-d OUTPUT_DIR] [-o]
-    ezcv theme [-l] [-c] [-m] [-s SECTION_NAME] [<theme>]
+    ezcv init [<name>] [<theme>] [-f]
+    ezcv theme [-l] [-c] [-m] [<theme>]
+    ezcv section <SECTION_NAME> [-t=<type>]
 
 
 Options:
@@ -88,7 +91,7 @@ Options:
 -f, --flask           Generate Flask routes and requirements.txt
 -d OUTPUT_DIR, --dir OUTPUT_DIR The folder name to export the site to
 -m, --metadata        Generate metadata for the theme
--s SECTION_NAME, --section SECTION_NAME The section name to initialize
+-t=<type>, --type=<type> The type of section to generate [default: markdown]
 """
 
 def init(theme_name="dimension", name="John Doe", flask:bool = False):
@@ -186,7 +189,7 @@ def theme(list_themes: bool = False, copy_theme:bool = False, theme_name:str = "
             if not data["created"]:
                 data["created"] = f"{datetime.datetime.now().year}-{datetime.datetime.now().month}-{datetime.datetime.now().day}"
             if not data["ezcv_version"]:
-                data["ezcv_version"] = __version__
+                data["ezcv_version"] = version
             data["updated"] = f"{datetime.datetime.now().year}-{datetime.datetime.now().month}-{datetime.datetime.now().day}"
             with open(metadata_path, "w+") as metadata_file:
                 yaml.dump(dict(data), metadata_file)
@@ -208,7 +211,7 @@ def theme(list_themes: bool = False, copy_theme:bool = False, theme_name:str = "
             if not data["created"]:
                 data["created"] = f"{datetime.datetime.now().year}-{datetime.datetime.now().month}-{datetime.datetime.now().day}"
             if not data["ezcv_version"]:
-                data["ezcv_version"] = __version__
+                data["ezcv_version"] = version
             data["updated"] = f"{datetime.datetime.now().year}-{datetime.datetime.now().month}-{datetime.datetime.now().day}"
             with open(metadata_path, "w+") as metadata_file:
                 yaml.dump(dict(data), metadata_file)
@@ -234,7 +237,7 @@ def theme(list_themes: bool = False, copy_theme:bool = False, theme_name:str = "
 
 
 
-def new_section(section_name:str) -> bool:
+def section(section_name:str, section_type:str):
     """Creates a new section (content folder, and section template in the theme)
 
     Parameters
@@ -242,75 +245,157 @@ def new_section(section_name:str) -> bool:
     section_name : str
         The name you want to give to the section, used to generate folder and template filename
 
+    section_type : str
+        The type of section you want to create, i.e. 'markdown'
+
     Notes
     -----
-    - Needs to be run from the main folder of a site, or at most one folder deep (i.e. the content or Images folder)
-
-    Returns
-    -------
-    bool
-        True if the creation was successful and False if it failed early
+    - Needs to be run from the main folder of a site
     """    
-    logging.debug(f"[ezcv cli.new_section({section_name=})] Creating a new section")
+    #TODO: Check if section exists and is in the metadata
+    logging.debug(f"[ezcv cli.section({section_name=})] Creating a new section")
     if os.path.exists("config.yml"):
         config_path = "config.yml"
-    elif os.path.exists("../config.yml") :
-        config_path = "../config.yml"
     else:
         print(f"{fg(1)}You are not in a project root folder, please run from folder with config.yml{fg(15)}\n")
-        return False
+        return 
 
-    logging.debug("[ezcv cli.new_section()] Getting site config")
+    logging.debug("[ezcv cli.section()] Getting site config")
     config = get_site_config(config_file_path=config_path)
     if not config["theme"]: # Set to default theme if no theme is set
         config["theme"] = "dimension"
 
     # TODO: update this to use the theme's metadata
-    logging.debug("[ezcv cli.new_section()] Getting theme metadata")
+    logging.debug("[ezcv cli.section()] Getting theme metadata")
     theme_path = locate_theme_directory(config["theme"], {"config": config})
+    theme_name = config["theme"]
     if os.path.exists(config["theme"]): # Theme is at cwd i.e. ./aerial
-        theme_path = config["theme"]
-    elif os.path.exists(os.path.join("..", config["theme"])): # Theme is one level up i.e. ../aerial
-        theme_path = os.path.join("..", config["theme"])
-    elif os.path.exists(os.path.join(THEMES_FOLDER, config["theme"])): # Theme is in package theme folder i.e. THEME_FOLDER/aerial
-        theme_path = os.path.join(THEMES_FOLDER, config["theme"])
+        theme_path = theme_name
+    elif theme_path == os.path.join(THEMES_FOLDER, theme_name): # Theme is in package theme folder i.e. THEME_FOLDER/aerial
+        try: # Try to copy the theme to ./<theme>
+            print(f"[ezcv cli.section()] Copying theme {theme_name} to ./{theme_name}")
+            logging.debug(f"[ezcv cli.section()] Copying theme {theme_name} to ./{theme_name}")
+            shutil.copytree(os.path.join(THEMES_FOLDER, theme_name), config["theme"])
+        except FileExistsError: # If a folder exists at ./<theme> remove and then re-copy
+            shutil.rmtree(theme_name)
+            shutil.copytree(os.path.join(THEMES_FOLDER, theme_name), theme_name)
+        print(f"Copied {os.path.join(THEMES_FOLDER, theme_name)} to .{os.sep}{theme_name}")
+        theme_path = theme_name
     else:
         print(f"{fg(1)}Could not find theme at any of the possible locations\n\t{config['theme']}\n\t{os.path.join('..', config['theme'])}\n\t{os.path.join(THEMES_FOLDER, config['theme'])} {fg(15)}\n")
-        return False
+        return 
 
-    logging.debug("[ezcv cli.new_section()] Getting content directory")
+    logging.debug("[ezcv cli.section()] Getting content directory")
     if os.path.exists("content"):
         content_path = "content"
     elif os.getcwd().split(os.sep)[-1] == "content": # Inside the current content folder
         content_path = os.getcwd()
     else:
-        return False
+        return
 
-    # The content for the template in the generated section
-    default_section_page_templte = f"""\n{{% for page in {section_name} %}} <!--Lets you iterate through each page -->
+    logging.debug("[ezcv cli.section()] Getting theme metadata")
+    theme_metadata = generate_theme_metadata(theme_path)
+    if theme_metadata["sections"]:
+        if theme_metadata["sections"].get(section_name, False):
+            print(f"{fg(1)}Section {section_name} already exists in theme {config['theme']}{fg(15)}\n")
+            return
+    if section_type.startswith("m"):
+        # The content for the template in the generated section
+        default_section_page_templte = f"""\n{{% for page in {section_name} %}} <!--Lets you iterate through each page -->
             {{{{ page[0] }}}} <!--Metadata access -->
             {{{{ page[1] | safe }}}} <!--content access -->
 {{% endfor %}}
 \n"""
-
-    # Begin creating content folder and theme file
-    if not os.path.exists(os.path.join(content_path, section_name)): # If the content folder doesn't already exist
-        if not os.path.exists(os.path.join(theme_path, "sections", f"{section_name}.jinja")) and not os.path.exists(os.path.join(theme_path, "sections", f"{section_name}.html")): # If jinja theme doesn't already exist
-            logging.debug("[ezcv cli.new_section()] Creating section folder")
+    elif section_type.startswith("b"):
+        section_type = section_type.replace("b", "").replace("blog","")
+        # Parse which sections to include ([s]ingle.jinja, [f]eed.jinja, [o]verview.jinja)
+        default_section_page_templte = defaultdict(lambda: False)
+        if not section_type:
+            section_type = "sfo" # If no additional type is specified, default to sfo
+        if "s" in section_type:
+            default_section_page_templte["single"] = f"""<!DOCTYPE html>\n<html>\n\t<body>
+\t\t<h1>{{{{ content[0]['title'] }}}}</h1>
+\t\t<h2>Current: {{{{ content[0]['current'] }}}} <br>Updated: {{{{ content[0]['current'] }}}}</h1>
+\t\t{{{{ content[1] | safe }}}}
+\n\t</body>\n</html>"""
+        if "f" in section_type:
+            default_section_page_templte["feed"] = f"""{{% for post in {section_name} %}}
+\t\t<h4> {{{{ post[0]["title"] }}}}</h4>
+\t\t<!-- Metadata -->
+\t\t<p>Created: {{{{ post[0]["created"] }}}}</p>
+\t\t<p>updated:{{{{ post[0]["updated"] }}}}</p>
+\t\t<!-- Content -->
+\t\t<p>{{{{ post[1] | safe}}}}</p>
+{{{{% endfor %}}}}"""
+        if "o" in section_type:
+            if "f" in section_type:
+                default_section_page_templte["overview"] = f"""<!DOCTYPE html>\n<html>\n\t<body>
+{{{{ feed_html | safe}}}}
+\n\t</body>\n</html>"""
+            else:
+                default_section_page_templte["overview"] = f"""<!DOCTYPE html>\n<html>\n\t<body>
+{{% for post in {section_name} %}}
+\t\t<h4> {{{{ post[0]["title"] }}}}</h4>
+\t\t<!-- Metadata -->
+\t\t<p>Created: {{{{ post[0]["created"] }}}}</p>
+\t\t<p>updated:{{{{ post[0]["updated"] }}}}</p>
+\t\t<!-- Content -->
+\t\t<p>{{{{ post[1] | safe}}}}</p>
+{{% endfor %}}
+\n\t</body>\n</html>"""
+    elif section_type.startswith("g"):
+        # The content for the template in the generated section
+        default_section_page_templte = f"""\n{{% for image in {section_name} %}} <!--Lets you iterate through each image -->
+            {{{{ image[0] }}}} <!--Metadata -->
+            <img src="{{ image[0]['file_path'] }}" alt="{{ image[0]['file_path'].split()[-1] }}"> <!--Image -->
+{{% endfor %}}
+\n"""
+    if not os.path.exists(os.path.join(theme_path, "sections")):
+        os.mkdir(os.path.join(theme_path, "sections"))
+    # Begin creating content folder and template file(s)
+    if type(default_section_page_templte) == str:
+        if not os.path.exists(os.path.join(content_path, section_name)): # If the content folder doesn't already exist
+            if not os.path.exists(os.path.join(theme_path, "sections", f"{section_name}.jinja")) and not os.path.exists(os.path.join(theme_path, "sections", f"{section_name}.html")): # If jinja theme doesn't already exist
+                logging.debug("[ezcv cli.new_section()] Creating section folder")
+                if not os.path.exists(os.path.join(content_path, section_name)):
+                    os.mkdir(os.path.join(content_path, section_name))
+                logging.debug("[ezcv cli.new_section()] Creating section theme file")
+                if not os.path.exists(os.path.join(theme_path, "sections")):
+                    os.mkdir(os.path.join(theme_path, "sections"))
+                with open(os.path.join(theme_path, "sections", f"{section_name}.jinja"), 'w+') as section_file:
+                    section_file.write(default_section_page_templte)
+            else: # Theme file already existed
+                print(f"{fg(1)}Could not create path, path already exists at either: \n\t{os.path.join(theme_path, 'sections', f'{section_name}.jinja')}\n\tor\n\t{os.path.join(theme_path, 'sections', f'{section_name}.jinja')}\n{fg(15)}")
+                return 
+        else: # Content folder already existed
+            print(f"{fg(1)}Could not create path, path already exists at {os.path.join(content_path, section_name)}\n{fg(15)}")
+            return 
+        if not theme_metadata["sections"]:
+            theme_metadata["sections"] = {}
+        theme_metadata["sections"][section_name] = {"type": "markdown" if "m" in section_type else "gallery"}
+        print(f"Section successfully created\n\nTheme file created at:\n\t{os.path.join(theme_path, 'sections', f'{section_name}.jinja')}\nContent folder created at:\n\t{os.path.join(content_path, section_name)}")
+    elif type(default_section_page_templte) == defaultdict:
+        os.mkdir(os.path.join(theme_path, "sections", section_name))
+        if not os.path.exists(os.path.join(content_path, section_name)):
             os.mkdir(os.path.join(content_path, section_name))
-            logging.debug("[ezcv cli.new_section()] Creating section theme file")
-            with open(os.path.join(theme_path, "sections", f"{section_name}.jinja"), 'w+') as section_file:
-                section_file.write(default_section_page_templte)
-        else: # Theme file already existed
-            print(f"{fg(1)}Could not create path, path already exists at either: \n\t{os.path.join(theme_path, 'sections', f'{section_name}.jinja')}\n\tor\n\t{os.path.join(theme_path, 'sections', f'{section_name}.jinja')}\n{fg(15)}")
-            return False
-    else: # Content folder already existed
-        print(f"{fg(1)}Could not create path, path already exists at {os.path.join(content_path, section_name)}\n{fg(15)}")
-        return False
-
-    print(f"Section successfully created\n\nTheme file created at:\n\t{os.path.join(theme_path, 'sections', f'{section_name}.jinja')}\nContent folder created at:\n\t{os.path.join(content_path, section_name)}")
-    return True
-
+        if default_section_page_templte["single"]:
+            with open(os.path.join(theme_path, "sections", section_name, "single.jinja"), 'w+') as section_file:
+                section_file.write(default_section_page_templte["single"])
+        if default_section_page_templte["feed"]:
+            with open(os.path.join(theme_path, "sections", section_name, "feed.jinja"), 'w+') as section_file:
+                section_file.write(default_section_page_templte["feed"])
+        if default_section_page_templte["overview"]:
+            with open(os.path.join(theme_path, "sections", section_name, "overview.jinja"), 'w+') as section_file:
+                section_file.write(default_section_page_templte["overview"])
+        if not theme_metadata["sections"]:
+            theme_metadata["sections"] = {}
+        theme_metadata["sections"][section_name] = {"fields":{"title": {"required": True, "type":"str"},"created": {"required": True, "type":"str"},"updated": {"required": True, "type":"str"}, },"type": "blog"}
+        theme_metadata["sections"][section_name]["single"] = True if default_section_page_templte["single"] else False
+        theme_metadata["sections"][section_name]["overview"] = True if default_section_page_templte["overview"] else False
+        theme_metadata["sections"][section_name]["feed"] = True if default_section_page_templte["feed"] else False
+        print(f"Section successfully created\n\nTheme file(s) created at:\n\t{os.path.join(theme_path, 'sections', f'{section_name}')}(remember to add your CSS)\nContent folder created at:\n\t{os.path.join(content_path, section_name)}")
+    with open(os.path.join(theme_path, "metadata.yml"), 'w+') as metadata_file:
+        yaml.dump(dict(theme_metadata), metadata_file)
 
 def optimize(directory:str = "site"):
     """Goes through and minifies html, css, js and image files in directory
@@ -361,7 +446,6 @@ def optimize(directory:str = "site"):
 
 def main():
     """The primary entrypoint for the ezcv cli"""
-    from ezcv import __version__ as version
     args = docopt(usage, version=version)
     logging.debug(f"[ezcv cli.main()] Arguments: {args}")
 
@@ -412,13 +496,15 @@ def main():
         elif args["--list"]:
             theme(args["--list"])
             exit()
-        if args["--section"]:
-            created = new_section(args["--section"])
-            if not created:
-                print(f"{fg(1)}Failed to create section {args['--section']} {fg(15)}")
         else: # If theme argument is called with no other flags
             print("\n", usage)
             exit()
+    
+    elif args["section"]:
+        if not args["--type"]:
+            args["--type"] = "markdown"
+        section(args["<SECTION_NAME>"], args["--type"])
+        exit()
 
     elif args["--preview"]: # If preview flag is specified with no other flags
         preview()

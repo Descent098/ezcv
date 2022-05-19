@@ -135,9 +135,10 @@ If you're on github then pushing the contents to master/main will activate the p
 ```shell
 Usage:
     ezcv [-h] [-v] [-p]
-    ezcv init [<name>] [<theme>]
     ezcv build [-d OUTPUT_DIR] [-o]
-    ezcv theme [-l] [-c] [-m] [-s SECTION_NAME] [<theme>]
+    ezcv init [<name>] [<theme>] [-f]
+    ezcv theme [-l] [-c] [-m] [<theme>]
+    ezcv section <SECTION_NAME> [-t=<type>]
 
 
 Options:
@@ -147,9 +148,10 @@ Options:
 -c, --copy            copy the provided theme, or defined site theme
 -p, --preview         preview the current state of the site
 -o, --optimize        Optimize output files (takes longer to run)
+-f, --flask           Generate Flask routes and requirements.txt
 -d OUTPUT_DIR, --dir OUTPUT_DIR The folder name to export the site to
 -m, --metadata        Generate metadata for the theme
--s SECTION_NAME, --section SECTION_NAME The section name to initialize
+-t=<type>, --type=<type> The type of section to generate [default: markdown]
 ```
 
 See the [CLI Documentation](https://ezcv.readthedocs.io/en/latest/cli/) for additional details
