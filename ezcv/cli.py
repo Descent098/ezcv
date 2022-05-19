@@ -284,6 +284,7 @@ def section(section_name:str, section_type:str):
     -----
     - Needs to be run from the main folder of a site
     """    
+    #TODO: PRINT SECTION INFO IF IT EXISTS
     logging.debug(f"[ezcv cli.section({section_name=})] Creating a new section")
     if os.path.exists("config.yml"):
         config_path = "config.yml"
@@ -322,12 +323,33 @@ def section(section_name:str, section_type:str):
         content_path = os.getcwd()
     else:
         return
-
+    
     logging.debug("[ezcv cli.section()] Getting theme metadata")
     theme_metadata = generate_theme_metadata(theme_path)
     if theme_metadata["sections"]:
         if theme_metadata["sections"].get(section_name, False):
-            print(f"{fg(1)}Section {section_name} already exists in theme {config['theme']}{fg(15)}\n")
+            if theme_metadata["sections"][section_name].get("fields", False):
+                fields_text = "\n\t• Fields: "
+                for field in theme_metadata["sections"][section_name]["fields"]:
+                    if type(theme_metadata["sections"][section_name]["fields"][field]) == str :
+                        fields_text += f"\n\t\t • {field}: {theme_metadata['sections'][section_name]['fields'][field]} (optional)"
+                    elif type(theme_metadata["sections"][section_name]["fields"][field]) == dict or type(theme_metadata["sections"][section_name]["fields"][field]) == defaultdict:
+                        fields_text += f"\n\t\t • {field}: {theme_metadata['sections'][section_name]['fields'][field]['type']} ({'required' if theme_metadata['sections'][section_name]['fields'][field]['required'] else 'optional'})"
+            else: # No fields specified
+                fields_text = ""
+            if theme_metadata["sections"][section_name].get("type", False) == "blog":
+                print(f"""Section {section_name} details:
+    • Type: Blog
+    • Feed: {theme_metadata['sections'][section_name].get('feed', False)}
+    • Single: {theme_metadata['sections'][section_name].get('single', False)}
+    • Overview: {theme_metadata['sections'][section_name].get('overview', False)}{fields_text}
+    """)
+                return
+            elif theme_metadata["sections"][section_name].get("type", False) == "gallery":
+                print(f"Section {section_name} details:\n\t• Type: Gallery")
+                return
+            else:
+                print(f"Section {section_name} details:\n\t• Type: Markdown{fields_text}")
             return
     if section_type.startswith("m"):
         # The content for the template in the generated section

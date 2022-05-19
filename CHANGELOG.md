@@ -9,7 +9,6 @@ The focus for this release was adding features that were not finalized in time f
 - Added `required_config` section to theme metadata that's used:
   - on initialization to generate the `config.yml` file
   - on build to cancel the build if a required value is missing from `config.yml`
-- Added test suite
 - Added section command (**note** `ezcv theme -s <section name>` **will no longer work**)
   - use `ezcv section <section name>` to get information
   - use `ezcv section -n <section name> [<type>]` to create a new section (note *type* is only required for any non-markdown sections i.e. blogs [can be "blog" or "b"] or galleries [can be "gallery" or "g"]). See [cli documentation](https://ezcv.readthedocs.io/en/latest/cli/) for full usage details
@@ -20,8 +19,6 @@ The focus for this release was adding features that were not finalized in time f
 - Added `massively`
 - Added `blog`
 - Added `evie`
-- Added `portfolio`
-- Added `street_art`
 - Added `parallax`
 
 ### Bug Fixes

@@ -136,6 +136,8 @@ This command is used to create new sections
 ezcv section <SECTION_NAME> [-t=<type>]
 ```
 
+*Note that if a section exists it will just print details about the section*
+
 There are two optional flags and one positional argument:
 
 - ```-t``` The type of section to generate [default: markdown], can be a few options:
@@ -186,4 +188,10 @@ ezcv section blog -t bs
 
 ```bash
 ezcv section blog -t bof
+```
+
+*Print details about existing section called 'blog'*
+
+```bash
+ezcv section blog
 ```
