@@ -127,7 +127,7 @@ def init(theme_name="dimension", name="John Doe", flask:bool = False):
         if theme_metadata["required_config"]: # Parse required config from theme if available
             if type(theme_metadata["required_config"]) == dict:
                 for value in theme_metadata["required_config"]:
-                    if value == "name" or value == "theme":
+                    if value in ("name", "theme"):
                         continue
                     if not theme_metadata["required_config"][value].get("type", False):
                         theme_metadata["required_config"][value]["type"] = "str"
@@ -147,7 +147,7 @@ def init(theme_name="dimension", name="John Doe", flask:bool = False):
                     config_file_contents += f"{value}: {theme_metadata['required_config'][value]['default']} {theme_metadata['required_config'][value]['description']}\n"
             elif type(theme_metadata["required_config"]) == list:
                 for value in theme_metadata["required_config"]:
-                    if value == "name" or value == "theme":
+                    if value in ("name", "theme"):
                         continue
                     config_file_contents += f"{value}: \"{str(value)}\"\n"
         config_file.write(config_file_contents)
@@ -270,7 +270,7 @@ def theme(list_themes: bool = False, copy_theme:bool = False, theme_name:str = "
 
 
 def section(section_name:str, section_type:str):
-    """Creates a new section (content folder, and section template in the theme)
+    """Creates a new section, or prints details about a section if it already exists
 
     Parameters
     ----------
@@ -442,9 +442,9 @@ def section(section_name:str, section_type:str):
         if not theme_metadata["sections"]:
             theme_metadata["sections"] = {}
         theme_metadata["sections"][section_name] = {"fields":{"title": {"required": True, "type":"str"},"created": {"required": True, "type":"str"},"updated": {"required": True, "type":"str"}, },"type": "blog"}
-        theme_metadata["sections"][section_name]["single"] = True if default_section_page_templte["single"] else False
-        theme_metadata["sections"][section_name]["overview"] = True if default_section_page_templte["overview"] else False
-        theme_metadata["sections"][section_name]["feed"] = True if default_section_page_templte["feed"] else False
+        theme_metadata["sections"][section_name]["single"] = bool(default_section_page_templte["single"])
+        theme_metadata["sections"][section_name]["overview"] = bool(default_section_page_templte["overview"])
+        theme_metadata["sections"][section_name]["feed"] = bool(default_section_page_templte["feed"])
         print(f"Section successfully created\n\nTheme file(s) created at:\n\t{os.path.join(theme_path, 'sections', f'{section_name}')}(remember to add your CSS)\nContent folder created at:\n\t{os.path.join(content_path, section_name)}")
     with open(os.path.join(theme_path, "metadata.yml"), 'w+') as metadata_file:
         yaml.dump(dict(theme_metadata), metadata_file)

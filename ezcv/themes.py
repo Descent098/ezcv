@@ -301,7 +301,7 @@ def _generate_fields(section_content_folder:str) -> dict:
                     fields[field] = "datetime"
                 elif metadata[field].isnumeric():
                     fields[field] = "int"
-                elif metadata[field].lower() == "true" or metadata[field].lower() == "false":
+                elif metadata[field].lower() in ("true", "false"):
                     fields[field] = "bool"
                 else:
                     fields[field] = "str"
