@@ -13,6 +13,7 @@ The focus for this release was adding features that were not finalized in time f
   - use `ezcv section <section name>` to get information
   - use `ezcv section -n <section name> [<type>]` to create a new section (note *type* is only required for any non-markdown sections i.e. blogs [can be "blog" or "b"] or galleries [can be "gallery" or "g"]). See [cli documentation](https://ezcv.readthedocs.io/en/latest/cli/) for full usage details
 - Added deepsource integration
+- Added issue template for creating new themes
 
 ### Themes
 
