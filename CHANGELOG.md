@@ -6,7 +6,9 @@ The focus for this release was adding features that were not finalized in time f
 
 ### Features
 
-- Added `required_config` section to theme metadata that's used on initialization to generate the `config.yml` file
+- Added `required_config` section to theme metadata that's used:
+  - on initialization to generate the `config.yml` file
+  - on build to cancel the build if a required value is missing from `config.yml`
 - Added test suite
 - Added section command (**note** `ezcv theme -s <section name>` **will no longer work**)
   - use `ezcv section <section name>` to get information

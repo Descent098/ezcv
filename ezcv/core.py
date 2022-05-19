@@ -72,7 +72,6 @@ def get_site_config(config_file_path:str = "config.yml", remotes_file_path:str =
     if not os.path.exists(config_file_path):
         raise FileNotFoundError(f"Config file at {config_file_path} was not found")
 
-    logging.debug(f"[ezcv get_site_config({config_file_path}, {remotes_file_path})]: Loading remotes file")
     with open(config_file_path, "r") as config_file:
         config = yaml.safe_load(config_file)
 
@@ -399,6 +398,19 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
     logging.debug("[ezcv] Getting theme directory")
     theme_folder = locate_theme_directory(theme, site_context)
     logging.info(f"[ezcv] theme directory: {theme_folder}" )
+
+    # Check required_config values
+    theme_metadata = get_theme_metadata(theme_folder)
+    if theme_metadata["required_config"]:
+        for value in theme_metadata["required_config"]:
+            if not value in site_context["config"].keys():
+                if not isinstance(theme_metadata["required_config"][value], dict):
+                    theme_metadata["required_config"][value] = {"type": "str", "default": "", "description": ""}
+                theme_metadata["required_config"][value]["default"] = theme_metadata["required_config"][value].get("default", "")
+                theme_metadata["required_config"][value]["type"] = theme_metadata["required_config"][value].get("type", "str")
+                theme_metadata["required_config"][value]["description"] = theme_metadata["required_config"][value].get("description", "")
+                print(f"\n\x1b[31mThe theme requires the '{value}'configuration value \n\n\ttype: { theme_metadata['required_config'][value]['type'] } \n\tdescription: { theme_metadata['required_config'][value]['description'] }\n\n please add\n\n\x1b[37m\t {value}: <value> \n\n\x1b[31mto your config.yml file\x1b[37m")
+                exit(1)
 
     # Initialize jinja loaders
     logging.debug("[ezcv] Initializing jinja2 loaders")

@@ -2,11 +2,20 @@ name: dimension
 ezcv_version: "0.3.0"
 created: 2022-04-22
 updated: 2022-04-22
-folder: dimension # Optional, only needed if folder is different than name field
-sections: # Optional, only if sections are available
+folder: dimension
+required_config:
+  name:
+    type: str
+    default: name
+    description: "Your full name"
+  biography:
+    type: str
+    default: "A description of yourself"
+    description: "This field is for writing about yourself you can add a > to span multiple lines"
+sections:
   education:
     type: markdown
-    fields: # Optional, only if fields exist
+    fields:
       title: str
       institution:
         required: true

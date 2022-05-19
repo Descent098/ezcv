@@ -99,7 +99,7 @@ There are two optional flags and one positional argument:
   - First it will check if a ```<theme>``` argument has been passed, and if it has it will copy that theme
   - Then it will check if there's a ```config.yml``` file in the current directory and copy that one
   - Then it will just default to exporting the dimension theme
-- ```-m``` used to generate metadata file (note will also copy into project folder if not already there)
+- ```-m``` used to generate metadata file (note will also copy into project folder if not already there, and `required_config` will not be specified)
 
 
 **Examples**

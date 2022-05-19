@@ -63,7 +63,7 @@ from sys import argv, exit  # Used to get length of CLI args and exit cleanly
 ## internal dependencies
 from ezcv import __version__ as version
 from ezcv.core import generate_site, get_site_config
-from ezcv.themes import THEMES_FOLDER, generate_theme_metadata, get_remote_themes, locate_theme_directory, setup_remote_theme
+from ezcv.themes import THEMES_FOLDER, generate_theme_metadata, get_remote_themes, get_theme_metadata, locate_theme_directory, setup_remote_theme
 from ezcv.autoreload import start_server
 
 # Third party dependencies
@@ -117,8 +117,40 @@ def init(theme_name="dimension", name="John Doe", flask:bool = False):
 
     # Generate initial config.yml file
     logging.debug("[ezcv cli.init()] generating config file")
+
+    ## Get theme info 
+    site_context= {"config": {"name": name, "theme": theme_name, "remotes": get_remote_themes()}}
+    theme_folder = locate_theme_directory(theme_name, site_context)
+    theme_metadata = get_theme_metadata(theme_folder)
     with open(os.path.join(name, "config.yml"), "w+") as config_file:
-        config_file.write(f"# See https://ezcv.readthedocs.io for documentation\nname: {name}\ntheme: {theme_name}\nresume: false")
+        config_file_contents = f"# See https://ezcv.readthedocs.io for documentation\nname: {name}\ntheme: {theme_name}\nresume: false\n"
+        if theme_metadata["required_config"]: # Parse required config from theme if available
+            if type(theme_metadata["required_config"]) == dict:
+                for value in theme_metadata["required_config"]:
+                    if value == "name" or value == "theme":
+                        continue
+                    if not theme_metadata["required_config"][value].get("type", False):
+                        theme_metadata["required_config"][value]["type"] = "str"
+                    if not theme_metadata["required_config"][value].get("description", False):
+                        theme_metadata["required_config"][value]["description"] = ""
+                    else: # If description exists
+                        theme_metadata["required_config"][value]["description"] = "# " + str(theme_metadata["required_config"][value]["description"])
+                    if not theme_metadata["required_config"][value].get("default", False):
+                        if theme_metadata["required_config"][value]["type"] == "str":
+                            theme_metadata["required_config"][value]["default"] = f'"{str(value)}"'
+                        elif theme_metadata["required_config"][value]["type"] == "bool":
+                            theme_metadata["required_config"][value]["default"] = False
+                        elif theme_metadata["required_config"][value]["type"] == "int":
+                            theme_metadata["required_config"][value]["default"] = 0
+                        elif theme_metadata["required_config"][value]["type"] == "datetime":
+                            theme_metadata["required_config"][value]["default"] = f"{datetime.datetime.now().year}-{datetime.datetime.now().month}-{datetime.datetime.now().day}"
+                    config_file_contents += f"{value}: {theme_metadata['required_config'][value]['default']} {theme_metadata['required_config'][value]['description']}\n"
+            elif type(theme_metadata["required_config"]) == list:
+                for value in theme_metadata["required_config"]:
+                    if value == "name" or value == "theme":
+                        continue
+                    config_file_contents += f"{value}: \"{str(value)}\"\n"
+        config_file.write(config_file_contents)
 
     if theme_name != "dimension":
         logging.debug(f"[ezcv cli.init()] Not using dimension theme, copying theme {theme_name}")
@@ -252,7 +284,6 @@ def section(section_name:str, section_type:str):
     -----
     - Needs to be run from the main folder of a site
     """    
-    #TODO: Check if section exists and is in the metadata
     logging.debug(f"[ezcv cli.section({section_name=})] Creating a new section")
     if os.path.exists("config.yml"):
         config_path = "config.yml"
@@ -265,7 +296,6 @@ def section(section_name:str, section_type:str):
     if not config["theme"]: # Set to default theme if no theme is set
         config["theme"] = "dimension"
 
-    # TODO: update this to use the theme's metadata
     logging.debug("[ezcv cli.section()] Getting theme metadata")
     theme_path = locate_theme_directory(config["theme"], {"config": config})
     theme_name = config["theme"]
