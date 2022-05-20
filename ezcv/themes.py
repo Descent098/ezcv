@@ -173,6 +173,9 @@ def locate_theme_directory(theme:str, site_context:dict) -> str:
         If no theme folder exists, or remote is defined
     """
     logging.debug(f"[ezcv locate_theme_directory()] Locate theme directory for {theme=}")
+    if os.path.exists(f".{os.sep}{theme}"):
+        logging.debug(f"[ezcv locate_theme_directory()] Theme folder found at {os.path.abspath(f'.{os.sep}{theme}')}")
+        return os.path.abspath(f".{os.sep}{theme}")
     if os.path.exists(os.path.abspath(theme)):
         logging.debug(f"[ezcv locate_theme_directory()] Theme found at {os.path.abspath(theme)}")
         theme_folder = os.path.abspath(theme)

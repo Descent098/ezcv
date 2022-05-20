@@ -400,6 +400,10 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
     logging.info(f"[ezcv] theme directory: {theme_folder}" )
 
     # Check required_config values
+    if not os.path.exists(os.path.join(theme_folder, "metadata.yml")):
+        new_metadata = dict(generate_theme_metadata(theme_folder))
+        with open(os.path.join(theme_folder, "metadata.yml"), "w+") as outfile:
+            yaml.dump(new_metadata, outfile)
     theme_metadata = get_theme_metadata(theme_folder)
     if theme_metadata["required_config"]:
         for value in theme_metadata["required_config"]:

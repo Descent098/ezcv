@@ -25,6 +25,7 @@ The focus for this release was adding features that were not finalized in time f
 
 - Fixed bug with downloading `aerial` theme from remote
 - Fixed bug where `ezcv_version` was generated incorrectly in the metadata
+- Fixed a bug where a theme without a `metadata.yml` file would not load properly
 
 ## V0.3.2; May 16th 2022
 
