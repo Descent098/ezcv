@@ -378,7 +378,7 @@ def section(section_name:str, section_type:str):
 \t\t<p>updated:{{{{ post[0]["updated"] }}}}</p>
 \t\t<!-- Content -->
 \t\t<p>{{{{ post[1] | safe}}}}</p>
-{{{{% endfor %}}}}"""
+{{% endfor %}}"""
         if "o" in section_type:
             if "f" in section_type:
                 default_section_page_templte["overview"] = f"""<!DOCTYPE html>\n<html>\n\t<body>
