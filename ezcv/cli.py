@@ -54,6 +54,7 @@ theme(list_themes = True)
 # Standard Lib Dependencies
 from collections import defaultdict
 import os                   # Used for path validation
+import string
 import shutil               # Used for file/folder copying and removal
 import logging
 import datetime
@@ -284,8 +285,15 @@ def section(section_name:str, section_type:str):
     -----
     - Needs to be run from the main folder of a site
     """    
-    #TODO: PRINT SECTION INFO IF IT EXISTS
-    logging.debug(f"[ezcv cli.section({section_name=})] Creating a new section")
+    logging.debug(f"[ezcv cli.section({section_name=}, {section_type=})] Calling section command")
+
+    # Sanatizing section name so resulting folder name is valid
+    logging.debug(f"[ezcv cli.section()] Sanatizing {section_name=}")
+    legal_path_characters = string.ascii_letters + string.digits+ " ()[]_-" # Allowed characters in file path
+    section_name = section_name.replace(" ", "_")
+    section_name = ''.join(current_character for current_character in section_name if current_character in legal_path_characters).lower()
+    logging.debug(f"[ezcv cli.section()] Sanatized {section_name=}")
+
     if os.path.exists("config.yml"):
         config_path = "config.yml"
     else:
@@ -367,7 +375,7 @@ def section(section_name:str, section_type:str):
         if "s" in section_type:
             default_section_page_templte["single"] = f"""<!DOCTYPE html>\n<html>\n\t<body>
 \t\t<h1>{{{{ content[0]['title'] }}}}</h1>
-\t\t<h2>Current: {{{{ content[0]['current'] }}}} <br>Updated: {{{{ content[0]['current'] }}}}</h1>
+\t\t<h2>Created: {{{{ content[0]['created'] }}}} <br>Updated: {{{{ content[0]['updated'] }}}}</h1>
 \t\t{{{{ content[1] | safe }}}}
 \n\t</body>\n</html>"""
         if "f" in section_type:
@@ -376,13 +384,14 @@ def section(section_name:str, section_type:str):
 \t\t<!-- Metadata -->
 \t\t<p>Created: {{{{ post[0]["created"] }}}}</p>
 \t\t<p>updated:{{{{ post[0]["updated"] }}}}</p>
+{ '\t\t<a href="{{{{ post[0]["title"] }}}}">{{{{ post[0]["title"] }}}}</a>' if default_section_page_templte["single"] else '\t\t<hr>' }
 \t\t<!-- Content -->
 \t\t<p>{{{{ post[1] | safe}}}}</p>
 {{% endfor %}}"""
         if "o" in section_type:
             if "f" in section_type:
                 default_section_page_templte["overview"] = f"""<!DOCTYPE html>\n<html>\n\t<body>
-{{{{ feed_html | safe}}}}
+{{{{ {section_name}_html | safe}}}}
 \n\t</body>\n</html>"""
             else:
                 default_section_page_templte["overview"] = f"""<!DOCTYPE html>\n<html>\n\t<body>
