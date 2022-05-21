@@ -384,7 +384,7 @@ def section(section_name:str, section_type:str):
 \t\t<!-- Metadata -->
 \t\t<p>Created: {{{{ post[0]["created"] }}}}</p>
 \t\t<p>updated:{{{{ post[0]["updated"] }}}}</p>
-{ '\t\t<a href="{{{{ post[0]["title"] }}}}">{{{{ post[0]["title"] }}}}</a>' if default_section_page_templte["single"] else '\t\t<hr>' }
+\t\t<a href='{{{{ post[0]["title"] }}}}'>{{{{ post[0]["title"] }}}}</a>
 \t\t<!-- Content -->
 \t\t<p>{{{{ post[1] | safe}}}}</p>
 {{% endfor %}}"""
