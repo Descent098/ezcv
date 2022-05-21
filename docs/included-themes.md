@@ -384,6 +384,78 @@ Gallery: ✔️
 Blog: ❌
 ```
 
+## Evie
+
+Author(s):  [One Page love](https://onepagelove.com/evie)
+
+Katerina Limpitsouni - [https://twitter.com/ninalimpi](https://twitter.com/ninalimpi)
+
+Aggelos Gesoulis - [https://twitter.com/anges244](https://twitter.com/anges244)
+
+### Preview
+
+Full page preview: [https://onepagelove.com/evie](https://onepagelove.com/evie)
+
+<img src="/en/latest/img/theme-previews/evie.png" width="100%" height="500px">
+
+
+### Usage
+
+To use this theme in your code either initialize the project with "evie" as the theme, or set it in your ```config.yml``` file:
+
+```yaml
+... # Other configuration settings
+theme: evie
+... # Other configuration settings
+```
+
+#### Supported config settings
+
+The following settings are supported and not supported in the ```config.yml``` file:
+
+✅: Required
+
+☑️: Optional
+
+❌: Not Supported
+
+```
+name: ✅
+background: ✅
+avatar: ☑️
+email: ☑️
+phone: ☑️
+biography: ✅
+role: ☑️ (recommended)
+company: ☑️ (recommended)
+address: ☑️
+social: ☑️
+  github: ☑️
+  twitch: ☑️
+  youtube: ☑️
+  instagram: ☑️
+  twitter: ☑️
+  snapchat: ☑️
+  linkedin: ☑️
+  facebook: ☑️
+```
+#### Supported Sections
+
+Below are a list of the supported, and unsupported sections.
+
+✔️: Supported
+
+❌: Not Supported
+
+```yml
+Projects: ❌
+Education: ✔️
+Work Experience: ✔️
+Volunteering Experience: ✔️
+Gallery: ❌
+Blog: ✔️
+```
+
 ## Freelancer
 
 Author:  [Start Bootstrap](https://startbootstrap.com)
