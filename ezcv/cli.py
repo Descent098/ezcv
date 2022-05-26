@@ -11,6 +11,9 @@ init():
 preview():
     Creates a temporary folder of the site's files and then previews it in browser
 
+section():
+    Creates a new section, or prints details about a section if it already exists
+
 theme():
     Used to get information about the available themes and/or copy a theme folder
 
@@ -54,10 +57,10 @@ theme(list_themes = True)
 # Standard Lib Dependencies
 from collections import defaultdict
 import os                   # Used for path validation
-import string
+import string               # Used for data validation
 import shutil               # Used for file/folder copying and removal
-import logging
-import datetime
+import logging              # Used to log information for internal testing
+import datetime             # Used for date formatting and date validation
 from glob import glob       # Used to glob filepaths (patternmatch filepaths)
 from sys import argv, exit  # Used to get length of CLI args and exit cleanly
 
@@ -68,7 +71,7 @@ from ezcv.themes import THEMES_FOLDER, generate_theme_metadata, get_remote_theme
 from ezcv.autoreload import start_server
 
 # Third party dependencies
-import yaml
+import yaml                      # Used to read and write yaml files
 from colored import fg           # Used to highlight output with colors
 from docopt import docopt        # Used to complete argument parsing for the cli
 from PIL import Image            # Used to optimize and minify image files
@@ -408,7 +411,7 @@ def section(section_name:str, section_type:str):
         # The content for the template in the generated section
         default_section_page_templte = f"""\n{{% for image in {section_name} %}} <!--Lets you iterate through each image -->
             {{{{ image[0] }}}} <!--Metadata -->
-            <img src="{{ image[0]['file_path'] }}" alt="{{ image[0]['file_path'].split()[-1] }}"> <!--Image -->
+            <img src="{{{{ image[0]['file_path'] }}}}" alt="{{{{ image[0]['file_path'].split()[-1] }}}}"> <!--Image -->
 {{% endfor %}}
 \n"""
     if not os.path.exists(os.path.join(theme_path, "sections")):

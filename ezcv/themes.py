@@ -8,8 +8,8 @@
 # Standard Library Dependencies 
 import os                    # Used for path validation and manipulation
 import shutil                # Used to make copying and deletion of paths easier
-import logging
-import datetime
+import logging               # Used to log information for internal testing
+import datetime              # Used for date formatting and date validation
 import tempfile              # Used to generate temporary folders for downloads
 from zipfile import ZipFile  # Used to extract all directories from zip archives
 from collections import defaultdict

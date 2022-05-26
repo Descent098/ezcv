@@ -24,9 +24,9 @@ start_server(project_path)
 """
 
 # Internal dependencies (should ship with python)
+import os                                       # Used in path validation
 import webbrowser                               # Used to open a browser tab
-from tempfile import TemporaryDirectory
-import os
+from tempfile import TemporaryDirectory         # Used to create a temporary directory
 
 # third party dependencies (need to be installed via pip)
 from livereload import Server                   # Used to livereload pages in browser

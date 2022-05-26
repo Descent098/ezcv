@@ -38,7 +38,7 @@ generate_site(output_folder="my_site", theme = "aerial", preview = True)
 # Standard Lib Dependencies
 import os                           # Used for path validation
 import shutil                       # Used for file/folder copying and removal
-import logging
+import logging                      # Used to log information for internal testing
 from collections import defaultdict # Used to instatiate dictionaries with default arguments on unspecified keys
 from typing import Callable, Union  # Used to add additional typehints to help with documentation and usage on functions
 

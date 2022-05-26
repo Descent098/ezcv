@@ -810,6 +810,74 @@ Gallery: ✔️
 Blog: ❌
 ```
 
+## Massively
+
+Author:  [HTML5Up](https://html5up.net)
+
+### Preview
+
+Full page preview: [https://html5up.net/massively](https://html5up.net/massively)
+
+
+<img src="/en/latest/img/theme-previews/massively.png" width="100%" height="500px">
+
+### Usage
+
+To use this theme in your code either initialize the project with "massively" as the theme, or set it in your ```config.yml``` file:
+
+```yaml
+... # Other configuration settings
+theme: massively
+... # Other configuration settings
+```
+
+#### Supported config settings
+
+The following settings are supported and not supported in the ```config.yml``` file:
+
+✅: Required
+
+☑️: Optional
+
+❌: Not Supported
+
+```
+name: ✅
+background: ❌
+avatar: ❌
+email: ☑️
+phone: ☑️
+biography: ☑️
+role: ☑️
+company: ❌
+address: ❌
+social: ☑️
+  github: ☑️
+  twitch: ☑️
+  youtube: ☑️
+  instagram: ☑️
+  twitter: ☑️
+  snapchat: ☑️
+  linkedin: ☑️
+  facebook: ☑️
+```
+#### Supported Sections
+
+Below are a list of the supported, and unsupported sections.
+
+✔️: Supported
+
+❌: Not Supported
+
+```yml
+Projects: ❌
+Education: ✔️
+Work Experience: ✔️
+Volunteering Experience: ✔️
+Gallery: ❌
+Blog: ✔️
+```
+
 ## Paradigm Shift
 
 Author:  [HTML5Up](https://html5up.net/)

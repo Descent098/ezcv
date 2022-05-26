@@ -26,8 +26,8 @@ get_section_content() -> List[List[Union[defaultdict, str]]]:
 """
 # Standard Lib Dependencies
 import os                                                # Used primarily in path validation
-import logging
-import datetime
+import logging                                           # Used to log information for internal testing
+import datetime                                          # Used for date formatting and date validation
 from collections import defaultdict                      # Used to give dicts default args
 from dataclasses import dataclass, field                 # Used to improve class performance
 from typing import DefaultDict, List, Tuple, Type, Union # Used to provide accurate type hints

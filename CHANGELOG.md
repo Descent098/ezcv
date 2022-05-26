@@ -1,6 +1,6 @@
 # Changelog
 
-## V0.3.3; TBD
+## V0.3.3; May 25th 2022
 
 The focus for this release was adding features that were not finalized in time for the `0.3.0`-`0.3.2` releases, and cleaning up some bugs.
 
@@ -11,7 +11,7 @@ The focus for this release was adding features that were not finalized in time f
   - on build to cancel the build if a required value is missing from `config.yml`
 - Added section command (**note** `ezcv theme -s <section name>` **will no longer work**)
   - use `ezcv section <section name>` to get information
-  - use `ezcv section -n <section name> [<type>]` to create a new section (note *type* is only required for any non-markdown sections i.e. blogs [can be "blog" or "b"] or galleries [can be "gallery" or "g"]). See [cli documentation](https://ezcv.readthedocs.io/en/latest/cli/) for full usage details
+  - use `ezcv section <section name> [<type>]` to create a new section (note *type* is only required for any non-markdown sections i.e. blogs [can be "blog" or "b"] or galleries [can be "gallery" or "g"]). See [cli documentation](https://ezcv.readthedocs.io/en/latest/cli/) for full usage details
 - Added deepsource integration
 - Added issue template for creating new themes
 
