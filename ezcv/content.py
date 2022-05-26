@@ -26,8 +26,8 @@ get_section_content() -> List[List[Union[defaultdict, str]]]:
 """
 # Standard Lib Dependencies
 import os                                                # Used primarily in path validation
-import logging
-import datetime
+import logging                                           # Used to log information for internal testing
+import datetime                                          # Used for date formatting and date validation
 from collections import defaultdict                      # Used to give dicts default args
 from dataclasses import dataclass, field                 # Used to improve class performance
 from typing import DefaultDict, List, Tuple, Type, Union # Used to provide accurate type hints
@@ -94,7 +94,7 @@ def get_section_content(section_content_folder: str, examples: bool = False, blo
     logging.debug(f"[ezcv get_section_content({section_content_folder=}, {examples=}, {blog=})] Getting section content for {section_content_folder}")
     content:List[List[Union[defaultdict, str]]] = []
     extension_handlers:DefaultDict[str, Type] = Content.get_available_extensions()
-    logging.debug(f"[ezcv get_section_content()] Beggining file iteration")
+    logging.debug("[ezcv get_section_content()] Beggining file iteration")
     for file_name in os.listdir(section_content_folder):                   # Iterate through the section_content folder and get the content from each file
         if not examples and file_name.startswith("example"):
             continue

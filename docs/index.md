@@ -55,6 +55,7 @@ Here are some additional resources to help you get started generating content
 - Additional places to find html templates to work from:
   - [Theme Wagon](https://themewagon.com/)
   - [Theme Fisher](https://themefisher.com/)
+  - [Templatemo](https://templatemo.com/)
 
 ## Acknowledgements
 

@@ -1,5 +1,7 @@
 ![ezcv logo](https://raw.githubusercontent.com/Descent098/ezcv/master/.github/logo.png)
 
+[![Downloads](https://pepy.tech/badge/ezcv)](https://pepy.tech/project/ezcv) [![DeepSource](https://deepsource.io/gh/Descent098/ezcv.svg/?label=active+issues&show_trend=true&token=Yg9KssXSgrClbYRYM3OMJhbI)](https://deepsource.io/gh/Descent098/ezcv/?ref=repository-badge)
+
 # ezcv
 
 *A python-based static site generator for setting up a CV/Resume site*
@@ -134,9 +136,10 @@ If you're on github then pushing the contents to master/main will activate the p
 ```shell
 Usage:
     ezcv [-h] [-v] [-p]
-    ezcv init [<name>] [<theme>]
     ezcv build [-d OUTPUT_DIR] [-o]
-    ezcv theme [-l] [-c] [-m] [-s SECTION_NAME] [<theme>]
+    ezcv init [<name>] [<theme>] [-f]
+    ezcv theme [-l] [-c] [-m] [<theme>]
+    ezcv section <SECTION_NAME> [-t=<type>]
 
 
 Options:
@@ -146,9 +149,10 @@ Options:
 -c, --copy            copy the provided theme, or defined site theme
 -p, --preview         preview the current state of the site
 -o, --optimize        Optimize output files (takes longer to run)
+-f, --flask           Generate Flask routes and requirements.txt
 -d OUTPUT_DIR, --dir OUTPUT_DIR The folder name to export the site to
 -m, --metadata        Generate metadata for the theme
--s SECTION_NAME, --section SECTION_NAME The section name to initialize
+-t=<type>, --type=<type> The type of section to generate [default: markdown]
 ```
 
 See the [CLI Documentation](https://ezcv.readthedocs.io/en/latest/cli/) for additional details

@@ -745,11 +745,15 @@ As of ezcv version 0.3.0 there is a specification for theme metadata. This speci
 
 ```yml
 name: dimension
-ezcv_version: "0.3.0"
-created: 2022-04-22
-updated: 2022-04-22
+ezcv_version: "0.3.3"
+created: 2022-05-18
+updated: 2022-05-18
 folder: dimension # Optional, only needed if folder is different than name field
-acquisition_method: Source # Optional, in this case it denotes the theme was included with ezcv
+required_config: # Optional, used to specify values for config.yml that are required to build site
+  biography:
+    type: str
+    default: "A description of yourself"
+    description: "This field is for writing about yourself you can add a > to span multiple lines"
 sections: # Optional, only if sections are available
   education:
     type: markdown
@@ -787,6 +791,8 @@ By default a `metadata.yml` file like this will be generated if a theme is missi
 
 The easiest way to generate theme metadata is to use the tool built into the cli. Inside a project folder that has the theme set in the `config.yml` you can run `ezcv theme -m`, this will bring the theme into the project folder (if not already there) and generate a `metadata.yml` file for you.
 
+#### Fields key generation
+
 Please note that the `fields` key will generate based on the metadata of the first **alphabetical** file in a content folder. So for example if this was the metadata for the first file alphabetically in `/content/education` and the theme had a file in `/sections/education.jinja`:
 
 ```markdown
@@ -817,7 +823,48 @@ sections:
       current: bool
 ```
 
-**Note that no fields are set to required**
+**Note that no fields are set to required when automatically generated**
+
+### Required Config Key
+
+You can optionally specify a `required_config` key, which is either a list or a YAML object specifying the required values a user must have in `config.yml` in order for a site to build. For example with the `dimension` theme:
+
+```yml
+required_config:
+  name:
+    type: str
+    default: name
+    description: "Your full name"
+  biography:
+    type: str
+    default: "A description of yourself"
+    description: "This field is for writing about yourself you can add a > to span multiple lines"
+```
+
+This means two things:
+
+1) if someone uses the theme when using `ezcv init` these two configuration values will be added to `config.yml` (`name` and `theme` will be ignored if specified) in the form `<config_value>: <default> # <description>` so for example with the `dimension` `required_config` above you would get:
+
+
+```yml
+# See https://ezcv.readthedocs.io for documentation
+name: John Doe
+theme: dimension
+resume: false
+biography: A description of yourself # This field is for writing about yourself you can add a > to span multiple lines
+```
+2) If someone tries to build the site with these values missing they will get an error message
+<img src="/en/latest/img/required_config_error.png" width="100%" height="500px">
+
+The 3 attributes (type, default, description) are also optional, so you can include 1-3 of them, or you can also use the following format for brevity if you don't care about usability (which you should):
+
+```yml
+required_config:
+  - name
+  - biography
+```
+
+This will be interpreted as all values being strings with no description or default value.
 
 ### Top-level theme metadata
 

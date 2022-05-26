@@ -8,8 +8,8 @@
 # Standard Library Dependencies 
 import os                    # Used for path validation and manipulation
 import shutil                # Used to make copying and deletion of paths easier
-import logging
-import datetime
+import logging               # Used to log information for internal testing
+import datetime              # Used for date formatting and date validation
 import tempfile              # Used to generate temporary folders for downloads
 from zipfile import ZipFile  # Used to extract all directories from zip archives
 from collections import defaultdict
@@ -25,7 +25,7 @@ from tqdm import tqdm        # Used to generate progress bars during iteration
 THEMES_FOLDER = os.path.join(os.path.dirname(__file__), "themes")
 
 #TODO: Add a way to update themes from CLI, will require theme metadata to implement
-def get_theme_section_directories(theme_folder:str, sections:list = [], preview:bool=False) -> list:
+def get_theme_section_directories(theme_folder:str, sections:list = None, preview:bool=False) -> list:
     """Gets a list of the available sections for a theme
 
     Explanation
@@ -38,7 +38,7 @@ def get_theme_section_directories(theme_folder:str, sections:list = [], preview:
     Parameters
     ----------
     sections : (list, optional)
-        A list of sections names, or an empty list if they need to be searched for
+        A list of sections names, or an empty list/None if they need to be searched for
 
     theme_folder : str
         The full path to the theme folder (typically from calling locate_theme_directory() )
@@ -51,9 +51,11 @@ def get_theme_section_directories(theme_folder:str, sections:list = [], preview:
     list
         The name(s) of the section templates that exist within the sections list without extensions
     """
+    if sections is None:
+        sections = []
     logging.debug(f"[ezcv get_theme_section_directories({theme_folder=}, {sections=}, {preview=})] Getting sections for theme {theme_folder}")
     if preview:
-        logging.debug(f"[ezcv get_theme_section_directories()] Preview mode specified generating sections list from scrath")
+        logging.debug("[ezcv get_theme_section_directories()] Preview mode specified generating sections list from scrath")
         sections = []
         if os.path.exists(os.path.join(theme_folder, "sections")): # Regenerating sections list to avoid global state bugs
             for section in os.listdir(os.path.join(theme_folder, "sections")):
@@ -70,7 +72,7 @@ def get_theme_section_directories(theme_folder:str, sections:list = [], preview:
         logging.debug(f"[ezcv get_theme_section_directories()] Sections list provided, returning: {sections=}")
         return sections
     elif os.path.exists(os.path.join(theme_folder, "sections")):
-        logging.debug(f"[ezcv get_theme_section_directories()] No sections list provided, generating from theme folder")
+        logging.debug("[ezcv get_theme_section_directories()] No sections list provided, generating from theme folder")
         for section in os.listdir(os.path.join(theme_folder, "sections")):
             if section.endswith(".jinja"):
                 section = section.replace(".jinja", "")
@@ -98,7 +100,7 @@ def setup_remote_theme(name: str, url: str):
     theme_folder_path = os.path.join(THEMES_FOLDER, name)
 
     if os.path.exists(theme_folder_path): # If theme folder already exists
-        logging.debug(f"[ezcv setup_remote_theme()] Theme alread exists")
+        logging.debug("[ezcv setup_remote_theme()] Theme alread exists")
         return # Exit function
 
     else: # Download remote theme
@@ -171,6 +173,9 @@ def locate_theme_directory(theme:str, site_context:dict) -> str:
         If no theme folder exists, or remote is defined
     """
     logging.debug(f"[ezcv locate_theme_directory()] Locate theme directory for {theme=}")
+    if os.path.exists(f".{os.sep}{theme}"):
+        logging.debug(f"[ezcv locate_theme_directory()] Theme folder found at {os.path.abspath(f'.{os.sep}{theme}')}")
+        return os.path.abspath(f".{os.sep}{theme}")
     if os.path.exists(os.path.abspath(theme)):
         logging.debug(f"[ezcv locate_theme_directory()] Theme found at {os.path.abspath(theme)}")
         theme_folder = os.path.abspath(theme)
@@ -210,7 +215,6 @@ def get_remote_themes(remotes_file_path:str = os.path.join(THEMES_FOLDER, "remot
         A key-value pair of name to url of themes
     """
     logging.debug(f"[ezcv get_remote_themes()] Getting remote themes list from {remotes_file_path=}")
-    import yaml
     if os.path.exists(remotes_file_path):
         with open(remotes_file_path, "r") as remotes_file:
             remotes = yaml.safe_load(remotes_file)
@@ -300,7 +304,7 @@ def _generate_fields(section_content_folder:str) -> dict:
                     fields[field] = "datetime"
                 elif metadata[field].isnumeric():
                     fields[field] = "int"
-                elif metadata[field].lower() == "true" or metadata[field].lower() == "false":
+                elif metadata[field].lower() in ("true", "false"):
                     fields[field] = "bool"
                 else:
                     fields[field] = "str"

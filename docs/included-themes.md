@@ -93,6 +93,75 @@ Gallery: ❌
 Blog: ❌
 ```
 
+## Blog
+
+Author:  [W3C](https://www.w3schools.com/w3css/w3css_templates.asp)
+
+### Preview
+
+Full page preview: [https://www.w3schools.com/w3css/tryw3css_templates_blog.htm](https://www.w3schools.com/w3css/tryw3css_templates_blog.htm)
+
+<img src="/en/latest/img/theme-previews/blog.png" width="100%" height="500px">
+
+
+
+### Usage
+
+To use this theme in your code either initialize the project with "blog" as the theme, or set it in your ```config.yml``` file:
+
+```yaml
+... # Other configuration settings
+theme: blog
+... # Other configuration settings
+```
+
+#### Supported config settings
+
+The following settings are supported and not supported in the ```config.yml``` file:
+
+✅: Required
+
+☑️: Optional
+
+❌: Not Supported
+
+```
+name: ✅
+background: ❌
+avatar: ❌
+email: ☑️
+phone: ☑️
+biography: ❌
+role: ❌
+company: ❌
+address: ❌
+social: ☑️
+  github: ☑️
+  twitch: ☑️
+  youtube: ☑️
+  instagram: ☑️
+  twitter: ☑️
+  snapchat: ☑️
+  linkedin: ☑️
+  facebook: ☑️
+```
+#### Supported Sections
+
+Below are a list of the supported, and unsupported sections.
+
+✔️: Supported
+
+❌: Not Supported
+
+```yml
+Projects: ❌
+Education: ❌
+Work Experience: ❌
+Volunteering Experience: ❌
+Gallery: ❌
+Blog: ✔️
+```
+
 ## Creative
 
 Author:  [Start Bootstrap](https://startbootstrap.com)
@@ -384,6 +453,78 @@ Gallery: ✔️
 Blog: ❌
 ```
 
+## Evie
+
+Author(s):  [One Page love](https://onepagelove.com/evie)
+
+Katerina Limpitsouni - [https://twitter.com/ninalimpi](https://twitter.com/ninalimpi)
+
+Aggelos Gesoulis - [https://twitter.com/anges244](https://twitter.com/anges244)
+
+### Preview
+
+Full page preview: [https://onepagelove.com/evie](https://onepagelove.com/evie)
+
+<img src="/en/latest/img/theme-previews/evie.png" width="100%" height="500px">
+
+
+### Usage
+
+To use this theme in your code either initialize the project with "evie" as the theme, or set it in your ```config.yml``` file:
+
+```yaml
+... # Other configuration settings
+theme: evie
+... # Other configuration settings
+```
+
+#### Supported config settings
+
+The following settings are supported and not supported in the ```config.yml``` file:
+
+✅: Required
+
+☑️: Optional
+
+❌: Not Supported
+
+```
+name: ✅
+background: ✅
+avatar: ☑️
+email: ☑️
+phone: ☑️
+biography: ✅
+role: ☑️ (recommended)
+company: ☑️ (recommended)
+address: ☑️
+social: ☑️
+  github: ☑️
+  twitch: ☑️
+  youtube: ☑️
+  instagram: ☑️
+  twitter: ☑️
+  snapchat: ☑️
+  linkedin: ☑️
+  facebook: ☑️
+```
+#### Supported Sections
+
+Below are a list of the supported, and unsupported sections.
+
+✔️: Supported
+
+❌: Not Supported
+
+```yml
+Projects: ❌
+Education: ✔️
+Work Experience: ✔️
+Volunteering Experience: ✔️
+Gallery: ❌
+Blog: ✔️
+```
+
 ## Freelancer
 
 Author:  [Start Bootstrap](https://startbootstrap.com)
@@ -669,6 +810,74 @@ Gallery: ✔️
 Blog: ❌
 ```
 
+## Massively
+
+Author:  [HTML5Up](https://html5up.net)
+
+### Preview
+
+Full page preview: [https://html5up.net/massively](https://html5up.net/massively)
+
+
+<img src="/en/latest/img/theme-previews/massively.png" width="100%" height="500px">
+
+### Usage
+
+To use this theme in your code either initialize the project with "massively" as the theme, or set it in your ```config.yml``` file:
+
+```yaml
+... # Other configuration settings
+theme: massively
+... # Other configuration settings
+```
+
+#### Supported config settings
+
+The following settings are supported and not supported in the ```config.yml``` file:
+
+✅: Required
+
+☑️: Optional
+
+❌: Not Supported
+
+```
+name: ✅
+background: ❌
+avatar: ❌
+email: ☑️
+phone: ☑️
+biography: ☑️
+role: ☑️
+company: ❌
+address: ❌
+social: ☑️
+  github: ☑️
+  twitch: ☑️
+  youtube: ☑️
+  instagram: ☑️
+  twitter: ☑️
+  snapchat: ☑️
+  linkedin: ☑️
+  facebook: ☑️
+```
+#### Supported Sections
+
+Below are a list of the supported, and unsupported sections.
+
+✔️: Supported
+
+❌: Not Supported
+
+```yml
+Projects: ❌
+Education: ✔️
+Work Experience: ✔️
+Volunteering Experience: ✔️
+Gallery: ❌
+Blog: ✔️
+```
+
 ## Paradigm Shift
 
 Author:  [HTML5Up](https://html5up.net/)
@@ -751,6 +960,130 @@ Below are a list of the supported, and unsupported sections.
 
 ```yml
 Projects: ✔️
+Education: ✔️
+Work Experience: ✔️
+Volunteering Experience: ✔️
+Gallery: ✔️
+Blog: ❌
+```
+
+## Parallax
+
+Author:  [W3C](https://www.w3schools.com/w3css/w3css_templates.asp)
+
+### Preview
+
+Full page preview: [https://www.w3schools.com/w3css/tryw3css_templates_parallax.htm](https://www.w3schools.com/w3css/tryw3css_templates_parallax.htm)
+
+<img src="/en/latest/img/theme-previews/parallax.png" width="100%" height="500px">
+
+### Notes
+
+#### Progress
+
+There is a built-in system for giving progress-bar style indicators of your skills:
+
+<img src="/en/latest/img/theme-previews/parallax-progress.png" width="100%" height="500px">
+
+The code for the above example is:
+
+```html
+<p class="w3-large w3-center w3-padding-16">Im really good at:</p>
+  <p class="w3-wide"><i class="fa fa-camera"></i>Photography</p>
+  <div class="w3-light-grey">
+    <div class="w3-container w3-padding-small w3-dark-grey w3-center" style="width:90%">90%</div>
+  </div>
+  <p class="w3-wide"><i class="fa fa-laptop"></i>Web Design</p>
+  <div class="w3-light-grey">
+    <div class="w3-container w3-padding-small w3-dark-grey w3-center" style="width:85%">85%</div>
+  </div>
+  <p class="w3-wide"><i class="fa fa-photo"></i>Photoshop</p>
+  <div class="w3-light-grey">
+    <div class="w3-container w3-padding-small w3-dark-grey w3-center" style="width:75%">75%</div>
+</div>
+```
+
+#### Banner
+
+There is a built-in system for creating a banner:
+
+<img src="/en/latest/img/theme-previews/parallax-banner.png" width="100%" height="200px">
+
+The code for the above example is:
+
+```html
+<div class="w3-row w3-center w3-dark-grey w3-padding-16">
+  <div class="w3-quarter w3-section">
+    <span class="w3-xlarge">14+</span><br>
+    Partners
+  </div>
+  <div class="w3-quarter w3-section">
+    <span class="w3-xlarge">55+</span><br>
+    Projects Done
+  </div>
+  <div class="w3-quarter w3-section">
+    <span class="w3-xlarge">89+</span><br>
+    Happy Clients
+  </div>
+  <div class="w3-quarter w3-section">
+    <span class="w3-xlarge">150+</span><br>
+    Meetings
+  </div>
+</div>
+```
+
+
+
+### Usage
+
+To use this theme in your code either initialize the project with "parallax" as the theme, or set it in your ```config.yml``` file:
+
+```yaml
+... # Other configuration settings
+theme: parallax
+... # Other configuration settings
+```
+
+#### Supported config settings
+
+The following settings are supported and not supported in the ```config.yml``` file:
+
+✅: Required
+
+☑️: Optional
+
+❌: Not Supported
+
+```
+name: ✅
+background: ✅
+avatar: ✅
+email: ☑️
+phone: ☑️
+biography: ☑️
+role: ☑️
+company: ❌
+address: ❌
+social: ☑️
+  github: ☑️
+  twitch: ☑️
+  youtube: ☑️
+  instagram: ☑️
+  twitter: ☑️
+  snapchat: ☑️
+  linkedin: ☑️
+  facebook: ☑️
+```
+#### Supported Sections
+
+Below are a list of the supported, and unsupported sections.
+
+✔️: Supported
+
+❌: Not Supported
+
+```yml
+Projects: ❌
 Education: ✔️
 Work Experience: ✔️
 Volunteering Experience: ✔️

@@ -5,9 +5,10 @@ Here is the full usage for the CLI, but see below for specifics of each command:
 ```bash
 Usage:
     ezcv [-h] [-v] [-p]
-    ezcv init [<name>] [<theme>]
     ezcv build [-d OUTPUT_DIR] [-o]
-    ezcv theme [-l] [-c] [-m] [-s SECTION_NAME] [<theme>]
+    ezcv init [<name>] [<theme>] [-f]
+    ezcv theme [-l] [-c] [-m] [<theme>]
+    ezcv section <SECTION_NAME> [-t=<type>]
 
 
 Options:
@@ -17,9 +18,10 @@ Options:
 -c, --copy            copy the provided theme, or defined site theme
 -p, --preview         preview the current state of the site
 -o, --optimize        Optimize output files (takes longer to run)
+-f, --flask           Generate Flask routes and requirements.txt
 -d OUTPUT_DIR, --dir OUTPUT_DIR The folder name to export the site to
 -m, --metadata        Generate metadata for the theme
--s SECTION_NAME, --section SECTION_NAME The section name to initialize
+-t=<type>, --type=<type> The type of section to generate [default: markdown]
 ```
 
 ## Init
@@ -97,8 +99,7 @@ There are two optional flags and one positional argument:
   - First it will check if a ```<theme>``` argument has been passed, and if it has it will copy that theme
   - Then it will check if there's a ```config.yml``` file in the current directory and copy that one
   - Then it will just default to exporting the dimension theme
-- ```-s``` Used to create a new section in a theme
-- ```-m``` used to generate metadata file (note will also copy into project folder if not already there)
+- ```-m``` used to generate metadata file (note will also copy into project folder if not already there, and `required_config` will not be specified)
 
 
 **Examples**
@@ -127,14 +128,70 @@ ezcv theme -c aerial
 ezcv theme -m
 ```
 
-*Create a new section called books in the current theme*
+## Section
+
+This command is used to create new sections
 
 ```bash
-ezcv theme -s books
+ezcv section <SECTION_NAME> [-t=<type>]
+```
+
+*Note that if a section exists it will just print details about the section*
+
+There are two optional flags and one positional argument:
+
+- ```-t``` The type of section to generate [default: markdown], can be a few options:
+  - `m` or `markdown`: Generate markdown section
+  - `g` or `gallery`: Generate gallery section
+  - `b` or `blog`: Generate blog section, note you can control which theme files to generate (by default all 3 will be generated but you can optionally specify 1-3 other letters)
+    - Add an `s` to generate `single.jinja` (i.e. `ezcv section <SECTION_NAME> -t bs`)
+    - Add an `f` to generate `feed.jinja` (i.e. `ezcv section <SECTION_NAME> -t bf`)
+    - Add an `o` to generate `overview.jinja` (i.e. `ezcv section <SECTION_NAME> -t bo`)
+
+*Create a new markdown section called books in the current theme*
+
+```bash
+ezcv section books
 ```
 
 or
 
 ```bash
-ezcv theme --section="books"
+ezcv section "books" -t m
+```
+
+or
+
+```bash
+ezcv section books --type="markdown"
+```
+
+*Create a new gallery section called gallery in the current theme*
+
+```bash
+ezcv section gallery -t g
+```
+
+*Create a new blog section called blog (with all 3 jinja files) in the current theme*
+
+```bash
+ezcv section blog -t b
+```
+
+*Create a new blog section called blog with only single templates in the current theme*
+
+```bash
+ezcv section blog -t bs
+```
+
+*Create a new blog section called blog with only overview and feed templates in the current theme*
+
+```bash
+ezcv section blog -t bof
+```
+
+*Print details about existing section called 'blog'*
+
+```bash
+ezcv section blog
 ```

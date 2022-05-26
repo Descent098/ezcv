@@ -38,9 +38,7 @@ generate_site(output_folder="my_site", theme = "aerial", preview = True)
 # Standard Lib Dependencies
 import os                           # Used for path validation
 import shutil                       # Used for file/folder copying and removal
-import logging
-import datetime                     # Used to parse dates for last-updated checks
-import webbrowser                   # Used to automatically open the default system browser
+import logging                      # Used to log information for internal testing
 from collections import defaultdict # Used to instatiate dictionaries with default arguments on unspecified keys
 from typing import Callable, Union  # Used to add additional typehints to help with documentation and usage on functions
 
@@ -74,7 +72,6 @@ def get_site_config(config_file_path:str = "config.yml", remotes_file_path:str =
     if not os.path.exists(config_file_path):
         raise FileNotFoundError(f"Config file at {config_file_path} was not found")
 
-    logging.debug(f"[ezcv get_site_config({config_file_path}, {remotes_file_path})]: Loading remotes file")
     with open(config_file_path, "r") as config_file:
         config = yaml.safe_load(config_file)
 
@@ -186,7 +183,7 @@ def _render_page(page:str, site_context:dict, environment:jinja2.Environment) ->
     return theme.render(site_context)
 
 
-def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment, output_folder:str = "site",  pages:list=["index.jinja"] ):
+def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment, output_folder:str = "site",  pages:list=None ):
     """Generates all the site html from pages specified and outputs them to the output folder
 
     Parameters
@@ -204,13 +201,15 @@ def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment,
         The folder to output the HTML files to, by default "site"
 
     pages : (list, optional)
-        The list of pages to use, by default ["index.jinja"]
+        The list of pages to use, by default None which gets set to ["index.jinja"]
 
     Raises
     ------
     FileNotFoundError
         If the provided theme folder does not exist
     """
+    if pages is None:
+        pages = ["index.jinja"]
     if not os.path.exists(theme_folder): # Error out if provided theme folder does not exist
         raise FileNotFoundError(f"The provided theme folder does not exist: {theme_folder}")
 
@@ -305,7 +304,7 @@ def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment,
         os.remove(os.path.join(output_folder, "metadata.yml")) # Remove metadata file
 
 
-def generate_site(output_folder:str="site", theme:str = "dimension", sections: list = [], config_file_path="config.yml", preview:bool = False, extra_filters:List[Callable] = []):
+def generate_site(output_folder:str="site", theme:str = "dimension", sections: list = None, config_file_path="config.yml", preview:bool = False, extra_filters:List[Callable] = None):
     """The primary entrypoint to generating a site
 
     Parameters
@@ -374,6 +373,10 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
     generate_site(output_folder="my_site", sections=["projects"])
     ```
     """
+    if sections is None:
+        sections = []
+    if extra_filters is None:
+        extra_filters = []
     print(f"Exporting site to {output_folder}")
     pages = [] # Filled with a list of all the pages to render
 
@@ -395,6 +398,23 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
     logging.debug("[ezcv] Getting theme directory")
     theme_folder = locate_theme_directory(theme, site_context)
     logging.info(f"[ezcv] theme directory: {theme_folder}" )
+
+    # Check required_config values
+    if not os.path.exists(os.path.join(theme_folder, "metadata.yml")):
+        new_metadata = dict(generate_theme_metadata(theme_folder))
+        with open(os.path.join(theme_folder, "metadata.yml"), "w+") as outfile:
+            yaml.dump(new_metadata, outfile)
+    theme_metadata = get_theme_metadata(theme_folder)
+    if theme_metadata["required_config"]:
+        for value in theme_metadata["required_config"]:
+            if not value in site_context["config"].keys():
+                if not isinstance(theme_metadata["required_config"][value], dict):
+                    theme_metadata["required_config"][value] = {"type": "str", "default": "", "description": ""}
+                theme_metadata["required_config"][value]["default"] = theme_metadata["required_config"][value].get("default", "")
+                theme_metadata["required_config"][value]["type"] = theme_metadata["required_config"][value].get("type", "str")
+                theme_metadata["required_config"][value]["description"] = theme_metadata["required_config"][value].get("description", "")
+                print(f"\n\x1b[31mThe theme requires the '{value}'configuration value \n\n\ttype: { theme_metadata['required_config'][value]['type'] } \n\tdescription: { theme_metadata['required_config'][value]['description'] }\n\n please add\n\n\x1b[37m\t {value}: <value> \n\n\x1b[31mto your config.yml file\x1b[37m")
+                exit(1)
 
     # Initialize jinja loaders
     logging.debug("[ezcv] Initializing jinja2 loaders")

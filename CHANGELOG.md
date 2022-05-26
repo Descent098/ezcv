@@ -1,5 +1,33 @@
 # Changelog
 
+## V0.3.3; May 25th 2022
+
+The focus for this release was adding features that were not finalized in time for the `0.3.0`-`0.3.2` releases, and cleaning up some bugs.
+
+### Features
+
+- Added `required_config` section to theme metadata that's used:
+  - on initialization to generate the `config.yml` file
+  - on build to cancel the build if a required value is missing from `config.yml`
+- Added section command (**note** `ezcv theme -s <section name>` **will no longer work**)
+  - use `ezcv section <section name>` to get information
+  - use `ezcv section <section name> [<type>]` to create a new section (note *type* is only required for any non-markdown sections i.e. blogs [can be "blog" or "b"] or galleries [can be "gallery" or "g"]). See [cli documentation](https://ezcv.readthedocs.io/en/latest/cli/) for full usage details
+- Added deepsource integration
+- Added issue template for creating new themes
+
+### Themes
+
+- Added `massively`
+- Added `blog`
+- Added `evie`
+- Added `parallax`
+
+### Bug Fixes
+
+- Fixed bug with downloading `aerial` theme from remote
+- Fixed bug where `ezcv_version` was generated incorrectly in the metadata
+- Fixed a bug where a theme without a `metadata.yml` file would not load properly
+
 ## V0.3.2; May 16th 2022
 
 More minor fixes

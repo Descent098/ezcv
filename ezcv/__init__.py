@@ -64,4 +64,4 @@ from ezcv.core import generate_site
 generate_site(output_folder="my_site", theme = "aerial", preview = True)
 ```
 """
-__version__ = "0.3.2"
+__version__ = "0.3.3"
