@@ -1,5 +1,13 @@
 # Changelog
 
+## V0.3.4; July 29th 2022
+
+Adding a fix for macos installations
+
+### Bug Fixes
+
+- Fixed macos install bugs
+
 ## V0.3.3; May 25th 2022
 
 The focus for this release was adding features that were not finalized in time for the `0.3.0`-`0.3.2` releases, and cleaning up some bugs.

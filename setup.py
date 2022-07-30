@@ -60,7 +60,6 @@ setuptools.setup(
     "colored",               # Used to color terminal output for emphasis
     "pillow",                # Used to do image compression for optimized builds
     "css-html-js-minify",    # Used to minify html, css and JS files for optimized builds
-    "md-mermaid",            # Used to render mermaid graphs in markdown
     "livereload",            # Used to auto-reload the site when changes are made
     "flask",                 # Used to create the web server for live reloading
         ],
