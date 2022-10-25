@@ -1,5 +1,18 @@
 # Changelog
 
+## V0.3.5; TBD
+
+### Features
+
+- Added support for GA4 tags
+- Added literal specification in theme metadata
+- Added test suite
+- Added details about flask security implications
+
+### Documentation
+
+- Added details about using GA4
+
 ## V0.3.4; July 29th 2022
 
 Adding a fix for macos installations
