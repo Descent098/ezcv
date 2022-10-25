@@ -260,7 +260,7 @@ def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment,
         elif type(page) == list: # Blog sections
             if len(page) == 2: # overview pages
                 logging.debug(f"[ezcv _export()]: Rendering {page[0]} overview page")
-                if not "sections/blog/overview.jinja" in templates_list:
+                if not (("sections/blog/overview.jinja" in templates_list) or "sections/posts/overview.jinja" in templates_list):
                     print("[ezcv _export()]: No overview template found")
                     continue
                 try:
@@ -276,7 +276,7 @@ def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment,
                     outfile.write(html)
             elif len(page) == 3: # Single pages
                 logging.debug(f"[ezcv _export()]: Rendering {page[0]} single pages")
-                if not "sections/blog/single.jinja" in templates_list:
+                if not (("sections/blog/single.jinja" in templates_list)or "sections/posts/single.jinja" in templates_list ):
                     print("[ezcv _export()]: No single blog post template found")
                     continue
                 template_file = page[1]
@@ -458,7 +458,7 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
     sections_iterator = tqdm(sections)
     sections_iterator.set_description_str("Writing section content")
     for section in sections_iterator:
-        if section == "blog": #TODO: Make parametric based on setup
+        if section in ["blog", "posts"]: #TODO: Make parametric based on setup
             single_page, overview_page, feed_html = _render_section(section, site_context, environment, blog=True)
             if single_page or overview_page or feed_html:
                 site_context[f"{section}_html"] = feed_html

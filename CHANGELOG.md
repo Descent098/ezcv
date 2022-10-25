@@ -8,6 +8,7 @@
 - Added literal specification in theme metadata
 - Added test suite
 - Added details about flask security implications
+- Temporarily allowed for the use of "posts" blog type section, next release will allow any name of blog-type sections
 
 ### Documentation
 
