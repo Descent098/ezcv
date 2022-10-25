@@ -265,7 +265,7 @@ class Markdown(Content):
     html, metadata = Markdown().get_content('file_1.md')
     ```
     """
-    md:markdown.Markdown = markdown.Markdown(extensions=['meta', 'footnotes', 'tables', 'toc', 'abbr', 'def_list', 'sane_lists', "mdx_math"]) # Setup markdown parser with extensions
+    md:markdown.Markdown = markdown.Markdown(extensions=['meta', 'footnotes', 'tables', 'toc', 'abbr', 'def_list', 'sane_lists', "mdx_math","fenced_code"]) # Setup markdown parser with extensions
     extensions:List[str] = (".md", ".markdown", ".mdown", ".mkdn", ".mkd", ".mdwn")
 
 

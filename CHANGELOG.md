@@ -9,6 +9,7 @@
 - Added test suite
 - Added details about flask security implications
 - Temporarily allowed for the use of "posts" blog type section, next release will allow any name of blog-type sections
+- Added support for [fenced code blocks](https://python-markdown.github.io/extensions/fenced_code_blocks)
 
 ### Documentation
 
