@@ -62,6 +62,7 @@ setuptools.setup(
     "css-html-js-minify",    # Used to minify html, css and JS files for optimized builds
     "livereload",            # Used to auto-reload the site when changes are made
     "flask",                 # Used to create the web server for live reloading
+    "tornado<6.3.0"          # HACK: Pinned until livereload is patched
         ],
     extras_require = {
         "dev" : ["mkdocs", # Used to create HTML versions of the markdown docs in the docs directory
