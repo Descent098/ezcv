@@ -1,6 +1,6 @@
 # Changelog
 
-## V0.3.5; TBD
+## V0.3.6; TBD
 
 ### Features
 
@@ -14,6 +14,18 @@
 ### Documentation
 
 - Added details about using GA4
+
+
+## V0.3.5; November 17th 2023
+
+Fixed new installations
+
+### Bug fixes
+
+- Pinned tornado to < 6.3 to avoid issues with environment no longer being static
+  - https://www.tornadoweb.org/en/stable/wsgi.html#tornado.wsgi.WSGIContainer.environ:~:text=Changed%20in%20version%206.3%3A%20No%20longer%20a%20static%20method.
+  - https://github.com/lepture/python-livereload/issues/270
+  - https://stackoverflow.com/questions/76182748/pyfyre-typeerror-wsgicontainer-environ
 
 ## V0.3.4; July 29th 2022
 
