@@ -25,7 +25,7 @@ start_server(project_path)
 
 # Internal dependencies (should ship with python)
 import os                                       # Used in path validation
-import webbrowser                               # Used to open a browser tab
+import random                                   # Used to randomize port on failure
 from tempfile import TemporaryDirectory         # Used to create a temporary directory
 
 # third party dependencies (need to be installed via pip)
@@ -36,18 +36,6 @@ from jinja2.exceptions import TemplateNotFound  # Used to except template errors
 
 # Setup global variables
 PORT = 5000 # The port to open flask to
-
-def open_in_browser():
-    """Opens localhost:{port} in whichever browser is installed"""
-    browser_types = ["chromium-browser", "chromium", "chrome", "google-chrome", "firefox", "mozilla", "opera", "safari"] # A list of all the types of browsers to try
-    for browser_name in browser_types:   # Look for which browser is installed
-        try:
-            webbrowser.get(browser_name) # Search for browser
-            break                        # Browser has been found
-        except webbrowser.Error:         # Browser wasn't found
-            continue
-    webbrowser.open(f"http://localhost:{PORT}", new=2) # Open the preview in the browser
-
 
 def start_server(project_folder: str="."):
     """Preview entrypoint that serves ezcv files from project folder and watches for changes
@@ -96,13 +84,27 @@ def start_server(project_folder: str="."):
                     </br>
                     <button onclick='history.go(-1)'> Click to go back</button>
                     </div>"""
-        generate_site(output_folder=temp_dir, preview=True)                          # Generate the site initially
-        open_in_browser()                                                               # Open the browser
+        generate_site(output_folder=temp_dir, preview=True)                             # Generate the site initially
         server = Server(app)                                                            # Initialize the livereload server
         server.watch(os.path.join(project_folder, 'images/*'), lambda: generate_site(output_folder=temp_dir, preview=True))       # Watch for changes in the images folder
         server.watch(os.path.join(project_folder, '*.yml'), lambda: generate_site(output_folder=temp_dir, preview=True))          # Watch for changes in the yml files
         server.watch(os.path.join(project_folder, 'content/*/*.md'), lambda: generate_site(output_folder=temp_dir, preview=True)) # watch for changes in the markdown files
-        server.serve(port=PORT)                                                         # Start the server
-
+        
+        failed_starts = 0
+        successful_start = False
+        global PORT
+        while failed_starts < 3 and not successful_start:
+            try:
+                server.serve(port=PORT, open_url_delay=.2) # Start the server
+                successful_start = True
+            except PermissionError as e:
+                print(f"Port {PORT} is already in use.")
+                failed_starts += 1
+                PORT = random.randint(5555,12_000)
+            except Exception as e:
+                print(f"Unexpected error while starting, retrying: {e}")
+                failed_starts += 1
+                PORT = random.randint(5555,12_000)
+                
 if __name__ == '__main__':
     start_server() 

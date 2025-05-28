@@ -15,6 +15,10 @@
 
 - Added details about using GA4
 
+### Bug fixes
+
+- Preview mode (`ezcv -p`) will now try to look 3 extra times for an open port before failing to start
+
 
 ## V0.3.5; November 17th 2023
 
