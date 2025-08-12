@@ -1,15 +1,17 @@
 # Changelog
 
-## V0.3.6; TBD
+## V0.4.0; TBD
 
 ### Features
 
+- Added sorting system to allow you to sort content
 - Added support for GA4 tags
 - Added literal specification in theme metadata
 - Added test suite
 - Added details about flask security implications
 - Temporarily allowed for the use of "posts" blog type section, next release will allow any name of blog-type sections
 - Added support for [fenced code blocks](https://python-markdown.github.io/extensions/fenced_code_blocks)
+- Moved MathJax integrations from v2.7 -> v4
 
 ### Documentation
 
@@ -18,7 +20,7 @@
 ### Bug fixes
 
 - Preview mode (`ezcv -p`) will now try to look 3 extra times for an open port before failing to start
-
+- Made "sections" available in blog single pages
 
 ## V0.3.5; November 17th 2023
 

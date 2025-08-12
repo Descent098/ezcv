@@ -57,7 +57,7 @@ def get_content_directories() -> List[str]:
     return result
 
 
-def get_section_content(section_content_folder: str, examples: bool = False, blog:bool = False) -> List[List[Union[defaultdict, str]]]:
+def get_section_content(section_content_folder: str, examples: bool = False, blog:bool = False, sorting:str = "date") -> List[List[Union[defaultdict, str]]]:
     """Takes in a section folder and gets all the content from the files using the Content subclass asigned to the file extension
 
     Parameters
@@ -70,6 +70,9 @@ def get_section_content(section_content_folder: str, examples: bool = False, blo
     
     blog : bool, optional
         Whether or not the current section is a blog section, by default False
+    
+    sorting: str, optional
+        The type of sorting to use for section content, default is "date" (newest first)
 
     Returns
     -------
@@ -107,10 +110,13 @@ def get_section_content(section_content_folder: str, examples: bool = False, blo
                 # Get the content and add it to the list
                 if not blog:
                     metadata, html = extension_handler.get_content(os.path.join(section_content_folder, file_name))
-                    content.append([metadata, html])
+                    if not metadata["created"]:
+                        metadata["created"] = datetime.datetime.now().strftime("%Y-%m-%d")
+                    if not metadata["updated"]:
+                        metadata["updated"] = datetime.datetime.now().strftime("%Y-%m-%d")
+                    content.append([metadata, html, file_name])
                 else:
                     metadata, html = extension_handler.get_content(os.path.join(section_content_folder, file_name))
-                    # TODO: Add data if not there
                     if not metadata["created"]:
                         metadata["created"] = datetime.datetime.now().strftime("%Y-%m-%d")
                     if not metadata["updated"]:
@@ -118,6 +124,12 @@ def get_section_content(section_content_folder: str, examples: bool = False, blo
                     
 
                     content.append([metadata, html, file_name])
+    
+    
+            if content and type(extension_handler) == Markdown:
+                assert len(content[0]) == 3
+                content = sort_content(content, sorting)
+            
     logging.debug(f"[ezcv get_section_content()] Returning section content {content=}")
     return content
 
@@ -265,7 +277,7 @@ class Markdown(Content):
     html, metadata = Markdown().get_content('file_1.md')
     ```
     """
-    md:markdown.Markdown = markdown.Markdown(extensions=['meta', 'footnotes', 'tables', 'toc', 'abbr', 'def_list', 'sane_lists', "mdx_math","fenced_code"]) # Setup markdown parser with extensions
+    md:markdown.Markdown = markdown.Markdown(extensions=['meta', 'footnotes', 'tables', 'toc', 'abbr', 'def_list', 'sane_lists', "fenced_code"]) # Setup markdown parser with extensions
     extensions:List[str] = (".md", ".markdown", ".mdown", ".mkdn", ".mkd", ".mdwn")
 
 
@@ -306,7 +318,7 @@ class Markdown(Content):
             The HTML rendered from the markdown file
         """
         logging.debug(f"[ezcv Markdown.__html__()] Getting HTML for {file_path=}")
-        with open(f"{file_path}", "r") as mdfile: # Parse markdown file
+        with open(f"{file_path}", "r", errors='replace') as mdfile: # Parse markdown file
             text = mdfile.read()
         html = self.md.convert(text) # Convert the markdown content text to hmtl
         logging.debug(f"[ezcv Markdown.__html__()] Returning HTML for {file_path=}")
@@ -487,3 +499,125 @@ class Image(Content):
         tags["file_path"] = f"images/gallery/{file_path.split(os.path.sep)[-1]}"
         self.image_paths.append(file_path)
         return tags, html
+
+
+def sort_content(content:list[list[dict, str, str]], sorting_type:str) -> list[list[dict,str,str]]:
+    #TODO: Improve memory performance by swapping to a generator, and seeing if this all can be done in one loop
+    sorting_type = "newest" if not sorting_type else sorting_type.strip().lower()
+    
+    # Set any unset fjelds
+    for metadata, html, file_name in content:
+        title = metadata.get("title", False) if metadata.get("title", False) else file_name
+        institution = metadata.get("institution", False) if metadata.get("institution", False) else ""
+        month_started = metadata.get("month_started", False) if metadata.get("month_started", False) else datetime.datetime.now().month if sorting_type=="oldest" else 1
+        year_started = metadata.get("year_started", False) if metadata.get("year_started", False) else datetime.datetime.now().year if sorting_type=="oldest" else 1
+        month_ended = metadata.get("month_ended", False) if metadata.get("month_ended", False) else datetime.datetime.now().month if sorting_type=="oldest" else 1
+        year_ended = metadata.get("year_ended", False) if metadata.get("year_ended", False) else datetime.datetime.now().year if sorting_type=="oldest" else 1
+
+        
+        current = metadata.get("current", False)
+        
+        metadata["title"] = title
+        metadata["institution"] = institution
+        metadata["month_started"] = month_started
+        metadata["year_started"] = year_started
+        metadata["month_ended"] = month_ended
+        metadata["year_ended"] = year_ended
+        metadata["current"] = current
+    
+    results = []
+    match sorting_type.strip().lower():
+        case "alphabetical":
+            # Sort content by alphabetical ordering, specifically the "title" field, then the filename
+            results = sorted(
+                content,
+                key=lambda item: (
+                    item[0].get("title", item[2]).casefold(),
+                    item[2].casefold()
+                )
+            )
+        case "newest":
+            results = sorted(
+                content,
+                key=lambda item: (
+                    datetime.datetime(
+                        year=int(item[0].get("year_started", datetime.datetime.now().year)),
+                        month=month_to_int(item[0].get("month_started", datetime.datetime.now().month)),
+                        day=1
+                    )
+                ),
+                reverse=True
+            )
+        case "oldest":
+            results = sorted(
+                content,
+                key=lambda item: (
+                    datetime.datetime(
+                        year=int(item[0].get("year_started", datetime.datetime.now().year)),
+                        month=month_to_int(item[0].get("month_started", datetime.datetime.now().month)),
+                        day=1
+                    )
+                ),
+            )
+        case "present":
+            # Content with "present" specified comes first, then sort by newest
+            results = sorted(
+                content,
+                key=lambda item: (
+                    not item[0].get("current", False),  # current=True → False → higher priority
+                    -int(item[0].get("year_started", 1)),
+                    -month_to_int(item[0].get("month_started", 1)),
+                )
+            )
+        case "created":
+            # Content first sorted by creation date, then alphabetical
+            results = sorted(
+                content,
+                key=lambda item: item[0].get("created", datetime.datetime.now().year),
+                reverse=True
+            )
+        case "updated":
+            # Content sorted by last updated, then alphabetical
+            results = sorted(
+                content,
+                key=lambda item: item[0].get("updated", datetime.datetime.now().year),
+                reverse=True
+            )
+            
+        case _:
+            raise ValueError(f"sort_content(): Could not sort content, invalid sorting type in config: {sorting_type}")
+
+    return results
+
+def month_to_int(month):
+    """Converts a month name or number to its integer representation (1-12)."""
+    month_map = {
+        "january": 1, "jan": 1,
+        "february": 2, "feb": 2,
+        "march": 3, "mar": 3,
+        "april": 4, "apr": 4,
+        "may": 5,
+        "june": 6, "jun": 6,
+        "july": 7, "jul": 7,
+        "august": 8, "aug": 8,
+        "september": 9, "sep": 9, "sept": 9,
+        "october": 10, "oct": 10,
+        "november": 11, "nov": 11,
+        "december": 12, "dec": 12,
+    }
+
+    if isinstance(month, int):
+        if 1 <= month <= 12:
+            return month
+        else:
+            raise ValueError(f"Invalid month number: {month}. Must be between 1 and 12.")
+    
+    elif isinstance(month, str):
+        month_clean = month.strip().lower()
+        if month_clean in month_map:
+            return month_map[month_clean]
+        else:
+            raise ValueError(f"Invalid month name: '{month}'.")
+    else:
+        raise TypeError(f"Unsupported type: {type(month)}. Must be str or int.")
+

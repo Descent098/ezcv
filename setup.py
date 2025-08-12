@@ -56,7 +56,6 @@ setuptools.setup(
     "tqdm",                  # Used to generate progress bars
     "requests",              # Used to download remote themes
     "exifread",              # Used to read exif data from images
-    "python-markdown-math",  # Used to render latex math equations
     "colored",               # Used to color terminal output for emphasis
     "pillow",                # Used to do image compression for optimized builds
     "css-html-js-minify",    # Used to minify html, css and JS files for optimized builds

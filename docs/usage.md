@@ -422,6 +422,44 @@ Blog markdown sections differ from standard markdown sections in how they show u
 - Created: a datestring of the day (i.e. for april 26th 2022 it would be `2022-04-26`)
 - Updated: a datestring of the day the post was last updated (i.e. for april 26th 2022 it would be `2022-04-26`)
 
+### Content Sorting
+
+As of version 0.4 there is a new content sorting system that you can control with a configuration variable
+
+The following `sorting` types are supported via the `config.yml`:
+
+|Sorting Type|Description|
+|---|---|
+|`alphabetical`|Sorts entries by `title`. [Uses case-insensitive comparison](https://www.w3schools.com/python/ref_string_casefold.asp) | 
+|`newest`|Sorts entries by `year_started` and `month_started`, descending (most recent first)|
+|`oldest`|Sorts entries by `year_started` and `month_started`, ascending (oldest first)|
+|`present`|Prioritizes entries with `current: true`, sorted newest to oldest|
+|`created`|Sorts by `created` timestamp (newest first)|
+|`updated`|Sorts by `updated` timestamp (newest first)|
+
+\**If `sorting` is missing or invalid, the fallback is `newest`.*
+
+If the values used to sort are not specified, then fallback values are used
+
+|Field|Fallback Behavior|
+|---|---|
+|`title`|Falls back to the file name|
+|`institution`|Defaults to an empty string `""`.|
+|`year_started`|Defaults to:  <br>• Current year if `sorting == "oldest"`  <br>• `1` otherwise.|
+|`month_started`|Defaults to:  <br>• Current month if `sorting == "oldest"`  <br>• `1` otherwise.|
+|`year_ended`|Defaults to:  <br>• Current year if `sorting == "oldest"`  <br>• `1` otherwise.|
+|`month_ended`|Defaults to:  <br>• Current month if `sorting == "oldest"`  <br>• `1` otherwise.|
+|`current`|Defaults to `False`.|
+|`created`|Falls back to file system creation time using `os.path.getctime(file_name)`.|
+|`updated`|Falls back to file system creation time using `os.path.getctime(file_name)`. (Note: `updated` falls back to **created** timestamp if not explicitly set.)|
+
+**Notes**
+
+- Dates in YAML should be [ISO 8601 format](https://www.iso.org/iso-8601-date-and-time-format.html) or Python `datetime`-compatible strings
+- File creation time retrieval may vary by OS:
+    - On **Unix**, `getctime` returns the last metadata change time, not creation time
+    - On **Windows**, it correctly returns the creation time
+
 ## Sections
 
 Sections is the name given to the content you use to fill your site. For example if you have content that lists your work experience, or education then that would be a section.
