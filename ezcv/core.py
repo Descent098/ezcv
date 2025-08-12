@@ -288,7 +288,7 @@ def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment,
                     if title == "index":
                         raise ValueError("The title of a blog post cannot be 'index'")
                     try:
-                        single_page_context = {"config": site_context["config"], "content": [content_file[0], content_file[1]]}
+                        single_page_context = {"config": site_context["config"], "content": [content_file[0], content_file[1]],  "sections":site_context["sections"]}
                         html = _render_page(template_file, single_page_context, environment)
                     except jinja2.UndefinedError as e:
                         print(e)
@@ -438,10 +438,10 @@ def generate_site(output_folder:str="site", theme:str = "dimension", sections: l
     for section in sections_content_dirs: 
         if not section.split(os.sep)[-1] == "blog": #TODO: make parametric
             # Get content to store in site_context["sections"][section]
-            site_context["sections"][section.split(os.sep)[-1]] = get_section_content(section, site_context["config"]["examples"])
+            site_context["sections"][section.split(os.sep)[-1]] = get_section_content(section, site_context["config"]["examples"], sorting=site_context["config"]["sorting"])
         else:
             # Get content to store in site_context["sections"][section]
-            site_context["sections"][section.split(os.sep)[-1]] = get_section_content(section, site_context["config"]["examples"], blog=True)
+            site_context["sections"][section.split(os.sep)[-1]] = get_section_content(section, site_context["config"]["examples"], blog=True, sorting=site_context["config"]["sorting"])
 
     # Get a list of all the top level pages in the theme folder and add them to the pages list
     logging.debug("[ezcv] Getting list of top-level files (.jinja and .html)")
