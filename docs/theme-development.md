@@ -325,29 +325,11 @@ This section contains details for implementing "standard" features that are used
 
 ### Adding support for Google Analytics
 
-To add support for google analytics to your theme you can use the snippet below to the head tag of the template.
-
-
-```jinja2
-{% if config["ua_code"] %}
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id={{config['ua_code']}}"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', '{{config["ua_code"]}}');
-</script>
-{% endif %}
-```
+To add support for google analytics to your theme you can use the snippet from the [themes repo](https://github.com/QU-UP/ezcv-themes/blob/main/components/general/analytics.jinja) and add it to the head tag of the template.
 
 ### Adding support for LaTex
 
-In order for a theme to support latex you will need to add the following script import
-
-```html
-<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-```
+In order for a theme to support latex you can use the snippet from the [themes repo](https://github.com/QU-UP/ezcv-themes/blob/main/components/general/mathjax.jinja) 
 
 ### Adding support for customizing Favicons
 

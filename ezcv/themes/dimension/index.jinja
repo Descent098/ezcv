@@ -12,21 +12,49 @@
 		<link rel="stylesheet" href="css/main.css" />
 		<link rel="icon" type="image/png" href="images/favicon.png"/>
 		<noscript><link rel="stylesheet" href="css/noscript.css" /></noscript>
-		<!-- Mermaid-->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.0.1/mermaid.min.js" integrity="sha512-epOjc4LHlbK/a3+OjKdQMnoVZ5u6JYkw7AboRUqUV4dLULCLdcf4wt5TXuSYjpBJF+odA830p3rXbBniex33Bg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-		<script>mermaid.initialize({startOnLoad:true});</script>
-        <!-- Highlight JS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlightjs-themes@1.0.0/monokai_sublime.css">
+
 		{% if config["ua_code"] %}
-		<!-- Global site tag (gtag.js) - Google Analytics -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id={{config['ua_code']}}"></script>
-		<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
-		gtag('config', '{{config["ua_code"]}}');
-		</script>
+			<script>
+			console.error("Please note Google deprecated UA codes in the transition to GA4, you will need a GA4 measurement ID: https://support.google.com/analytics/answer/9539598?hl=en")
+			</script>
 		{% endif %}
+		{% if config["ga4_id"] %}
+			<script async src="https://www.googletagmanager.com/gtag/js?id={{ config['ga4_id'] }}"></script>
+
+			<script>
+			window.dataLayer = window.dataLayer || [];
+
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', "{{ config['ga4_id'] }}");
+			</script>
+		{% endif %}
+
+
+		<!--Mermaid-->
+		<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"></script>
+		<script>mermaid.initialize({startOnLoad:true});</script>
+		<!--highlightjs-->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlightjs-themes@1.0.0/monokai_sublime.css">
+		<script defer src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+		<!-- Mathjax -->
+		<script>
+		window.MathJax = {
+			loader: {
+			load: ['[tex]/texhtml']
+			},
+			tex: {
+			inlineMath: [['$', '$'], ['\\(', '\\)']],
+			displayMath: [['$$', '$$'], ['\\[', '\\]']],
+			packages: {'[+]': ['texhtml']},
+			processEscapes: true
+			}
+		};
+		</script>
+		<script async
+		id="MathJax-script"
+		src="https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-mml-chtml.js">
+		</script>
 
 {% if config["background"] %}			
 	<style>
@@ -202,6 +230,5 @@
 			<script src="js/breakpoints.min.js"></script>
 			<script src="js/util.js"></script>
 			<script src="js/main.js"></script>
-			<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 	</body>
 </html>

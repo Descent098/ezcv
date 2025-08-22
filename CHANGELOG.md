@@ -15,7 +15,7 @@
 
 ### Documentation
 
-- Added details about using GA4
+- Added details about using GA4, if you previously had a UA code, you need to transition to a GA4 code, and set it as your `ga4_id` in your `config.yml`
 
 ### Bug fixes
 
