@@ -228,6 +228,102 @@ Gallery: ❌
 Blog: ✔️
 ```
 
+## Carte
+
+Author: Kieran Wood [github](https://github.com/descent098), [website](https://kieranwood.ca)
+
+### Preview
+
+<img src="/en/latest/img/theme-previews/carte.png" width="100%" height="500px">
+
+### Usage
+
+To use this theme in your code either initialize the project with "carte" as the theme, or set it in your ```config.yml``` file:
+
+```yaml
+... # Other configuration settings
+theme: carte
+... # Other configuration settings
+```
+
+**Notes**
+
+This theme supports an extra config variable called `colorTheme` which can be set to `rosy`, `oceanic`, `straightLace`, or `earthy` (default) in order to set color scheme. It would be used like this:
+
+```yaml
+...# Other settings
+colorTheme: rosy
+...# Other settings
+```
+
+Here are screenshots of the color schemes
+
+**earthy**
+
+<img src="/en/latest/img/theme-previews/carte.png" width="100%" height="500px">
+
+**rosy**
+
+<img src="/en/latest/img/theme-previews/carte-rosy.png" width="100%" height="500px">
+
+**oceanic**
+
+<img src="/en/latest/img/theme-previews/carte-oceanic.png" width="100%" height="500px">
+
+**straightLace**
+
+<img src="/en/latest/img/theme-previews/carte-straightLace.png" width="100%" height="500px">
+
+#### Supported config settings
+
+The following settings are supported and not supported in the ```config.yml``` file:
+
+✅: Required
+
+☑️: Optional
+
+❌: Not Supported
+
+```
+name: ✅
+background: ❌
+avatar: ☑️
+email: ☑️
+phone: ☑️
+biography: ✅
+role: ☑️
+company: ☑️
+address: ❌
+social: ☑️
+  github: ☑️
+  twitch: ☑️
+  youtube: ☑️
+  instagram: ☑️
+  twitter: ☑️
+  x: ☑️
+  snapchat: ☑️
+  linkedin: ☑️
+  facebook: ☑️
+```
+#### Supported Sections
+
+Below are a list of the supported, and unsupported sections.
+
+✔️: Supported
+
+❌: Not Supported
+
+```yml
+Projects: ❌
+Education: ✔️
+Work Experience: ✔️
+Volunteering Experience: ✔️
+Gallery: ❌
+Blog: ❌
+```
+
+
+
 ## Creative
 
 Author:  [Start Bootstrap](https://startbootstrap.com)

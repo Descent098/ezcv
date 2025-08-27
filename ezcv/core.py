@@ -72,7 +72,7 @@ def get_site_config(config_file_path:str = "config.yml", remotes_file_path:str =
     if not os.path.exists(config_file_path):
         raise FileNotFoundError(f"Config file at {config_file_path} was not found")
 
-    with open(config_file_path, "r") as config_file:
+    with open(config_file_path, "r", encoding="utf-8", errors="replace") as config_file:
         config = yaml.safe_load(config_file)
 
     logging.debug(f"[ezcv get_site_config({config_file_path}, {remotes_file_path})]: Loading remotes file")

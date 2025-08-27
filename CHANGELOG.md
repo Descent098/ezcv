@@ -5,23 +5,29 @@
 ### Features
 
 - Added sorting system to allow you to sort content
-- Added support for GA4 tags
 - Added literal specification in theme metadata
 - Added test suite
 - Added details about flask security implications
 - Temporarily allowed for the use of "posts" blog type section, next release will allow any name of blog-type sections
 - Added support for [fenced code blocks](https://python-markdown.github.io/extensions/fenced_code_blocks)
-- Moved MathJax integrations from v2.7 -> v4
+- Updated theme dependencies
+  - Mathjax V2 -> V4
+  - Mermaid 8.1.0 -> 11.x.x
+  - Highlightjs 11.2.0 -> 11.11.1
+  - Analytics UA -> GA4
+    - See integration notes
 
 ### Documentation
 
 - Added details about using GA4, if you previously had a UA code, you need to transition to a GA4 code, and set it as your `ga4_id` in your `config.yml`
+- Updated docs for new themes
+- Added docs about the components approach to re-usable theme code
 
 ### Bug fixes
 
 - Preview mode (`ezcv -p`) will now try to look 3 extra times for an open port before failing to start
 - Made "sections" available in blog single pages
-- Set unicode encoding error mode to `replace` instead of `strict`
+- Set unicode encoding error mode to `replace` instead of `strict` for both theme files and config files
 
 ## V0.3.5; November 17th 2023
 
