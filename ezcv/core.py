@@ -255,7 +255,7 @@ def _export(site_context:dict, theme_folder:str, environment:jinja2.Environment,
                 page = f"{page[:-6:]}.html"
             pages_iterator.set_description_str(f"Writing {page}")
             pages_iterator.refresh()
-            with open(f"{output_folder}{os.sep}{page}", "w+") as outfile:
+            with open(f"{output_folder}{os.sep}{page}", "w+", encoding="utf-8", errors="replace") as outfile:
                 outfile.write(html)
         elif type(page) == list: # Blog sections
             if len(page) == 2: # overview pages

@@ -345,12 +345,16 @@ To use a custom favicon in your theme overwrite the ```images/favicon.png``` fil
 
 ### Adding suport for Resume Generation
 
-Inside all themes they are packaged with a ```resume.jinja``` file. This file is what generates the html resume at `sitename/resume`. Any changes you want to make to the resume should be done to this file. Everything is self contained (stylesheets are CDN linked, or done inline in the `<style>` tag), so any changes you make to global stylesheets **will not** show up unless you import the stylesheet into ```resume.jinja``` with a link tag.
+Inside all themes they are packaged with a `resume.jinja` file. This file is what generates the html resume at `sitename/resume`. Any changes you want to make to the resume should be done to this file. Everything is self contained (stylesheets are CDN linked, or done inline in the `<style>` tag), so any changes you make to global stylesheets **will not** show up unless you import the stylesheet into `resume.jinja` with a link tag.
 
 
 ## Adding support for optional features
 
-Below are the recommended methods to add support for optional configuration options, and optional features.
+Below are the recommended methods to add support for optional configuration options, and optional features. You can find references for integrations as ready-to-use components [here](https://github.com/QU-UP/ezcv-themes/tree/main/components/general). For example if you want to include mermaidJS diagrams on blog posts, you can grab the file [from the theme repo](https://github.com/QU-UP/ezcv-themes/tree/main/components/general), copy it into your project, and use:
+
+```jinja
+{% include "components/mermaid.jinja %}
+```
 
 ### Adding support for avatars
 

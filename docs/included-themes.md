@@ -93,6 +93,72 @@ Gallery: ❌
 Blog: ❌
 ```
 
+## Altair
+
+Author: Kieran Wood [github](https://github.com/descent098), [website](https://kieranwood.ca)
+
+### Preview
+
+<img src="/en/latest/img/theme-previews/altair.png" width="100%" height="500px">
+
+### Usage
+
+To use this theme in your code either initialize the project with "altair" as the theme, or set it in your ```config.yml``` file:
+
+```yaml
+... # Other configuration settings
+theme: altair
+... # Other configuration settings
+```
+
+#### Supported config settings
+
+The following settings are supported and not supported in the ```config.yml``` file:
+
+✅: Required
+
+☑️: Optional
+
+❌: Not Supported
+
+```
+name: ✅
+background: ❌
+avatar: ❌
+email: ☑️
+phone: ☑️
+biography: ✅
+role: ❌
+company: ❌
+address: ❌
+social: ☑️
+  github: ☑️
+  twitch: ☑️
+  youtube: ☑️
+  instagram: ☑️
+  twitter: ☑️
+  x: ☑️
+  snapchat: ☑️
+  linkedin: ☑️
+  facebook: ☑️
+```
+#### Supported Sections
+
+Below are a list of the supported, and unsupported sections.
+
+✔️: Supported
+
+❌: Not Supported
+
+```yml
+Projects: ✔️
+Education: ✔️
+Work Experience: ✔️
+Volunteering Experience: ✔️
+Gallery: ✔️
+Blog: ✔️
+```
+
 ## Blog
 
 Author:  [W3C](https://www.w3schools.com/w3css/w3css_templates.asp)

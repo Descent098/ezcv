@@ -30,13 +30,39 @@
 			</script>
 		{% endif %}
 
+		{# 
+			This script will increase load speed on multi-page themes
+			SEE: https://www.docuseal.com/blog/make-any-website-load-faster-with-6-lines-html?ref=dailydev
+		#}
+		<script type="speculationrules">
+		{
+			"prerender": [{ "where": { "href_matches": "/*" }, "eagerness": "moderate" }],
+			"prefetch": [{ "where": { "href_matches": "/*" }, "eagerness": "moderate" }]
+		}
+		</script>
+
 
 		<!--Mermaid-->
-		<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"></script>
-		<script>mermaid.initialize({startOnLoad:true});</script>
+		<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+		<script>
+		mermaid.initialize({startOnLoad:false });
+
+		window.addEventListener("load", (event) => {
+		mermaid.run({
+			nodes: document.querySelectorAll('.language-mermaid'),
+		});
+		});
+		</script>
 		<!--highlightjs-->
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlightjs-themes@1.0.0/monokai_sublime.css">
-		<script defer src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/vs2015.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+		<script>
+			// Skip Mermaid Diagrams
+			document.querySelectorAll('.language-mermaid').forEach( (el) =>{
+				el.classList.add("nohighlight")
+			})
+			hljs.highlightAll();
+		</script>
 		<!-- Mathjax -->
 		<script>
 		window.MathJax = {

@@ -21,6 +21,7 @@
 
 - Preview mode (`ezcv -p`) will now try to look 3 extra times for an open port before failing to start
 - Made "sections" available in blog single pages
+- Set unicode encoding error mode to `replace` instead of `strict`
 
 ## V0.3.5; November 17th 2023
 

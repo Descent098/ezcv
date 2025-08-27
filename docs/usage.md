@@ -410,7 +410,23 @@ Keep in mind many latex packages are not available natively in MathJax, so depen
 
 #### Mermaid (graphs/diagrams)
 
-**Note this integration is HIGHLY LIMITED**
+[Mermaid](https://mermaid.js.org/) is a plain-text diagramming system that can be used for everything from flow charts to git graphs. To use the integration in your markup simply add a code block with the standard code syntax, and a language of mermaid. Like this:
+
+<pre>
+&#96;&#96;&#96;mermaid
+flowchart TD
+    A[Christmas] -->|Get money| B(Go shopping)
+    B --> C{Let me think}
+    C -->|One| D[Laptop]
+    C -->|Two| E[iPhone]
+    C -->|Three| F[fa:fa-car Car]
+&#96;&#96;&#96;
+</pre>
+
+
+Which would render:
+
+![](/en/latest/img/mermaid-example.png)
 
 
 
